@@ -22,11 +22,11 @@ class WinAppOptions extends WinApp {
 		scrollUp._visible = false;
 		scrollDown._visible = false;
 
-		// sensibilité souris
+		// sensibilitï¿½ souris
 		addField(sdm, 10,10, Lang.get.OptSensitivity);
-		addButton(sdm, 10,30, "<", callback(sensitivy,-1));
+		addButton(sdm, 10,30, "<", sensitivy.bind(-1));
 		sensField = addField(sdm, 40,30, "??", false);
-		addButton(sdm, 70,30, ">", callback(sensitivy,1));
+		addButton(sdm, 70,30, ">", sensitivy.bind(1));
 
 		// raccourcis
 		capField = addField(sdm, 10,200, Lang.get.OptCapture, false );
@@ -41,7 +41,7 @@ class WinAppOptions extends WinApp {
 		var y = 0;
 		for (s in ls.shortcuts) {
 			addField(sdm, 30+x*75,90+y*55, "Virus "+(i+1), false);
-			var mc = addButton(sdm, 30 + x*75, 110+y*55, "NUMPAD 5", callback(onShortcut,i) );
+			var mc = addButton(sdm, 30 + x*75, 110+y*55, "NUMPAD 5", onShortcut.bind(i) );
 			mc.smc._width = mc.field._width+5;
 			shortcutButtons.push(mc);
 			x++;
@@ -86,7 +86,7 @@ class WinAppOptions extends WinApp {
 
 	override function onKey(c) {
 		if ( capture!=null ) {
-			if ( c!=flash.Key.ESCAPE )
+			if ( c!=Key.ESCAPE )
 				ls.shortcuts[capture] = c;
 			term.startAnim( A_Blink, shortcutButtons[capture].smc );
 			capture = null;
@@ -137,14 +137,14 @@ class WinAppOptions extends WinApp {
 			keyNames_FR[i]=String.fromCharCode(i) ;
 		}
 
-		// Les chiffres du pavé numérique
+		// Les chiffres du pavï¿½ numï¿½rique
 //		for (i=96;i<=105;i++) {
 		for (i in 96...106) {
 			keyNames_US[i]="NumPad "+(i-96) ;
 			keyNames_FR[i]="PavNum "+(i-96) ;
 		}
 
-		// Touches spéciales du pavé
+		// Touches spï¿½ciales du pavï¿½
 		keyNames_US[106]="NumPad *" ;
 		keyNames_US[107]="NumPad +" ;
 		keyNames_US[108]="NumPad Enter" ;
@@ -153,7 +153,7 @@ class WinAppOptions extends WinApp {
 		keyNames_US[111]="NumPad /" ;
 		keyNames_FR[106]="PavNum *" ;
 		keyNames_FR[107]="PavNum +" ;
-		keyNames_FR[108]="PavNum Entrée" ;
+		keyNames_FR[108]="PavNum Entrï¿½e" ;
 		keyNames_FR[109]="PavNum -" ;
 		keyNames_FR[110]="PavNum Suppr" ;
 		keyNames_FR[111]="PavNum /" ;
@@ -207,34 +207,34 @@ class WinAppOptions extends WinApp {
 		keyNames_FR[8]="Retour " ;
 		keyNames_FR[9]="TAB " ;
 		keyNames_FR[12]="Supprimer " ;
-		keyNames_FR[13]="Entrée " ;
+		keyNames_FR[13]="Entrï¿½e " ;
 		keyNames_FR[16]="Majuscule " ;
 		keyNames_FR[17]="Controle " ;
 		keyNames_FR[18]="Alt " ;
 		keyNames_FR[20]="Verr.Maj." ;
 		keyNames_FR[27]="Echappe " ;
 		keyNames_FR[32]="Espace " ;
-		keyNames_FR[33]="Page préc." ;
+		keyNames_FR[33]="Page prï¿½c." ;
 		keyNames_FR[34]="Page suiv." ;
 		keyNames_FR[35]="Fin " ;
-		keyNames_FR[36]="Début " ;
+		keyNames_FR[36]="Dï¿½but " ;
 		keyNames_FR[37]="Gauche " ;
 		keyNames_FR[38]="Haut " ;
 		keyNames_FR[39]="Droite " ;
 		keyNames_FR[40]="Bas " ;
-		keyNames_FR[45]="Insérer" ;
+		keyNames_FR[45]="Insï¿½rer" ;
 		keyNames_FR[46]="Supprimer " ;
 		keyNames_FR[47]="Aide " ;
 		keyNames_FR[144]="VerrNum " ;
-		keyNames_FR[186]="$ £" ;
+		keyNames_FR[186]="$ ï¿½" ;
 		keyNames_FR[187]="= +" ;
 		keyNames_FR[189]="- _" ;
 		keyNames_FR[191]=": /" ;
-		keyNames_FR[192]="ù %" ;
-		keyNames_FR[219]="° )" ;
-		keyNames_FR[220]="* µ" ;
-		keyNames_FR[221]="^ ¨" ;
-		keyNames_FR[222]="²" ;
+		keyNames_FR[192]="ï¿½ %" ;
+		keyNames_FR[219]="ï¿½ )" ;
+		keyNames_FR[220]="* ï¿½" ;
+		keyNames_FR[221]="^ ï¿½" ;
+		keyNames_FR[222]="ï¿½" ;
 
 		if ( lang.toLowerCase()=="fr" )
 			return keyNames_FR;

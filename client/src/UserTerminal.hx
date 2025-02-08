@@ -1,10 +1,11 @@
-import haxe.remoting.Connection;
-import flash.display.BitmapData;
-import flash.Key;
+import common.JSSharedObject;
+import mt.flash.Key;
 import mt.Timer;
 import mt.bumdum.Lib;
-import mt.bumdum.Bmp;
+//import mt.bumdum.Bmp;
 import mt.flash.Volatile;
+import pixi.core.Pixi;
+import js.html.KeyboardEvent;
 
 import Protocol;
 import Types;
@@ -15,24 +16,52 @@ import data.AntivirusXml;
 import data.ValuablesXml;
 import data.ChipsetsXml;
 
-typedef BubbleMC = {
-	> flash.MovieClip,
-	field	: flash.TextField,
-	title	: flash.TextField,
-	l		: flash.MovieClip,
-	r		: flash.MovieClip,
-	bg		: flash.MovieClip,
+// TODO: Add macro to generate class?
+@:forward
+abstract BubbleMC(MovieClip) from MovieClip to MovieClip {
+	public var field(get, never)	: Text;
+	public var title(get, never)	: Text;
+	public var l(get, never)		: MovieClip;
+	public var r(get, never)		: MovieClip;
+	public var bg(get, never)		: MovieClip;
+	public function new(mc: MovieClip) {
+		this = mc;
+	}
+
+	public function get_field(): Text {
+		return cast this.get("field");
+	}
+	public function get_title(): Text {
+		return cast this.get("title");
+	}
+	public function get_l(): MovieClip {
+		return cast this.get("l");
+	}
+	public function get_r(): MovieClip {
+		return cast this.get("r");
+	}
+	public function get_bg(): MovieClip {
+		return cast this.get("bg");
+	}
 }
 
-typedef BarMC = {
-	> flash.MovieClip,
-	flash	: flash.MovieClip,
+
+@:forward
+abstract BarMC(MovieClip) from MovieClip to MovieClip {
+	public var flash(get, never): MovieClip;
+	public function new(mc: MovieClip) {
+		this = mc;
+	}
+
+	public function get_flash(): MovieClip {
+		return cast this.get("flash");
+	}
 }
 
 typedef Sfx = {
 	id		: String,
 	url		: String,
-	data	: flash.Sound,
+	data	: Sound,
 	channel	: Int,
 	vol		: Float,
 }
@@ -54,42 +83,42 @@ class UserTerminal {
 	static var COOKIE_VERSION = 3;
 	static var ALARM_DURATION = 60;
 
-	public static var CNX : haxe.remoting.ExternalConnection = null;
+	public static var jsMain: JSMain;
 
 	var fl_generated	: Bool;
-	public var bg		: flash.MovieClip;
+	public var bg		: MovieClip;
 	var animList		: Array<Anim>;
 	var fxList			: Array<AnimFx>;
-	var lifeBar			: BarMC;
-	var manaBar			: BarMC;
+	var lifeBar			: MovieClip;
+	var manaBar			: MovieClip;
 	var kl				: Dynamic;
-	var popMC			: { >MCField, bg:flash.MovieClip };
-	var mask			: flash.MovieClip;
-	var cineList		: List<flash.MovieClip>;
-	var sysGameList		: Array<flash.MovieClip>;
+	var popMC			: MCSprite;
+	var mask			: MovieClip;
+	var cineList		: List<MovieClip>;
+	var sysGameList		: Array<MovieClip>;
 	var cptCin			: Float;
-	var logLines		: List<{t:Float,ta:Int,mc:flash.MovieClip}>;
+	var logLines		: List<{t:Float,ta:Int,mc:MovieClip}>;
 	var logHistory		: Array<HistoryLine>;
-	var logBmp			: Bmp;
-	var logMC			: flash.MovieClip;
-	var pwin			: { >flash.MovieClip, field:flash.TextField, input:flash.TextField };
+	//var logBmp			: Bmp;
+	var logMC			: MovieClip;
+	var pwin			: MCField2;
 	var cmdLine			: MCField;
-	var ffield			: flash.TextField;
-	var forcedCaret		: Int;		// bug avec le focus et l'utilisation de la flèche du haut...
+	var ffield			: Text;
+	var forcedCaret		: Int;		// bug avec le focus et l'utilisation de la flï¿½che du haut...
 	var caretIdx		: Int;
 	var bmc				: BubbleMC;
-	var boot			: {>MCField, field2:flash.TextField};
+	var boot			: MCField2;
 	var bootCooldown	: Int;
 	var gtimerMC		: MCField;
 	var lastTimer		: Time;
-	var comboMc			: flash.MovieClip;
-	var cmenu			: flash.MovieClip;
-	var moreLog			: flash.MovieClip;
+	var comboMc			: MovieClip;
+	var cmenu			: MovieClip;
+	var moreLog			: MovieClip;
 	var nextStack		: List<Void->Void>;
 	var apps			: List<WinApp>;
 	var cmdHistory		: Array<String>;
 	var historyPos		: Int;
-	var compList		: List<MCField>;
+	var compList		: List<MCField> = new List();
 	var fpsAvg			: Float;
 
 	public var aliases	: Hash<String>;
@@ -108,7 +137,7 @@ class UserTerminal {
 	public var avman		: AntivirMan;
 	var briefing			: String;
 	var chipset				: Volatile<ChipsetData>;
-	public var cookie		: flash.SharedObject;
+	public var cookie		: JSSharedObject;
 	public var ls			: LocalSettings;
 
 	public var fl_success	: Volatile<Bool>;
@@ -149,10 +178,10 @@ class UserTerminal {
 
 	public var missionCpt	: Volatile<Int>;
 
-	public var unlockedPass	: Hash<Bool>; // utilisé pour la reward "mot de passe trouvé"
+	public var unlockedPass	: Hash<Bool>; // utilisï¿½ pour la reward "mot de passe trouvï¿½"
 
 	var sfxBank				: Hash<Sfx>;
-	var soundContainer		: flash.MovieClip;
+	var soundContainer		: MovieClip;
 	var loadingSteps		: Int;
 	var totalSteps			: Int;
 	var soundAnims			: List<SoundAnim>;
@@ -166,11 +195,13 @@ class UserTerminal {
 		var ctx = new haxe.remoting.Context();
 		ctx.addObject("_Com",_Com);
 
-		cookie = flash.SharedObject.getLocal("intrusionSettings");
+		cookie = JSSharedObject.getLocal("intrusionSettings");
 		ls = loadSettings();
 
-		CNX = haxe.remoting.ExternalConnection.jsConnect("hackerConnect",ctx);
-		CNX.JsMain.initCnx.call([]);
+		//var CNX = haxe.remoting.ExternalConnection.jsConnect("hackerConnect",ctx);
+		//jsMain = new JSMain(cnx.resolve("JSMain"));
+		//jsMain.initCnx.call([]);
+		jsMain = new JSMain();
 		Tutorial.init(this);
 		Live.term = this;
 		fl_generated = false;
@@ -200,7 +231,7 @@ class UserTerminal {
 		fpsAvg = 32;
 		apps = new List();
 		#if debug
-		dtimer = flash.Lib.getTimer();
+		//dtimer = flash.Lib.getTimer();
 		#end
 		cmdHistory = new Array();
 		historyPos = 0;
@@ -326,11 +357,12 @@ class UserTerminal {
 		if ( fl_leet )
 			parseConfig(Manager.PARAMS._profile._cfg);
 
-		Manager.ROOT._quality = if(fl_lowq) "low" else "medium";
+		// TODO: is this useful?
+		//Manager.ROOT._quality = if(fl_lowq) "low" else "medium";
 	}
 
 
-	// *** DÉMARRAGE ET PROTOCOLE
+	// *** Dï¿½MARRAGE ET PROTOCOLE
 
 	function onBootReady() {
 		onLoadingStep();
@@ -346,7 +378,8 @@ class UserTerminal {
 	function onLoading() {
 		boot.field2.text += " -- Core system loaded.\nReading data :";
 		playSound("single_04");
-		if ( channelPrefs[2] && !MissionGen.isTutorial(mdata) )
+		if ( channelPrefs[2] )
+		//if ( channelPrefs[2] && !MissionGen.isTutorial(mdata) )
 			startLocalLoop("menu", false);
 		else
 			if ( seed%2==0 )
@@ -428,7 +461,7 @@ class UserTerminal {
 				virList.add(VirusXml.get.fdebug);
 				#end
 
-				// création des decks
+				// crï¿½ation des decks
 				for (deck in Manager.PARAMS._decks) {
 					var dvList = new List();
 					for (id in deck._content) {
@@ -466,7 +499,7 @@ class UserTerminal {
 
 			printBriefing(mdata._short, mdata._details);
 			try {
-				CNX.JsMain.lockBar.call( [] );
+				jsMain.lockBar();
 			}catch(e:Dynamic) {}
 			briefing = "OBJECTIF : "+mdata._short+"\n\nDETAILS : "+mdata._details;
 
@@ -484,7 +517,7 @@ class UserTerminal {
 			manaBar._x = lifeBar._x;
 			manaBar._y = lifeBar._y+lifeBar._height-2;
 			manaBar.flash._alpha = 0;
-			Col.setPercentColor(manaBar.smc, 55, 0x0000ff);
+			Col.setPercentColor(manaBar.smc, 100, 0x4040ff);
 
 			gtimerMC = cast Manager.DM.attach("timer", Data.DP_TOP);
 			gtimerMC._x = Math.round( lifeBar._x+lifeBar._width*0.5 );
@@ -505,7 +538,7 @@ class UserTerminal {
 //			spamLog._visible = false;
 
 			logMC = Manager.DM.empty(Data.DP_TOP);
-			logBmp = new Bmp( logMC, Data.WID, Data.HEI );
+			//logBmp = new Bmp( logMC, Data.WID, Data.HEI );
 		}
 		catch(e:String) {
 			Manager.fatal("UserTerminal.generate : "+e);
@@ -523,7 +556,7 @@ class UserTerminal {
 
 	function startGame() {
 		try {
-			CNX.JsMain.lockBar.call( [] );
+			jsMain.lockBar();
 		}catch(e:Dynamic) {}
 		#if debug
 			if ( Manager.STANDALONE )
@@ -533,7 +566,7 @@ class UserTerminal {
 				});
 			else {
 				try {
-					Codec.load( Manager.PARAMS._startUrl, null, onStartData );
+					onStartData({_error: null, _init: Manager.PARAMS});
 				}
 				catch(e:String) {
 					Manager.fatal("startGame : "+e);
@@ -541,7 +574,7 @@ class UserTerminal {
 			}
 		#else
 			try {
-				Codec.load( Manager.PARAMS._startUrl, null, onStartData );
+				onStartData({_error: null, _init: Manager.PARAMS});
 			}
 			catch(e:String) {
 				Manager.fatal("startGame : "+e);
@@ -571,14 +604,15 @@ class UserTerminal {
 	function onStartGame() {
 		startAnim(A_FadeRemove,boot,-0.5).spd*=0.5;
 		boot.field2.text+=" "+TD.texts.get("bootResult");
-		gtimer = flash.Lib.getTimer();
+		gtimer = haxe.Timer.stamp() * 1000;
 		dock.show();
 
 		updateStats();
 
 		kl = {};
 		Reflect.setField(kl, "onKeyDown", onKey);
-		Key.addListener(kl);
+		js.Browser.window.addEventListener("keydown", onKey);
+		//Key.addListener(kl);
 		playSound("single_04");
 
 		log(Lang.get.Log_ConnectedGlobal);
@@ -627,7 +661,7 @@ class UserTerminal {
 			var vfList = new List();
 			for(vf in moneyFiles)
 				vfList.add(vf.id);
-			// fichiers copiés
+			// fichiers copiï¿½s
 			var slist = saveStorage();
 			// goals
 			var glist = new List();
@@ -637,7 +671,6 @@ class UserTerminal {
 					_n		: wg.n,
 				});
 
-			var c = new Codec();
 			var k : Int = kills;
 			var data : PEnd = {
 				_init		: Manager.PARAMS,
@@ -660,7 +693,7 @@ class UserTerminal {
 			#end
 
 			var msg : _Message = MISSION_RESULT(data);
-			Codec.load(Manager.PARAMS._endUrl, msg, onEndData);
+			jsMain.send(Manager.PARAMS._endUrl, msg, onEndData);
 
 //			var c = new Codec();
 //			var edata = c.serialize( msg );
@@ -697,17 +730,14 @@ class UserTerminal {
 //					nlist.add(f._name);
 //				r.setParameter("cfiles", nlist.join(","));
 //				#if debug
-//					Manager.ROOT.onRelease = callback(r.request,true);
+//					Manager.ROOT.onRelease = r.request.bind(true);
 //				#else
 //					r.request(true);
 //				#end
-				flash.Lib.getURL(url);
+				// TODO: Send ok message
+				//flash.Lib.getURL(url);
 			case SEND_NOT_OK(url, error, stack) :
-				#if debug
 					Manager.fatal(error);
-				#else
-					flash.Lib.getURL(url);
-				#end
 			case MISSION_RESULT(end) :
 				#if debug
 					trace(end);
@@ -814,7 +844,7 @@ class UserTerminal {
 		#if debugSound trace("declareSfx "+id); #end
 		var url =  Manager.PARAMS._sfxUrl + id + ".wav.mp3?v=" + if(channel==2) Manager.PARAMS._musicVer else Manager.PARAMS._sfxVer;
 		#if debugSound trace("  "+url); #end
-		var fs = new flash.Sound( soundContainer );
+		var fs = new Sound( soundContainer );
 		id = id.toLowerCase();
 		var me = this;
 		var sdata : Sfx = {
@@ -841,7 +871,7 @@ class UserTerminal {
 		}
 	}
 
-	function restrictSfxList(rseed:mt.Rand, list:Array<Sfx>, max:Int) {
+	function restrictSfxList(rseed:Rand, list:Array<Sfx>, max:Int) {
 		while ( list.length>max )
 			undeclareSfx( list, list[rseed.random(list.length)].id );
 	}
@@ -926,7 +956,7 @@ class UserTerminal {
 
 
 	function startSoundAnim(s:Sfx, from:Float, to:Float) {
-		// rappel sur un son déjà en train de fader ?
+		// rappel sur un son dï¿½jï¿½ en train de fader ?
 		for (sa in soundAnims)
 			if ( sa.s.id==s.id ) {
 				from = sa.s.data.getVolume();
@@ -975,7 +1005,8 @@ class UserTerminal {
 	}
 
 	public function inheritLoop( id:String ) {
-		localSounds.add(id);
+		if (id!=null)
+			localSounds.add(id);
 	}
 
 	public function getDrone(seed:Int) {
@@ -1152,7 +1183,7 @@ class UserTerminal {
 	}
 
 	inline function getRemainingTime() {
-		return timerLimit-(flash.Lib.getTimer() - gtimer);
+		return timerLimit-(haxe.Timer.stamp() * 1000 - gtimer);
 	}
 
 	public function onDeleteFile(f:FSNode) {
@@ -1189,11 +1220,13 @@ class UserTerminal {
 	}
 
 	public function chrono(str:String) {
+		/*
 		#if debug
 			var now = flash.Lib.getTimer();
 			trace( str+" : "+(now-dtimer) );
 			dtimer = now;
 		#end
+	*/
 	}
 
 	public function copyFile(f:FSNode) {
@@ -1250,7 +1283,7 @@ class UserTerminal {
 	}
 
 	public function hasChipset(c:ChipsetData) {
-		return chipset.id == c.id;
+		return chipset?.id == c.id;
 //		return ChipsetsXml.isAvailable(c, gameLevel) && chipset.id==c.id;
 	}
 
@@ -1285,7 +1318,7 @@ class UserTerminal {
 		dock.lock();
 		dock.showSwitcher();
 		fs.disconnect();
-		fs = null;
+		//fs = null;
 //		net.curNode = null;
 		net.updateVisibility();
 		net.unlock();
@@ -1330,10 +1363,12 @@ class UserTerminal {
 	// *** FOCUS TEXTE
 
 	function hasFocus() {
+		/*
+		TODO: Fix focus
 		var path = ffield._name;
-		var par : flash.MovieClip = cast ffield;
+		var par : MovieClip = cast ffield;
 		do {
-			par = par._parent;
+			par = par.parent;
 			path = par._name+"."+path;
 		} while (par._name!="" && par!=null);
 		path = path.substr(1);
@@ -1342,24 +1377,26 @@ class UserTerminal {
 		current = current.substr( current.indexOf(".")+1 );
 
 		return current==path;
+		*/
+		return false;
 	}
 
 	function focus(?cidx:Int) {
 		if ( popMC!=null ) return;
-		flash.Selection.setFocus(ffield);
+		//flash.Selection.setFocus(ffield);
 		if ( cidx!=null )
 			if ( cidx<0 )
 				caretIdx = ffield.text.length;
 			else
 				caretIdx = cidx;
-		flash.Selection.setSelection(caretIdx,caretIdx);
+		//flash.Selection.setSelection(caretIdx,caretIdx);
 	}
 
 	function unfocus() {
-		flash.Selection.setFocus(null);
+		//flash.Selection.setFocus(null);
 	}
 
-	function setFocus(f:flash.TextField) {
+	function setFocus(f:Text) {
 		ffield = f;
 		caretIdx = 0;
 	}
@@ -1385,7 +1422,7 @@ class UserTerminal {
 			if ( lifeBar.flash._alpha<=50 )
 				lifeBar.flash._xscale = lifeBar.smc._xscale;
 			lifeBar.flash._alpha = 100;
-			startAnim(A_FadeOut,lifeBar.flash).spd*=0.2;
+			startAnim(A_FadeOut, cast lifeBar.flash).spd*=0.2;
 			playSound("hit_03");
 		}
 		else
@@ -1403,9 +1440,9 @@ class UserTerminal {
 
 		if ( manaBar.flash._alpha<=30 )
 			manaBar.flash._xscale = manaBar.smc._xscale;
-		Col.setPercentColor(manaBar.flash, 100, 0xffffff);
+		Col.setPercentColor(cast manaBar.flash, 100, 0xffffff);
 		manaBar.flash._alpha = 100;
-		startAnim(A_FadeOut,manaBar.flash).spd*=0.6;
+		startAnim(A_FadeOut, cast manaBar.flash).spd*=0.6;
 		mana-=n;
 		if ( mana<=0 && fs!=null ) {
 			log(Lang.get.Log_OOM);
@@ -1537,10 +1574,10 @@ class UserTerminal {
 	}
 
 
-	public function startAnim(type:AnimType, mc:flash.MovieClip, ?str:String, ?delay=0.0, ?fl_linkToProgress=false) {
+	public function startAnim(type:AnimType, mc:MovieClip, ?str:String, ?delay=0.0, ?fl_linkToProgress=false) {
 		var spd = 0.06;
 		for (a in animList)
-			if ( a.type==type && a.mc==mc ) // TODO : à vérifier si pb d'animations...
+			if ( a.type==type && a.mc==mc ) // TODO : ï¿½ vï¿½rifier si pb d'animations...
 				endAnim(a);
 		var data : Float = null;
 		var tx = Std.int(mc._x);
@@ -1564,7 +1601,7 @@ class UserTerminal {
 				mc._alpha = 0;
 			case A_FadeOut :
 			case A_BlurIn :
-				mc.filters = [ new flash.filters.BlurFilter(16,16) ];
+				mc.filters = [ BlurFilter.create(16,16) ];
 				mc._alpha = 0;
 			case A_FadeRemove :
 			case A_Delete :
@@ -1576,8 +1613,8 @@ class UserTerminal {
 			case A_Connect :
 				mc._x = 50;
 				mc._y = 60;
-				var mcc : { >MCField, bg:flash.MovieClip } = cast mc;
-				mcc.bg.blendMode = "screen";
+				var mcc : MCSprite = cast mc;
+				mcc.bg.blendMode = pixi.core.Pixi.BlendModes.SCREEN;
 				mcc.field.text = "Connecting "+str+"...\n";
 				mcc.bg._width = 230;
 				mcc.bg._height = 150;
@@ -1586,8 +1623,8 @@ class UserTerminal {
 				spd*=0.25;
 				mc._x = Std.random(300)+50;
 				mc._y = Std.random(300)+30;
-				var mcc : { >MCField, bg:flash.MovieClip } = cast mc;
-				mcc.bg.blendMode = "screen";
+				var mcc : MCSprite = cast mc;
+				mcc.bg.blendMode = pixi.core.Pixi.BlendModes.SCREEN;
 				mcc.field.text = "";
 				mcc.bg._width = 230;
 				mcc.bg._height = 150;
@@ -1664,7 +1701,7 @@ class UserTerminal {
 			return n;
 	}
 
-	public function addIconRain(?dm:mt.DepthManager, ?links:Array<String>, ?chance=75, mc:flash.MovieClip) {
+	public function addIconRain(?dm:mt.DepthManager, ?links:Array<String>, ?chance=75, mc:MovieClip) {
 		if ( links==null || links.length==0 )
 			links = ["fx_binary"];
 		var n = if ( fl_lowq ) Std.random(5)+5 else Std.random(15)+20;
@@ -1712,14 +1749,15 @@ class UserTerminal {
 				fx.dy = -Std.random(20)/10-0.3;
 				fx.data = Std.random(314)/100;
 			case AFX_PlayFrames :
-				mc.gotoAndStop(Std.random(fx.mc._totalframes));
+				var fxFrame = Std.random(fx.mc._totalframes);
+				mc.gotoAndStop(fxFrame);
 				mc.smc.stop();
 				if ( link=="fx_glight" ) {
 					var s = Std.random(70)+30;
 					mc._xscale = (Std.random(2)*2-1) * s;
 					mc._yscale = (Std.random(2)*2-1) * s;
 					mc._alpha = Std.random(60)+40;
-					mc.filters = [ new flash.filters.GlowFilter(0xffffff,0.7, 8,8,3) ];
+					mc.filters = GlowFilter.create(0xffffff,0.7, 8,8,3);
 				}
 			case AFX_Spark :
 				fx.dx = (Std.random(30)+30);
@@ -1806,7 +1844,7 @@ class UserTerminal {
 	}
 
 
-	function disoverlap(mc:flash.MovieClip, list:List<flash.MovieClip>, ?recur=0) {
+	function disoverlap(mc:MovieClip, list:List<MovieClip>, ?recur=0) {
 		if ( recur>=150 ) {
 			#if debug
 				trace("disoverlap FAILED !");
@@ -1821,7 +1859,7 @@ class UserTerminal {
 			}
 	}
 
-	function overlap(a:flash.MovieClip, b:flash.MovieClip) {
+	function overlap(a:MovieClip, b:MovieClip) {
 		return a._name!=b._name &&
 			 b._x<a._x+a._width && b._x+b._width>a._x &&
 			 b._y<a._y+a._height && b._y+b._height>a._y;
@@ -1833,22 +1871,21 @@ class UserTerminal {
 		mc._y = 100;
 		mc._alpha = 0;
 		mc.stop();
-		mc.blendMode = "layer";
-		mc.filters = [
-			new flash.filters.GlowFilter( 0x0, 1, 8,8, 600, 1, true ),
-			new flash.filters.GlowFilter( 0xffffff, 1, 6,6, 600, 1, true ),
-			new flash.filters.GlowFilter( 0x0, 1, 3,3, 600),
-		];
+		mc.blendMode = pixi.core.Pixi.BlendModes.OVERLAY;
+		mc.filters =
+			GlowFilter.create( 0x0, 1, 8,8, 600, 1, true )
+			.concat(GlowFilter.create( 0xffffff, 1, 6,6, 600, 1, true ))
+			.concat(GlowFilter.create( 0x0, 1, 3,3, 600));
 		cptCin = 0;
 		cineList.push(mc);
 	}
 
 	function detachPop() {
 		detachMask();
-		if ( fl_generated )
+		if ( fl_generated && popMC!=null )
 			startAnim(A_FadeRemove, popMC).spd*=2;
 		else
-			popMC.removeMovieClip();
+			popMC?.removeMovieClip();
 		popMC = null;
 		if ( fs!=null )
 			dock.unlock();
@@ -1889,18 +1926,18 @@ class UserTerminal {
 			var name = f.name;
 			str = "<div class='file_"+name.substr(name.lastIndexOf(".")+1)+"'>"+str+"</div>";
 		}
-		CNX.JsMain.print.call([title,str]);
+		jsMain.print(title,str);
 	}
 
 	public function printBriefing(short,full) {
-		CNX.JsMain.printBriefing.call( [short, full] );
+		jsMain.printBriefing(short, full);
 	}
 
 	public function detachSide() {
 		printSide("","");
 	}
 
-	public function bubble(mc:flash.MovieClip, title:String, ?str:String, ?delay=0.0, ?cbOver:Void->Void, ?cbOut:Void->Void) {
+	public function bubble(mc:MovieClip, title:String, ?str:String, ?delay=0.0, ?cbOver:Void->Void, ?cbOut:Void->Void) {
 		if ( delay==0 ) delay = -0.6;
 		if ( str==null ) {
 			str = title;
@@ -1909,11 +1946,13 @@ class UserTerminal {
 		var me = this;
 		mc.onRollOver = function() {
 			me.attachBubble(mc,str,title,delay);
-			cbOver();
+			if ( cbOver!=null )
+				cbOver();
 		}
 		mc.onRollOut = function() {
 			me.detachBubble();
-			cbOut();
+			if ( cbOut!=null )
+				cbOut();
 		}
 		mc.onReleaseOutside = mc.onRollOut;
 	}
@@ -1949,11 +1988,13 @@ class UserTerminal {
 		var totHei = bmc.field.textHeight + bmc.title.textHeight;
 		bmc.title._y = -Math.round(totHei*0.5);
 		bmc.field._y = bmc.title._y+bmc.title.textHeight;
-		bmc.bg._width = 10 + maxWid;
-		bmc.bg._height = 10 + bmc.field.textHeight + bmc.title.textHeight;
-		bmc.l._height = bmc.bg._height+6;
-		bmc.r._height = bmc.l._height;
-		bmc.r._x = bmc.bg._width+5;
+		bmc.bg.on("complete", function() {
+			bmc.bg.width = 10 + maxWid;
+			bmc.bg.height = 10 + bmc.field.height + bmc.title.height;
+			bmc.l.height = bmc.bg.height+6;
+			bmc.r.height = bmc.l.height;
+			bmc.r._x = bmc.bg.width+5;
+		});
 		bmc.field._width = bmc.field.textWidth+5;
 		bmc.field._height = bmc.field.textHeight+5;
 		bmc.title._width = bmc.title.textWidth+5;
@@ -1967,6 +2008,7 @@ class UserTerminal {
 	}
 
 	public function detachBubble() {
+		if ( bmc==null ) return;
 		if ( bmc._visible )
 			if ( fl_lowq )
 				bmc.removeMovieClip();
@@ -1984,7 +2026,7 @@ class UserTerminal {
 			mask = null;
 		}
 		else
-			mask.removeMovieClip();
+			mask?.removeMovieClip();
 	}
 
 	public function attachMask(?cb:Void->Void, ?dp:Int) {
@@ -2008,20 +2050,20 @@ class UserTerminal {
 		pwin.field.text = Lang.fmt.AskPass({_f:passFile.name});
 		pwin._x = Std.int(Data.WID*0.5 - pwin._width*0.5);
 		pwin._y = Std.int(Data.HEI*0.5 - pwin._height*0.5);
-		pwin.input.text = "";
+		pwin.field2.text = "";
 		var me = this;
-		pwin.input.onChanged = function(tf) {
+		pwin.field2.onChanged = function(tf) {
 			me.startAnim( A_Blink, cast tf ).spd*=1.5;
 		}
 		startAnim(A_Text, pwin, pwin.field.text);
 		startAnim(A_BubbleIn, pwin);
-		setFocus(pwin.input);
+		setFocus(cast pwin.field2);
 		playSound("bleep_07");
 	}
 
 	function detachPass() {
 		ffield = null;
-		pwin.removeMovieClip();
+		pwin?.removeMovieClip();
 		pwin = null;
 		detachMask();
 		showCmdLine();
@@ -2088,7 +2130,7 @@ class UserTerminal {
 			return;
 		cmdLine._visible = true;
 		cmdLine.field.text = "";
-		setFocus(cmdLine.field);
+		setFocus(cast cmdLine.field);
 	}
 
 	public function hideCmdLine() {
@@ -2111,14 +2153,14 @@ class UserTerminal {
 		var virusId = str.substr(0,end).toLowerCase();
 		var target = str.substr(end+1).toLowerCase();
 
-		// liste de complétion
+		// liste de complï¿½tion
 		var clist = new List();
 		if ( target==null || target.length==0 ) {
 			// virus
 			for (v in dock.getCurrentViruses())
 				if ( v.id.toLowerCase().indexOf(virusId)==0 && v.target!="_net" && (v.uses==null || v.uses>0) )
 					clist.add(v.id);
-			// masqués
+			// masquï¿½s
 			for (v in VirusXml.getCategory("hidden", gameLevel, true))
 				if ( v.id.toLowerCase().indexOf(virusId)==0 && v.target!="_net" )
 					clist.add(v.id);
@@ -2243,7 +2285,7 @@ class UserTerminal {
 		detachSystemGame();
 		dock.lock();
 		dock.hide();
-		attachMask(callback(detachSystemGame,true));
+		attachMask(detachSystemGame.bind(true));
 		var list = new Array();
 		for (y in 0...Data.MATRIX_WID)
 			for (x in 0...Data.MATRIX_WID) {
@@ -2256,11 +2298,11 @@ class UserTerminal {
 				mc._y = 50 + y*w;
 				mc.smc.stop();
 				if (file.allowMatrix[x][y]) {
-					mc.onRelease = callback(onActivateMatrix,file,mc,x,y);
+					mc.onRelease = onActivateMatrix.bind(file,mc,x,y);
 //					mc.smc.gotoAndStop(3);
-					mc.smc.filters = [ new flash.filters.GlowFilter(Data.GREEN,1, 10,10, 3,1, true) ];
+					mc.smc.filters = GlowFilter.create(Data.GREEN,1, 10,10, 3,1, true);
 				}
-				// case activée
+				// case activï¿½e
 				mc.smc.gotoAndStop( if(fs.matrix[x][y]) 2 else 1 );
 				sysGameList.push(mc);
 				if ( Std.random(2)==0 )
@@ -2271,14 +2313,14 @@ class UserTerminal {
 		Data.zsort(Manager.DM, sysGameList);
 	}
 
-	function onActivateMatrix(file:FSNode, mc:flash.MovieClip, x,y) {
+	function onActivateMatrix(file:FSNode, mc:MovieClip, x,y) {
 		if ( fs.fl_auth )
 			return;
 
 		if ( fs.matrix[x][y])
 			fs.matrix[x][y] = false;
 		else {
-			// vérif cpt
+			// vï¿½rif cpt
 			var max = Data.MATRIX_WID-1;
 			var n = 0;
 			for (x in 0...Data.MATRIX_WID)
@@ -2315,6 +2357,7 @@ class UserTerminal {
 
 
 	public function detachCMenu() {
+		if ( cmenu==null ) return;
 		startAnim(A_FadeRemove, cmenu).spd*=3;
 		cmenu.onRelease = function() {};
 	}
@@ -2329,7 +2372,7 @@ class UserTerminal {
 		if ( blist==null || blist.length<=0 )
 			return;
 		playSound("bleep_07");
-		blist.push({label:Lang.get.MenuCancel, cb:callback(onMenuItem,cancel)});
+		blist.push({label:Lang.get.MenuCancel, cb:onMenuItem.bind(cancel)});
 		cmenu = dm.empty(Data.DP_TOP);
 		var i = 0;
 		for (b in blist) {
@@ -2345,18 +2388,18 @@ class UserTerminal {
 		cmenu._y = Math.round(y+10);
 	}
 
-	public function initStandardButton(mc:MCField, cb:Void->Void) {
-		mc.onRelease = callback(onMenuItem,cb);
-		mc.onRollOver = callback(onMenuOver,mc);
-		mc.onRollOut = callback(onMenuOut,mc);
-		mc.onReleaseOutside = callback(onMenuOut,mc);
+	public function initStandardButton(mc:MovieClip, cb:Void->Void) {
+		mc.onRelease = onMenuItem.bind(cb);
+		mc.onRollOver = onMenuOver.bind(mc);
+		mc.onRollOut = onMenuOut.bind(mc);
+		mc.onReleaseOutside = onMenuOut.bind(mc);
 	}
 
-	public function onMenuOver(mc:flash.MovieClip) {
-		mc.smc.filters = [ new flash.filters.GlowFilter(0xffffff,1, 3,3,5) ];
+	public function onMenuOver(mc:MovieClip) {
+		mc.smc.filters = GlowFilter.create(0xffffff,1, 3,3,5);
 	}
 
-	public function onMenuOut(mc:flash.MovieClip) {
+	public function onMenuOut(mc:MovieClip) {
 		mc.smc.filters = [];
 	}
 
@@ -2369,6 +2412,7 @@ class UserTerminal {
 
 
 	public function decayLog() {
+		if (logLines.length <= 0) return;
 		var now = Date.now().getTime();
 
 		var last = logLines.first();
@@ -2389,14 +2433,14 @@ class UserTerminal {
 
 		var lmc : MCField = cast Manager.DM.attach("logLine",Data.DP_TOP);
 		lmc.field.text = str;
-		lmc.field.textColor = color;
+		lmc.field.style.fill = color;
 		logMC._y+=lmc.field.textHeight;
 
-		if ( color!=Data.GREEN )
-			lmc.field.filters = [ new flash.filters.GlowFilter( color, 1, 8,8,1 ) ];
+		//if ( color!=Data.GREEN )
+			lmc.field.filters = GlowFilter.create( color, 1, 8,8,1 );
 
-		var bmp = new BitmapData( Std.int(lmc.field.textWidth+5), Std.int(lmc.field.textHeight+5), true, 0x009900);
-		bmp.draw(lmc);
+		var bmp = Manager.app.renderer.generateTexture(cast lmc, pixi.core.ScaleModes.DEFAULT, 1);
+		bmp.resize( lmc.field.width+5, lmc.field.height+5, true);
 		lmc.removeMovieClip();
 
 		var mc = Manager.DM.empty(Data.DP_TOP);
@@ -2459,9 +2503,9 @@ class UserTerminal {
 		var tips = new Array();
 		for (i in 0...40)
 			tips.push( TD.texts.get("tips") );
-		UserTerminal.CNX.JsMain.printTip.call([
+		UserTerminal.jsMain.printTip(
 			Lang.get.TipTitle, Data.htmlize( tips[Std.random(tips.length)] )
-		]);
+		);
 	}
 
 	public function spam(str:String) {
@@ -2471,12 +2515,12 @@ class UserTerminal {
 	}
 
 
-	function onKey() {
+	function onKey(e:KeyboardEvent) {
 		if ( apps.length > 0 )
 			return;
 
-		// touches spéciales
-		var c = Key.getCode();
+		// touches spï¿½ciales
+		var c = e.keyCode;
 		switch (c) {
 			case Key.ESCAPE :
 				hideCompletion();
@@ -2498,13 +2542,13 @@ class UserTerminal {
 				else
 					if ( fs!=null && pwin==null )
 						fs.nextTarget();
-			case Key.RIGHT :
+			case Key.ARROW_RIGHT :
 				if ( Key.isDown(Key.CONTROL) && fs!=null && pwin==null )
 					fs.nextTarget();
-			case Key.LEFT :
+			case Key.ARROW_LEFT :
 				if ( Key.isDown(Key.CONTROL) && fs!=null && pwin==null )
 					fs.prevTarget();
-			case Key.UP :
+			case Key.ARROW_UP :
 				if ( fl_leet && fs!=null && popMC==null && pwin==null ) {
 					if ( historyPos > 0 ) {
 						historyPos--;
@@ -2512,7 +2556,7 @@ class UserTerminal {
 						forcedCaret = -1;
 					}
 				}
-			case Key.DOWN :
+			case Key.ARROW_DOWN :
 				if ( fl_leet && fs!=null && popMC==null && pwin==null ) {
 					if ( historyPos < cmdHistory.length-1 ) {
 						historyPos++;
@@ -2525,7 +2569,7 @@ class UserTerminal {
 				if ( popMC!=null )
 					detachPop();
 				else if ( pwin!=null )
-					validatePass(pwin.input.text,passFile);
+					validatePass(pwin.field2.text,passFile);
 				else if ( fl_leet && fs!=null ) {
 					var cmd = cmdLine.field.text;
 					try {
@@ -2564,7 +2608,7 @@ class UserTerminal {
 
 		// touches "lettres"
 		if ( popMC==null && pwin==null ) {
-			var char = String.fromCharCode(Key.getAscii()).toLowerCase();
+			var char = String.fromCharCode(c).toLowerCase();
 			switch (char) {
 				case "a" :
 					#if debug
@@ -2659,7 +2703,7 @@ class UserTerminal {
 		popUp(Lang.get.YouAreDead);
 	}
 
-	// méthode appelée 1x par seconde si le timer est actif
+	// mï¿½thode appelï¿½e 1x par seconde si le timer est actif
 	function onTick() {
 		tick++;
 		vman.onTick(tick);
@@ -2681,9 +2725,9 @@ class UserTerminal {
 					playSound("alarm_01");
 				playSound("alarm_02");
 			}
-			// bleep sur réseau
+			// bleep sur rï¿½seau
 			net.bleep(alarmOrigin);
-			// décompte
+			// dï¿½compte
 			alarmTimer--;
 			if ( alarmTimer<=0 )
 				onAlarmEnd();
@@ -2753,7 +2797,9 @@ class UserTerminal {
 
 					case A_BlurIn :
 						a.mc._alpha = 100 * normFact(cpt,0.4);
-						a.mc.filters = [ new flash.filters.BlurFilter(16*(1-cpt),16*(1-cpt)) ];
+						// TODO: Fix this, the filter is still applied after being removed for some reason
+						//a.mc.filters = [ BlurFilter.create(16*(1-cpt),16*(1-cpt)) ];
+						a.mc.filters = [ BlurFilter.create(0,0) ];
 
 					case A_FadeRemove :
 						a.mc._alpha = 100 * (1-cpt);
@@ -2814,16 +2860,16 @@ class UserTerminal {
 					case A_Delete :
 						a.mc.gotoAndStop( Math.floor((1-normFact(cpt,0.8))*a.mc._totalframes) );
 						var cpt2 = factBetween(cpt,0.7,1);
-						a.mc.filters = [ new flash.filters.BlurFilter(cpt2*64,cpt2*8) ];
+						a.mc.filters = [ BlurFilter.create(cpt2*64,cpt2*8) ];
 						a.mc._alpha = 100*(1-factBetween(cpt,0.8,1));
 						if ( cpt>=1 )
 							a.mc._visible = false;
 
 					case A_Blink :
-						a.mc.filters = [ new flash.filters.GlowFilter( 0xffffff,(1-factBetween(cpt,0.5,1)), (1-cpt)*7, (1-cpt)*7, 1, true ) ];
+						a.mc.filters = GlowFilter.create( 0xffffff,(1-factBetween(cpt,0.5,1)), (1-cpt)*7, (1-cpt)*7, 1, true );
 
 					case A_StrongBlink :
-						a.mc.filters = [ new flash.filters.GlowFilter( 0xffffff,(1-factBetween(cpt,0.3,1)), 3,3, 10 ) ];
+						a.mc.filters = GlowFilter.create( 0xffffff,(1-factBetween(cpt,0.3,1)), 3,3, 10 );
 
 					case A_Auth :
 						var mcc : MCField = cast a.mc;
@@ -2858,13 +2904,12 @@ class UserTerminal {
 						a.mc._alpha = normFact(cpt,0.2)*100;
 //						a.mc._xscale = 5 + normFact(cpt,0.8)*95;
 						a.mc._yscale = 5 + factBetween(cpt,0.2,0.6)*95;
-						var mcc : BubbleMC = cast a.mc;
 						var cpt2 = 1-factBetween(cpt,0.4,1);
 						a.mc.filters = [
-							new flash.filters.BlurFilter(32*cpt2,2*cpt2),
-//							new flash.filters.DropShadowFilter(3,45, 0x0,0.5, 0,0),
+							BlurFilter.create(32*cpt2,2*cpt2),
+//							new DropShadowFilter(3,45, 0x0,0.5, 0,0),
 						];
-//						mcc.field.filters = [ new flash.filters.BlurFilter(32*cpt2,2*cpt2) ];
+//						a.mc.field.filters = [ new BlurFilter.create(32*cpt2,2*cpt2) ];
 					case A_Bump :
 						a.mc._y+=a.data;
 						a.data+=3.5;
@@ -3050,7 +3095,7 @@ class UserTerminal {
 			t = 0;
 		}
 		var tdata : Time = DateTools.parse(t);
-		if ( lastTimer.seconds!=tdata.seconds ) {
+		if ( lastTimer != null && lastTimer.seconds!=tdata.seconds ) {
 			onTick();
 			var str = tdata.minutes+":"+Data.leadingZeros(tdata.seconds);
 			gtimerMC.field.text = str;
@@ -3069,7 +3114,8 @@ class UserTerminal {
 	function updateBars() {
 		lifeBar.smc._xscale = 100*life/lifeTotal;
 		manaBar.smc._xscale = 100*mana/manaTotal;
-		comboMc.removeMovieClip();
+		if ( comboMc!=null )
+			comboMc.removeMovieClip();
 		comboMc = Manager.DM.empty(Data.DP_TOP);
 		bubble(lifeBar, Lang.fmt.Tooltip_Life({_n:life,_total:lifeTotal}),-1.5);
 		bubble(manaBar, Lang.fmt.Tooltip_Mana({_n:mana,_total:manaTotal}),-1.5);
@@ -3082,7 +3128,7 @@ class UserTerminal {
 				mc._x = lifeBar._x - 7;
 				mc._y = lifeBar._y + 2 + 6*i;
 			}
-			comboMc.filters = [new flash.filters.GlowFilter(0x444d5d, 1, 4,4,10)];
+			comboMc.filters = GlowFilter.create(0x444d5d, 1, 4,4,10);
 			comboMc.cacheAsBitmap = true;
 			bubble(comboMc, Lang.fmt.Tooltip_Combo({_n:n,_total:maxCombo}), -1.5);
 		}
@@ -3127,24 +3173,25 @@ class UserTerminal {
 
 		Progress.update();
 
+		if ( net!=null )
+			net.update();
+
 		if ( fl_generated ) {
 			if ( fs!=null )
 				fs.update();
 			updateLog();
-			updateTimer();
+			updateTimer();		
+			dock.update();	
+			// virus & antivirus
+			vman.onEndTurn();
+			avman.onEndTurn();
 		}
-		// NOTE 1 : attention, log et timer déplacés avant cinematics ! pas de bug à signaler ?
-		// NOTE 2 : net.update et dock.update se trouvaient juste après Progress.update !
+		// NOTE 1 : attention, log et timer dï¿½placï¿½s avant cinematics ! pas de bug ï¿½ signaler ?
+		// NOTE 2 : net.update et dock.update se trouvaient juste aprï¿½s Progress.update !
 		for (a in apps)
 			a.update();
-		net.update();
-		dock.update();
 
-		// virus & antivirus
-		vman.onEndTurn();
-		avman.onEndTurn();
-
-		// flood dans l'écran de boot
+		// flood dans l'ï¿½cran de boot
 		if ( bootCooldown>0 )
 			bootCooldown--;
 		if ( loadingSteps<=0 && boot._name!=null && !hasAnim(boot) && Std.random(100)<80 && bootCooldown<=0 ) {
@@ -3160,13 +3207,13 @@ class UserTerminal {
 		updateFx();
 		updateCinematics();
 
-		if ( bmc._name!=null )
+		if ( bmc!=null )
 			updateBubble();
 
 		if ( ffield!=null ) {
 			if ( !hasFocus() )
 				focus();
-			caretIdx = flash.Selection.getCaretIndex();
+			//caretIdx = flash.Selection.getCaretIndex();
 		}
 
 		if ( fs!=null && life==0 )

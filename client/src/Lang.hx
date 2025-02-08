@@ -1,7 +1,26 @@
-private class AllTexts extends haxe.xml.Proxy<"../xml/lang.client.fr.xml",String> {
+import mt.gx.HashEx;
+import mt.data.XMLProxy;
+
+private abstract AllTexts(String -> Null<String>) {
+    public function new(get: String -> Null<String>) {
+		this = get;
+	}
+
+	@:resolve
+	public function getText(key: String): String {
+		return this(key);
+	}
 }
 
-private class AllTextsFormat extends haxe.xml.Proxy<"../xml/lang.client.fr.xml",Dynamic->String> {
+private abstract AllTextsFormat(String -> (Dynamic -> Null<String>)) {
+    public function new(get: String -> (Dynamic -> Null<String>)) {
+		this = get;
+	}
+
+	@:resolve
+	public function getText(key: String): (Dynamic -> Null<String>) {
+		return this(key);
+	}
 }
 
 class Lang {

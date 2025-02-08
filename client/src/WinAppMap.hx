@@ -14,7 +14,7 @@ class WinAppMap extends WinApp {
 	static var X_OFFSET = 22;
 
 	var fs			: GFileSystem;
-	var avList		: List<flash.MovieClip>;
+	var avList		: List<MovieClip>;
 	var scanLevel	: Int;
 	var mode		: MapMode;
 	public var fl_ignoreScrambler	: Bool;
@@ -73,8 +73,8 @@ class WinAppMap extends WinApp {
 		var fl_superScan = term.hasChipset( ChipsetsXml.get.sscan );
 
 
-		// child "???" si parent protégé par password
-		if ( parent.password!=null && !fl_superScan ) {
+		// child "???" si parent protï¿½gï¿½ par password
+		if ( parent?.password!=null && !fl_superScan ) {
 			var mc : MCField = cast sdm.attach("mapFolder",Data.DP_ITEM);
 			mc._x = 20 + level*X_OFFSET;
 			mc._y = 15 + y;
@@ -86,7 +86,7 @@ class WinAppMap extends WinApp {
 		}
 
 
-		// récupération du contenu affichable de ce dossier
+		// rï¿½cupï¿½ration du contenu affichable de ce dossier
 		var me = this;
 		var list = fs.getFolderFiles(parent);
 		list.sort( function(a,b) {
@@ -133,7 +133,7 @@ class WinAppMap extends WinApp {
 				if ( scanLevel>=3 && term.avman.folderContainsAny(f) ) {
 					tip(mc, Lang.get.MapAV);
 					mc.field.textColor = 0xffff00;
-					mc.field.filters = [ new flash.filters.GlowFilter(0xffbb00, 0.5, 5,5) ];
+					mc.field.filters = GlowFilter.create(0xffbb00, 0.5, 5,5);
 					mc.smc.gotoAndStop(2);
 				}
 				if ( f.password!=null ) {
@@ -174,8 +174,8 @@ class WinAppMap extends WinApp {
 		return branch;
 	}
 
-	function tip(mc:flash.MovieClip, title:String, ?txt:String) {
-		term.bubble(mc,title,txt, callback(onOver,mc), callback(onOut,mc));
+	function tip(mc:MovieClip, title:String, ?txt:String) {
+		term.bubble(mc,title,txt, onOver.bind(mc), onOut.bind(mc));
 	}
 
 	public function detachStack() {
@@ -220,6 +220,7 @@ class WinAppMap extends WinApp {
 //						k.toUpperCase()
 //					else
 //						k.toUpperCase()+" x "+list.length;
+				case _ : Manager.fatal("Unmatched pattern: " + scanLevel); "";
 			}
 			text = "[?] "+text;
 			#if debug

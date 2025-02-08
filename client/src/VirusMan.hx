@@ -102,7 +102,7 @@ class VirusMan {
 		}
 		str = words.join(" ");
 
-		// récupération du virus
+		// rï¿½cupï¿½ration du virus
 		var v : Virus = null;
 		var end = str.indexOf(" ");
 		if ( end<0 )
@@ -125,7 +125,7 @@ class VirusMan {
 		}
 
 
-		// nom du fichier ciblé
+		// nom du fichier ciblï¿½
 		var fname = str.substr( end+1 );
 		var f : FSNode = null;
 		if ( fname.length==0 )
@@ -192,7 +192,7 @@ class VirusMan {
 				me.term.playSound("bleep_01");
 		}
 
-		// démarrage après barre de progression
+		// dï¿½marrage aprï¿½s barre de progression
 		Progress.start( ct, function() {
 			if ( me.virus.uses!=null ) {
 				me.virus.uses--;
@@ -208,7 +208,7 @@ class VirusMan {
 			me.term.hideCompletion();
 			me.term.dock.updateBubbles();
 
-			// perte furtivité
+			// perte furtivitï¿½
 			if ( me.term.hasEffect(UE_Furtivity) )
 				me.term.avman.endTurn.add( function() {
 					me.term.removeEffect(UE_Furtivity);
@@ -254,6 +254,7 @@ class VirusMan {
 	}
 
 	public function onTick(t) {
+		if (term.fs == null) return;
 		if ( t%5==0 )
 			for (f in term.fs.rawTree)
 				if ( f.hasEffect(E_Dot) ) {
@@ -459,7 +460,7 @@ class VirusMan {
 
 
 
-	// *** IMPLÉMENTATION : NETWORK
+	// *** IMPLï¿½MENTATION : NETWORK
 
 	function _connec(n:N) {
 		if ( n.type==Entrance ) {
@@ -484,6 +485,7 @@ class VirusMan {
 			term.startAnim( A_Connect, mc, n.ip, true );
 		term.log(Lang.get.Log_Connecting);
 
+		term.fs.lock();
 		start(getCT()*2, function(t,v) {
 			t.net.connect(n);
 			t.fs.logEvent(Lang.fmt.TraceConnect({_name:t.username}));
@@ -492,7 +494,7 @@ class VirusMan {
 		} );
 	}
 
-	// *** IMPLÉMENTATION : FILE
+	// *** IMPLï¿½MENTATION : FILE
 
 	function _exit(f:F) {
 		if ( term.fs.curFolder.parent!=null )
@@ -507,9 +509,12 @@ class VirusMan {
 			throw "";
 		}
 
-		if ( term.avman.folderContains(term.fs.curFolder, AntivirusXml.get.glue ) )
-			if ( !term.hasEffect(UE_Furtivity) && !term.hasEffect(UE_MoveFurtivity) )
-				throw term.popUp(Lang.get.CantGetOut);
+		if ( term.avman.folderContains(term.fs.curFolder, AntivirusXml.get.glue ) ) {
+			if ( !term.hasEffect(UE_Furtivity) && !term.hasEffect(UE_MoveFurtivity) ) {
+				term.popUp(Lang.get.CantGetOut);
+				throw "";
+			}
+		}
 
 		start(0.1, function(t,v) {
 			Tutorial.play( Tutorial.get.second, "nowExit" );
@@ -543,7 +548,7 @@ class VirusMan {
 		if ( term.avman.folderContains(term.fs.curFolder, AntivirusXml.get.glue) )
 			if ( !term.hasEffect(UE_Furtivity) && !term.hasEffect(UE_MoveFurtivity) )
 				throw Lang.get.CantGetOut;
-		term.startAnim( A_StrongBlink, f.mc.icon );
+		term.startAnim( A_StrongBlink, cast f.mc.icon );
 
 		var t = getCT()*0.6;
 		if ( f==term.fs.curFolder.parent || MissionGen.isTutorial(term.mdata) )
@@ -765,7 +770,7 @@ class VirusMan {
 			while (f.hasEffect(E_Masked))
 				f.removeEffect(E_Masked);
 			var a = t.startAnim(A_Decrypt, f.mc, f.name);
-			a.cb = callback(t.fs.onUnmask,f);
+			a.cb = t.fs.onUnmask.bind(f);
 		});
 	}
 

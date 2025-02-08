@@ -8,7 +8,7 @@ typedef FolderPattern = {
 }
 
 class PatternXml {
-	public var rseed	: mt.Rand;
+	public var rseed	: Rand;
 	var patterns		: Hash<Array<String>>;
 
 	public function new(seed:Int,raw:String) {
@@ -55,7 +55,7 @@ class PatternXml {
 	}
 
 
-	public static function getCount(rseed:mt.Rand, key:String) {
+	public static function getCount(rseed:Rand, key:String) {
 		key = key.toLowerCase();
 		var a = key.split(":");
 		if ( a.length==1 ) return 1;

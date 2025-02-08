@@ -1,11 +1,29 @@
 import Types;
-import flash.Key;
+import mt.flash.Key;
+import js.html.KeyboardEvent;
+import common.MovieClip;
+import common.Filters;
 
-typedef WindowMC = {
-	> flash.MovieClip,
-	field	: flash.TextField,
-	close	: flash.MovieClip,
-	mask	: flash.MovieClip,
+@:forward
+abstract WindowMC(MovieClip) from MovieClip to MovieClip {
+	public var field(get, never)		: Text;
+	public var close(get, never)		: MovieClip;
+	public var winMask(get, never)		: MovieClip;
+
+	public function new(mc: MovieClip) {
+		this = mc;
+	}
+
+	public function get_field(): Text {
+		return cast this.get("field");
+	}
+
+	public function get_close(): MovieClip {
+		return cast this.get("close");
+	}
+	public function get_winMask(): MovieClip {
+		return cast this.get("winMask");
+	}
 }
 
 class WinApp {
@@ -16,10 +34,10 @@ class WinApp {
 	var sdm			: mt.DepthManager;
 
 	var win			: WindowMC;
-	var bg			: flash.MovieClip;
-	var scroller	: flash.MovieClip;
-	var scrollUp	: flash.MovieClip;
-	var scrollDown	: flash.MovieClip;
+	var bg			: MovieClip;
+	var scroller	: MovieClip;
+	var scrollUp	: MovieClip;
+	var scrollDown	: MovieClip;
 
 	var wid			: Int;
 	var hei			: Int;
@@ -43,7 +61,7 @@ class WinApp {
 	public function setTitle(?t:String) {
 		if ( t!=null )
 			title = t;
-		if ( win.field!=null )
+		if ( win?.field!=null )
 			win.field.text = title.toUpperCase()+".PRG";
 	}
 
@@ -59,11 +77,11 @@ class WinApp {
 		win._y = Math.round( Data.HEI*0.5 - win._height*0.5 );
 		setTitle();
 		win.close.onRelease = onClose;
-		win.close.onRollOver = callback(onOver, win.close);
-		win.close.onRollOut = callback(onOut, win.close);
+		win.close.onRollOver = onOver.bind(cast win.close);
+		win.close.onRollOut = onOut.bind(cast win.close);
 
-		wid = Std.int( win.mask._width );
-		hei = Std.int( win.mask._height );
+		wid = Std.int( win.resolve("mask").width );
+		hei = Std.int( win.resolve("mask").height );
 
 		dm = new mt.DepthManager( win );
 
@@ -74,8 +92,8 @@ class WinApp {
 		scrollUp.onPress = onScrollUp;
 		scrollUp.onRelease = onStopScroll;
 		scrollUp.onReleaseOutside = onStopScroll;
-		scrollUp.onRollOver = callback(onOver,scrollUp);
-		scrollUp.onRollOut = callback(onOut,scrollUp);
+		scrollUp.onRollOver = onOver.bind(scrollUp);
+		scrollUp.onRollOut = onOut.bind(scrollUp);
 
 		scrollDown = dm.attach("windowScroll", Data.DP_APP);
 		scrollDown._x = win._width - scrollDown._width;
@@ -83,13 +101,13 @@ class WinApp {
 		scrollDown.onPress = onScrollDown;
 		scrollDown.onRelease = onStopScroll;
 		scrollDown.onReleaseOutside = onStopScroll;
-		scrollDown.onRollOver = callback(onOver,scrollDown);
-		scrollDown.onRollOut = callback(onOut,scrollDown);
+		scrollDown.onRollOver = onOver.bind(scrollDown);
+		scrollDown.onRollOut = onOut.bind(scrollDown);
 
 		scroller = dm.empty(Data.DP_ITEM);
-		scroller.setMask(win.mask);
-		scroller._x = win.mask._x;
-		scroller._y = win.mask._y;
+		scroller.fieldWrite("mask", cast win.resolve("mask"));
+		scroller._x = win.resolve("mask")._x;
+		scroller._y = win.resolve("mask")._y;
 		sdm = new mt.DepthManager( scroller );
 
 		term.registerApp(this);
@@ -103,10 +121,9 @@ class WinApp {
 		if ( !term.fl_lowq )
 			term.startAnim( A_FadeIn, win ).spd*=2;
 
-		Reflect.setField(ml, "onMouseWheel", onMouseWheel);
-		flash.Mouse.addListener(ml);
-		Reflect.setField(kl, "onKeyDown", onKeyEvent);
-		Key.addListener(kl);
+		//Reflect.setField(ml, "onMouseWheel", onMouseWheel);
+		//flash.Mouse.addListener(ml);
+		js.Browser.window.addEventListener("keydown", onKeyEvent);
 	}
 
 	public function stop() {
@@ -121,14 +138,14 @@ class WinApp {
 		}
 		term.dock.show();
 		term.showLog();
-		Key.removeListener(kl);
-		flash.Mouse.removeListener(ml);
+		//Key.removeListener(kl);
+		//flash.Mouse.removeListener(ml);
 	}
 
 	function separator(x) {
 		var mc = dm.attach("windowLine", Data.DP_TOP);
-		mc._x = Math.round( x + win.mask._x );
-		mc._y = Math.round( win.mask._y - 5 );
+		mc._x = Math.round( x + win.resolve("mask")._x );
+		mc._y = Math.round( win.resolve("mask")._y - 5 );
 		mc._alpha = 50;
 		return mc;
 	}
@@ -138,7 +155,7 @@ class WinApp {
 			fdm = dm;
 		var mc : MCField = cast fdm.attach("logLine",Data.DP_TOP);
 		mc.field.text = s;
-		mc.field._width = mc.field.textWidth + 10;
+		mc.field._width = mc.field.width + 10;
 		mc._x = x;
 		mc._y = y;
 		if ( fl_anim )
@@ -154,16 +171,16 @@ class WinApp {
 		mc._x = x;
 		mc._y = y;
 		mc.field.text = label;
-		mc.field._width = mc.field.textWidth + 10;
+		mc.field._width = mc.field.width + 10;
 		if ( fl_resize )
-			mc.smc._width = mc.field.textWidth+10;
+			mc.smc._width = mc.field.width+10;
 		var me = this;
 		mc.onRelease = function() {
 			me.term.playSound("single_01");
 			cb();
 		}
-		mc.onRollOver = callback(onOver,mc);
-		mc.onRollOut = callback(onOut,mc);
+		mc.onRollOver = onOver.bind(mc);
+		mc.onRollOut = onOut.bind(mc);
 		mc.onReleaseOutside = mc.onRollOut;
 		return mc;
 	}
@@ -181,8 +198,8 @@ class WinApp {
 		scrollY = 0;
 	}
 
-	function onKeyEvent() {
-		onKey( Key.getCode() );
+	function onKeyEvent(e:KeyboardEvent) {
+		onKey( e.keyCode );
 	}
 
 	function onKey(c) {
@@ -196,28 +213,28 @@ class WinApp {
 		scroll( 0, Std.int( -delta * SCROLL_SPEED * mt.Timer.tmod ) );
 	}
 
-	function onOver(mc:flash.MovieClip) {
-		mc.filters = [ new flash.filters.GlowFilter(Data.GREEN,0.8, 4,4) ];
+	function onOver(mc:MovieClip) {
+		mc.filters = GlowFilter.create(Data.GREEN,0.8, 4,4);
 	}
 
-	function onOut(mc:flash.MovieClip) {
+	function onOut(mc:MovieClip) {
 		mc.filters = [];
 	}
 
 	function scroll(dx,dy) {
-		if ( scroller._width < win.mask._width )
+		if ( scroller.width < win.resolve("mask").width )
 			dx = 0;
-		if ( scroller._height < win.mask._height )
+		if ( scroller.height < win.resolve("mask").height )
 			dy = 0;
 
 		if ( dx!=0 ) {
 			scroller._x -= dx;
-			scroller._x = Math.min( win.mask._x, scroller._x );
+			scroller._x = Math.min( win.resolve("mask")._x, scroller._x );
 			scroller._x = Math.max( -scroller._width + wid, scroller._x );
 		}
 		if ( dy!=0 ) {
 			scroller._y -= dy;
-			scroller._y = Math.min( win.mask._y, scroller._y );
+			scroller._y = Math.min( win.resolve("mask")._y, scroller._y );
 			scroller._y = Math.max( -scroller._height + hei, scroller._y );
 		}
 

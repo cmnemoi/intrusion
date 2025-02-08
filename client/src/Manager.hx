@@ -2,18 +2,26 @@ import Protocol;
 import mt.bumdum.Lib;
 import Types;
 import MissionGen;
+import pixi.core.Application;
+import haxe.CallStack;
+import common.MovieClipBuilder;
+
+import haxe.Unserializer;
 
 class Manager {
 	public static var LANG		 = "fr";
+	public static var ASSET_ROOT = "/";
 	
-	public static var ROOT		: flash.MovieClip;
+	public static var app:Application;
+	public static var ROOT		: common.MovieClip;
 	public static var ME		: Manager;
 	public static var DM		: mt.DepthManager;
 	public static var PARAMS	: PInit;
-	public static var fc 		: mt.flash.FastCrypt = null;
+	//public static var fc 		: mt.flash.FastCrypt = null;
 
 	static var xmlData			: Hash<String>;
 	static var fl_decrypted		: Bool;
+	static var textures_loaded  : Bool = false;
 
 	#if debug
 		public static var STANDALONE	= false;
@@ -24,10 +32,19 @@ class Manager {
 	static var timers		: List<haxe.Timer>;
 
 
-	public function new(mc) {
-		ROOT = mc;
-		ROOT.tabEnabled = false;
-		ROOT.tabChildren = false;
+
+	public function new() {
+		// INIT
+		var spriteBuilder = new MovieClipBuilder("xml_sprites", ASSET_ROOT);
+		spriteBuilder.preloadAssets(() -> {
+			textures_loaded = true;
+		});
+		ROOT = new common.MovieClip(spriteBuilder);
+		Manager.app.stage.addChild(ROOT);
+
+		//ROOT.tabEnabled = false;
+		//ROOT.tabChildren = false;
+		/*
 		try {
 			var raw = haxe.Resource.getString("soundData");
 			fc = new mt.flash.FastCrypt( raw );
@@ -35,18 +52,20 @@ class Manager {
 		catch(e:String) {
 			fatal("FC : "+e);
 		}
+		*/
 		ME = this;
 		DM = new mt.DepthManager(ROOT);
 		timers = new List();
 		fl_decrypted = false;
+		js.Browser.window.requestAnimationFrame(update);
 	}
 
 	function onDecrypt() {
-		// initialisation des XML cryptés
-		data.VirusXml.init();
+		// initialisation des XML cryptï¿½s
+		data.VirusXml.init(Manager.LANG);
 		data.AntivirusXml.init();
-		data.ValuablesXml.init();
-		data.ChipsetsXml.init();
+		data.ValuablesXml.init(Manager.LANG);
+		data.ChipsetsXml.init(Manager.LANG);
 
 		PARAMS = getParams();
 		term = new UserTerminal();
@@ -56,24 +75,25 @@ class Manager {
 	static function getStacks() {
 		var list = new List();
 		list.add("EXCEPTION STACK :");
-		list.add( haxe.Stack.toString(haxe.Stack.exceptionStack()) );
+		list.add(CallStack.exceptionStack().join("\n"));
 		list.add("\n");
 		list.add("CALL STACK :");
-		list.add( haxe.Stack.toString(haxe.Stack.callStack()) );
+		list.add(CallStack.callStack().join("\n"));
 		return list.join("\n");
 	}
 
 	public static function fatal(str:String) {
 		trace("FATAL ["+PARAMS._seed+"] : "+str+"\n"+getStacks());
 
-		var mc : { >MCField, bg:flash.MovieClip } = cast Manager.DM.attach("pop", Data.DP_TOPTOP);
+		var mc : MCSprite = cast Manager.DM.attach("pop", Data.DP_TOPTOP);
 		mc.field.text = Lang.get.Fatal+"\n\n"+str;
 		mc.bg._width = mc.field.textWidth+13;
 		mc.bg._height = mc.field.textHeight+10;
 		mc._x = Data.WID*0.5 - mc.bg._width*0.5;
 		mc._y = Data.HEI*0.5 - mc.bg._height*0.5;
 		mc.onRelease = function() {
-			flash.Lib.getURL(Manager.PARAMS._errorUrl);
+			// TODO: Fix?
+			//flash.Lib.getURL(Manager.PARAMS._errorUrl);
 		}
 
 		Col.setPercentColor( ROOT, 25, 0xff0000 );
@@ -89,11 +109,12 @@ class Manager {
 		}
 		if ( str!=mcLoading.field.text ) {
 			mcLoading.field.text = str;
-			mcLoading.field._visible = str!=null;
+			mcLoading.field.visible = str!=null;
 		}
 	}
 
 	public static function stopLoading() {
+		if (mcLoading==null) return;
 		Manager.ME.term.startAnim(A_FadeRemove,mcLoading).spd*=0.5;
 		mcLoading.smc._visible = false;
 //		Manager.ME.term.startAnim(A_FadeOut,mcLoading.smc).spd*=2;
@@ -104,11 +125,12 @@ class Manager {
 	static function getParams() : PInit {
 		var p : PInit = null;
 		try {
-			p = Codec.getData("init");
+			var unserializer = new Unserializer(untyped js.Browser.window.init);
+			p = unserializer.unserialize();
 		}
 		catch(e:Dynamic) {
 			#if debug
-				var stack = haxe.Stack.toString(haxe.Stack.exceptionStack());
+				var stack = CallStack.exceptionStack().join("\n");
 				trace("getParams : "+e);
 				STANDALONE = true;
 				p = {
@@ -203,10 +225,14 @@ class Manager {
 	public function decryptXml() {
 		if ( fl_decrypted )
 			return true;
-		fl_decrypted = !fc.run(400+Std.random(800));
+		// TODO: we can probably just remove that since the XMLs arent' encrypted
+		//fl_decrypted = !fc.run(400+Std.random(800));
+		fl_decrypted = true;
 		if ( !fl_decrypted )
-			loading( Lang.fmt.LoadCounter({_n:fc.getOutput().length*2}) );
+			return false;
+			//loading( Lang.fmt.LoadCounter({_n:fc.getOutput().length*2}) );
 		else {
+			/*
 			try {
 				var r = fc.getOutput();
 				xmlData = haxe.Unserializer.run( r );
@@ -214,33 +240,47 @@ class Manager {
 			catch(e:String) {
 				fatal("Unserializer failed : "+e);
 			}
+			*/
 			onDecrypt();
 		}
 		return fl_decrypted;
 	}
 
+	public function update(ts:Float) {
+		mt.Timer.update(ts);
+		js.Browser.window.requestAnimationFrame(update);
 
-	public static function getEncodedXml(key:String) {
-		if ( !fl_decrypted ) {
-			fatal("reading not complete");
-			return null;
-		}
+		Manager.DM.getMC().update();
 
-		key = "xml/"+key+".xml";
+		if (!textures_loaded) return;
 
-		if ( !xmlData.exists(key) ) {
-			fatal("unknown XML "+key);
-			return null;
-		}
-		else
-			return xmlData.get(key);
-	}
+		// DEBUG
+		//loading( Lang.fmt.LoadCounter({_n:0}));
+		//return;
+
+		/*
+			Loading order:
+				- Empty screen, "loading" only with Mo downloaded: decryptXml
+				- Boot screen with "Loading System": onLoadingStep
+				- " Reading data": onLoading
+				- Spam log
 
 
-	public function main() {
-		mt.Timer.update();
-		if ( !decryptXml() || term==null )
+			UserTerminal initialiation:
+				- fl_generated: set on onGenerate. Called from GNetwork updateGenerate
+				- GNetwork created in initGenerate. Called when onLoading reaches 0
+
+			GNetwork initialization:
+				- fl_generated Set after updateGenerate, called from update()
+				- called from UserTerminal.update()
+		*/
+
+		if ( !decryptXml() || term==null) {
+			// TODO: can't display this earlier as it requires textures..
+			// There's a race condition if decryptXML tries to remove the loading screen before we display it.
+			loading( Lang.fmt.LoadCounter({_n:0}));
 			return;
+		}
 		term.update();
 	}
 }

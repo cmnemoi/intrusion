@@ -1,4 +1,6 @@
 import Types;
+import pixi.core.display.Container;
+import pixi.core.math.Point;
 
 class Data {
 	public static inline var WID		= 600;
@@ -28,7 +30,7 @@ class Data {
 		return n*32;
 	}
 
-//	public inline static function getFraction(rseed:mt.Rand, n, pctMin:Int, pctMax:Int) {
+//	public inline static function getFraction(rseed:Rand, n, pctMin:Int, pctMax:Int) {
 //		return (rseed.random(pctMax-pctMin) + pctMin)/100 * n;
 //	}
 
@@ -38,7 +40,7 @@ class Data {
 		var rseed = newRandSeed(seed);
 		var list = new Array();
 
-		// division en N tas équivalents
+		// division en N tas ï¿½quivalents
 		var sum = 0;
 		for (i in 0...n) {
 			list[i] = Math.floor(total/n);
@@ -68,7 +70,7 @@ class Data {
 
 	public static function shuffle(seed:Int, list:Array<Dynamic>) {
 		if ( list==null || list.length<=1 ) return list;
-		var rseed = new mt.Rand(seed);
+		var rseed = new Rand(seed);
 		var n = Math.ceil( Math.min(list.length,500) );
 		for (i in 0...n) {
 			var from = rseed.random(list.length);
@@ -83,19 +85,14 @@ class Data {
 		return list;
 	}
 
-	public static function localToGlobal(parent:flash.MovieClip, x:Float, y:Float) {
-		var pt = {x:x, y:y};
-		while ( parent!=null ) {
-			pt.x += parent._x;
-			pt.y += parent._y;
-			parent = parent._parent;
-		}
-		return pt;
+	public static function localToGlobal(parent:Container, x:Float, y:Float) {
+		var ref = parent.toGlobal(new Point(0, 0));
+		return {x:ref.x+x, y:ref.y+y};
 	}
 
 
 	public static function newRandSeed(s) {
-		var rseed = new mt.Rand(0);
+		var rseed = new Rand(0);
 		rseed.initSeed(s);
 		return rseed;
 	}
@@ -138,7 +135,7 @@ class Data {
 		}
 	}
 
-	public static function zsort(dm:mt.DepthManager, mcList:Array<flash.MovieClip>) {
+	public static function zsort(dm:mt.DepthManager, mcList:Array<MovieClip>) {
 		mcList.sort( function(a,b) {
 			return Std.int(a._y-b._y);
 		});

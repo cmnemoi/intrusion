@@ -3,7 +3,8 @@ class TD {
 	public static var patterns			: data.PatternXml = null;
 	public static var texts				: data.TextXml = null;
 	public static var names				: data.TextXml = null;
-//	public static var dialogs			: data.TextXml = null;
+	// TODO: this was commented out for some reason
+	public static var dialogs			: data.TextXml = null;
 
 
 	public static function init() {
@@ -35,7 +36,7 @@ class TD {
 	}
 
 	private static inline function newRandSeed(s) {
-		var rseed = new mt.Rand(0);
+		var rseed = new Rand(0);
 		rseed.initSeed(s);
 		return rseed;
 	}

@@ -1,14 +1,14 @@
 import Types;
 import Progress;
 import mt.bumdum.Lib;
-import flash.display.BitmapData;
 import MissionGen;
 import Tutorial;
-
-
+import pixi.core.textures.RenderTexture;
+import pixi.core.Pixi;
 
 enum NodeType {
 	Empty;			// 1
+	Unused;         // 2
 	TargetEmpty;	// 3
 	Entrance;		// 4
 	Terminal;		// 5
@@ -39,7 +39,7 @@ typedef NetNode = {
 	type		: NodeType,
 	x			: Int,
 	y			: Int,
-	links		: List<{mc:flash.MovieClip,node:NetNode}>,
+	links		: List<{mc:MovieClip,node:NetNode}>,
 	users		: Array<String>,
 	dist		: Int,
 	path		: Array<NetNode>,
@@ -74,7 +74,7 @@ class GNetwork {
 
 	var uniq		: Int;
 	var seed		: Int;
-	var rseed		: mt.Rand;
+	var rseed		: Rand;
 	var map			: Array<Array<NetNode>>;
 	var nodes		: List<NetNode>;
 	var wid			: Int;
@@ -86,19 +86,19 @@ class GNetwork {
 	var baseIp				: String;
 	public var owner		: String;
 
-	var tmc					: TargetMC;
+	var tmc					: MovieClip;
 	public var sdm			: mt.DepthManager;
 	var ldm					: mt.DepthManager;
 	var groundField			: MCField;
-//	var bg2					: flash.MovieClip;
-	var dotLines			: Array<flash.MovieClip>;
-	var scroller			: flash.MovieClip;
+//	var bg2					: MovieClip;
+	var dotLines			: Array<MovieClip>;
+	var scroller			: MovieClip;
 	var stx					: Int;
 	var sty					: Int;
 	var sx					: Float;
 	var sy					: Float;
 	var spamCpt				: Float;
-	var gspamList			: List<{mc:flash.MovieClip, dx:Float,dy:Float, bmp:BitmapData}>;
+	var gspamList			: List<{mc:MovieClip, dx:Float,dy:Float, bmp:RenderTexture}>;
 	var scrollSpeed			: Float;
 
 	var fl_lock				: Bool;
@@ -198,7 +198,7 @@ class GNetwork {
 						return;
 					}
 
-				// on détermine le système protégé par les micro-verrous
+				// on dï¿½termine le systï¿½me protï¿½gï¿½ par les micro-verrous
 				#if debugGen trace("LockServerLight"); #end
 				for(lock in getNodes(LockServerLight)) {
 					var list = new Array();
@@ -231,7 +231,7 @@ class GNetwork {
 		}
 
 		#if debugGen trace("update generate DONE"); #end
-		// terminé !
+		// terminï¿½ !
 		initRand();
 		onGenerate();
 	}
@@ -262,7 +262,7 @@ class GNetwork {
 		if ( rseed.random(100)<66 )
 			genEmpty = rseed.random(5);
 		else
-			genEmpty = rseed.random(8)+4; // réseau étendu (lignes longues)
+			genEmpty = rseed.random(8)+4; // rï¿½seau ï¿½tendu (lignes longues)
 
 		// tuto 1
 		if ( MissionGen.isType(term.mdata, _MTutorial) ) {
@@ -279,7 +279,7 @@ class GNetwork {
 		// tuto 3
 		if ( MissionGen.isType(term.mdata, _MTutorialBypass(null)) ) {
 			useful = 1;
-			genEmpty = 1;
+			genEmpty = 2;
 		}
 
 		#if debugGen
@@ -305,7 +305,7 @@ class GNetwork {
 //				removeNodes(remain, false);
 //		}
 //		else {
-//			// normal mode (beaucoup de terminaux à la suite les uns des autres...)
+//			// normal mode (beaucoup de terminaux ï¿½ la suite les uns des autres...)
 //			removeNodes(total-useful-1, false );
 //		}
 
@@ -630,7 +630,7 @@ class GNetwork {
 
 
 	function computePath(?node:NetNode,?path:Array<NetNode>) {
-		if ( node.path!=null ) return;
+		if ( node!=null && node.path!=null ) return;
 		if ( node==null )
 			node = getOne(Entrance);
 		if ( path==null )
@@ -693,7 +693,7 @@ class GNetwork {
 		if ( pool.length<=0 )
 			return;
 
-		// répartition
+		// rï¿½partition
 		for (cc in cards) {
 			var node = pool[ rseed.random(pool.length) ];
 			var files = if( rseed.random(2)==0 ) node.system.getFilesByKey("file.mail") else node.system.getFilesByKey("file.doc");
@@ -701,6 +701,8 @@ class GNetwork {
 				return !f.fl_target;
 			}));
 			var f = files[ rseed.random(files.length) ];
+			if (f==null)
+				continue;
 			#if debugGen trace("creditCard : "+cc+" to "+node.system.name+" in "+f.name+" ("+f.getPathString()+")"); #end
 			TD.texts.set("card",cc);
 			if ( f.ext("mail") )
@@ -717,7 +719,7 @@ class GNetwork {
 	}
 
 	function dispatchMoney(total:Int) {
-		// recherche de système contenant des PACKs
+		// recherche de systï¿½me contenant des PACKs
 		var pool = new Array();
 		for (n in nodes)
 			if ( n.type!=Empty && n.type!=Treasure && n.system.countFilesByExt("pack")>0 )
@@ -787,8 +789,8 @@ class GNetwork {
 		// target mc
 		if (tmc==null) {
 			tmc = cast sdm.attach("target",Data.DP_BG);
-//			tmc.blendMode = "screen";
-			tmc.filters = [ new flash.filters.GlowFilter(0xffffff,0.7,12,12,1) ];
+//			tmc.blendMode = pixi.core.Pixi.BlendModes.SCREEN;
+			tmc.filters = GlowFilter.create(0xffffff,0.7,12,12,1);
 		}
 		if ( canReach(node) )
 			Col.setPercentColor(tmc, 100, Data.GREEN);
@@ -808,12 +810,12 @@ class GNetwork {
 			for (i in 0...Std.random(5)+5)
 				term.addFx(sdm, Data.DP_BG, AFX_PlayFrames, "fx_glight", node.mc._x, node.mc._y-15);
 
-		// exécution
+		// exï¿½cution
 		if ( node.type==Entrance ) {
 			if ( Tutorial.at(Tutorial.get.second, "nowExit") )
 				Tutorial.print();
 			term.showCMenu(sdm, node.mc._x, node.mc._y-20, [
-				{ label:Lang.get.MenuLogout, cb:callback(startConnect,node) },
+				{ label:Lang.get.MenuLogout, cb:startConnect.bind(node) },
 			]);
 		}
 		else
@@ -1307,7 +1309,7 @@ class GNetwork {
 		}
 		if ( Tutorial.play(Tutorial.get.third, "unreachable") )
 			return;
-
+		term.fs = node.system;
 		term.vman.exec(data.VirusXml.get.connec, node);
 	}
 
@@ -1388,10 +1390,11 @@ class GNetwork {
 		var mc = sdm.attach("mapBleep",Data.DP_TOPTOP);
 		mc._x = node.mc._x;
 		mc._y = node.mc._y-24;
-		mc.onEnterFrame = function() {
+		// TODO: Check if this works
+		Manager.app.ticker.add(function() {
 			if (mc._currentframe==mc._totalframes-1 )
 				mc.removeMovieClip();
-		}
+		});
 	}
 
 	public function updateVisibility(?fl_anim=true) {
@@ -1437,7 +1440,7 @@ class GNetwork {
 		if ( to.mc._x<from.mc._x && to.mc._y<from.mc._y )
 			line._xscale*=-1;
 		if (!canReach(to)) {
-			to.mc.filters = [ new flash.filters.GlowFilter( Data.RED, 1, 8,8, 2, 1) ];
+			to.mc.filters = GlowFilter.create( Data.RED, 1, 8,8, 2, 1);
 			Col.setPercentColor(line, 75, Data.RED);
 		}
 		dotLines.push(line);
@@ -1462,12 +1465,12 @@ class GNetwork {
 //		bg2._xscale = 75;
 //		bg2._yscale = bg2._xscale;
 //		bg2.cacheAsBitmap = true;
-//		bg2.blendMode = "overlay";
+//		bg2.blendMode = pixi.core.Pixi.BlendModes.OVERLAY;
 //		bg2._alpha = 30;
 
 		var bmpCont = sdm.empty(Data.DP_BG);
 		bmpCont._x = -300;
-		bmpCont.blendMode = "overlay";
+		bmpCont.blendMode = pixi.core.Pixi.BlendModes.OVERLAY;
 		var flat  = sdm.empty(Data.DP_BG);
 		var flatDm = new mt.DepthManager(flat);
 		var bg = flatDm.attach("bgNet",0);
@@ -1486,8 +1489,7 @@ class GNetwork {
 		groundField._x = -350 + x*HEXWID*0.5 + y*HEXWID*0.5;
 		groundField._y = 350 + -x*HEXHEI*0.5 + y*HEXHEI*0.5;
 		term.startAnim(A_Text, groundField, groundField.field.text, -2).spd*= if(term.fl_lowq) 2 else 0.5;
-
-		var mcList : Array<{d:Int,mc:flash.MovieClip}> = new Array();
+		var mcList : Array<{d:Int,mc:MovieClip}> = new Array();
 		var ambSpots : Array<{x:Float,y:Float}> = new Array();
 		for (y in 0...wid)
 			for (x in 0...wid) {
@@ -1500,10 +1502,13 @@ class GNetwork {
 					continue;
 				}
 				var mcNode : MCNode = cast sdm.attach("node",Data.DP_ITEM);
+				// 'base' isn't correctly set in the SWF export, adding it manually here.
+				mcNode.base = mcNode.attachMovieImage("158", "unused", "base", 1);
 				mcNode._x = -350 + x*HEXWID*0.5 + y*HEXWID*0.5;
 				mcNode._y = 350 + -x*HEXHEI*0.5 + y*HEXHEI*0.5;
 				mcNode.base._visible = false;
 				mcNode.sicon._visible = false;
+				mcNode.shield._visible = false;
 				mcNode.sicon.stop();
 				Col.setPercentColor( mcNode, 75, term.mdata._color );
 //				var hexWid = 32;
@@ -1513,19 +1518,20 @@ class GNetwork {
 				if ( node==null ) {
 					mcNode.gotoAndStop(1);
 					mcNode._alpha = 20;
-					mcNode.field._visible = false;
+					// TODO: can't find `field` in the SWF, not sure what it does..
+					//mcNode.field.visible = false;
 				}
 				else {
 					mcNode.gotoAndStop( Type.enumIndex(node.type)+1 );
 //					Col.setPercentColor( mcNode, 50, DIST_COLORS[node.dist] );
-					mcNode.field.text = node.ip;
-					mcNode.field._visible = false;
+					//mcNode.field.text = node.ip;
+					//mcNode.field.visible = false;
 					var links = node.links;
 					if ( node.type==Empty )
 						mcNode._visible = false;
 					else {
-						mcNode.onRelease = callback(onReleaseNode, node);
-						mcNode.onReleaseOutside = callback(onReleaseNode, node);
+						mcNode.onRelease = onReleaseNode.bind(node);
+						mcNode.onReleaseOutside = onReleaseNode.bind(node);
 					}
 					for (link in links) {
 						var mc = ldm.attach("link",Data.DP_BG_ITEM);
@@ -1601,35 +1607,38 @@ class GNetwork {
 //			flatDm.ysort(1);
 //		}
 //		else {
-			// décors d'ambiance
+			// dï¿½cors d'ambiance
 			var cx = -350 + (wid*0.5)*HEXWID*0.5 + (wid*0.5)*HEXWID*0.5;
 			var cy = 350 + -(wid*0.5)*HEXHEI*0.5 + (wid*0.5)*HEXHEI*0.5;
-			for (i in 0...rseed.random(40)+10) {
+			// TODO: Ambiance nodes aren't rendering well, reducing their number for now
+			for (i in 0...rseed.random(10)) {
 				var idx = rseed.random(ambSpots.length);
 				var c = ambSpots[idx];
 				ambSpots.splice(idx,1);
 				var mc : MCNode = cast flatDm.attach("node",2);
+				mc.base = mc.attachMovieImage("158", "unused", "base", 1);
 				mc._x = c.x-bmpCont._x;
 				mc._y = c.y;
 				mc.gotoAndStop( 30 + rseed.random(mc._totalframes-30+1) );
 				mc.sicon._visible = false;
 				mc.shield._visible = false;
+				mc.base._visible = false;
 				var dist = Math.sqrt( Math.pow(c.x-cx,2) + Math.pow(c.y-cy,2) );
 				mc._alpha = Std.int( 5+Math.min(1, dist/600 )*60 );
 			}
 //		}
 
-		var bmp = new BitmapData( 1300, 800, true, 0x0);
-		bmp.draw(flat);
-		flat.removeMovieClip();
-		bmpCont.attachBitmap(bmp,1);
+		//var bmp = Manager.app.renderer.generateTexture(flat, pixi.core.ScaleModes.DEFAULT, 1);
+		//bmp.resize( 1300, 800, true);
+		//flat.removeMovieClip();
+		//bmpCont.attachBitmap(bmp,1);
 
 		lmc.filters = [
-			new flash.filters.DropShadowFilter(2,90, 0x333333, 1, 0,0),
-			new flash.filters.DropShadowFilter(1,90, 0x111111, 1, 0,0),
-//			new flash.filters.GlowFilter(0x0,1, 3,3, 2),
-//			new flash.filters.GlowFilter(0xffffff,0.1, 3,3, 100),
-			new flash.filters.DropShadowFilter(15,90, 0x0, 0.25, 0,0),
+			DropShadowFilter.create(2,90, 0x333333, 1, 0,0),
+			DropShadowFilter.create(1,90, 0x111111, 1, 0,0),
+//			GlowFilter.create(0x0,1, 3,3, 2),
+//			GlowFilter.create(0xffffff,0.1, 3,3, 100),
+			DropShadowFilter.create(15,90, 0x0, 0.25, 0,0),
 		];
 		updateVisibility(false);
 		var base = if(mcList.length>40) 100 else 20;
@@ -1690,7 +1699,7 @@ class GNetwork {
 			var fl_shield = isShielded(node);
 			node.mc.shield._visible = fl_shield;
 //			node.mc.gotoAndStop( if(node.fl_visible) Type.enumIndex(node.type)+2 else 2 );
-			node.mc.gotoAndStop( Type.enumIndex(node.type)+2 );
+			node.mc.gotoAndStop( Type.enumIndex(node.type)+1 );
 //			if ( node.fl_visible )
 //				Col.setPercentColor( node.mc, 0, 0 );
 //			else
@@ -1706,7 +1715,7 @@ class GNetwork {
 			node.mc.filters = null;
 			#if debug
 				if ( node.fl_target )
-					node.mc.filters = [ new flash.filters.GlowFilter(0xffff00, 1, 6,6, 2) ];
+					node.mc.filters = GlowFilter.create(0xffff00, 1, 6,6, 2);
 			#end
 			if ( node.system.canConnect() && (node.system.fl_crashed || node.system.fl_auth) ) {
 				node.mc.sicon._visible = true;
@@ -1724,12 +1733,30 @@ class GNetwork {
 			drawPath(curNode);
 	}
 
+	/*
+	function collectFilters(mc: DisplayObject): Array<{name: String, f: pixi.core.renderers.webgl.filters.Filter}> {
+		var filters = new Array();
+		if (mc.filters != null) {
+			for (f in mc.filters) {
+				filters.push({name: mc.name, f: f});
+			}
+		}
+		if (Std.is(mc, Container)) {
+			for (c in cast(mc, Container).children) {
+				filters = filters.concat(collectFilters(c));
+			}
+		}
+		return filters;
+	}
 
+*/
 	public function update() {
 		if ( !fl_generated ) {
 			updateGenerate();
 			return;
 		}
+
+		//var filters = collectFilters(Manager.DM.getMC());
 
 		if ( fl_lock )
 			return;
@@ -1747,7 +1774,7 @@ class GNetwork {
 //		var mstx = (Manager.ROOT._xmouse - Data.WID*0.5)*0.15;
 //		var msty = (Manager.ROOT._ymouse - Data.HEI*0.5)*0.15;
 
-		if ( tmc._name!=null ) {
+		if ( tmc!=null ) {
 			var spd = 4;
 			tmc.c1._rotation+=spd;
 			tmc.c2._rotation+=-spd*1.3;
@@ -1808,19 +1835,19 @@ class GNetwork {
 				} while(str.length>70);
 				mc.field.text = str;
 				mc.field._width = mc.field.textWidth+5;
-				mc.field.filters = [ new flash.filters.GlowFilter(0xffffff,0.7, 10,10, 1) ];
+				mc.field.filters = GlowFilter.create(0xffffff,0.7, 10,10, 1);
 				if ( fl_spamDir )
 					mc.field._y = mc.field._height-45;
-				var mcc : {>MCField, shadow:flash.TextField} = cast mc;
+				var mcc: MCFieldShadow = cast mc;
 				mcc.shadow.text = mc.field.text;
 				mcc.shadow._width = mcc.shadow.textWidth+5;
 				mcc.shadow._y = mc.field._y+22;
-				mcc.shadow.filters = [ new flash.filters.BlurFilter(4,4) ];
+				mcc.shadow.filters = [ BlurFilter.create(4,4) ];
 				var delta = Std.random(30)+10;
 				mcc.shadow._x-=delta*0.2;
 				mcc.shadow._y+=delta;
-				var bmp = new BitmapData(Std.int(cont._width+20),Std.int(cont._height+40),true,0xff0000);
-				bmp.draw(cont);
+				var bmp = Manager.app.renderer.generateTexture(cont, pixi.core.ScaleModes.DEFAULT, 1);
+				bmp.resize( cont.width+20, cont.height+40, true);
 				mc.removeMovieClip();
 				cont.attachBitmap(bmp,1);
 				var spd = Std.random(20)/10+1;
@@ -1838,8 +1865,9 @@ class GNetwork {
 				var mc = gs.mc;
 				mc._x-=mt.Timer.tmod*gs.dx;
 				mc._y-=mt.Timer.tmod*gs.dy;
-				if ( mc._x+mc._width*2<0 || mc._y+mc._height<0 || mc._y>700 ) {
-					gs.bmp.dispose();
+				if ( mc._x+mc.width*2<0 || mc._y+mc.height<0 || mc._y>700 ) {
+					// TODO: cleanup
+					//gs.bmp.dispose();
 					gspamList.remove(gs);
 					mc.removeMovieClip();
 				}

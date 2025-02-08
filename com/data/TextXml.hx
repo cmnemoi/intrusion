@@ -12,7 +12,7 @@ class TextXml {
 	static var SPECIAL_LETTERS = VOYEL_LOWERS+VOYEL_UPPERS + CONS_LOWERS+CONS_UPPERS;
 
 	var xmlName				: String; // utilisé pour les msg d'erreur
-	public var rseed		: mt.Rand;
+	public var rseed		: Rand;
 	var texts				: Hash<Array<String>>;
 	public var tvars		: Hash<String>;
 	public var fl_autoCaps	: Bool;
@@ -23,7 +23,7 @@ class TextXml {
 		xmlName = xname;
 		if ( raw==null || raw=="" )
 			throw "no data for "+xmlName;
-		rseed = new mt.Rand(0);
+		rseed = new Rand(0);
 		otherTextXml = new List();
 		rseed.initSeed(seed);
 		texts = new Hash();
@@ -74,7 +74,7 @@ class TextXml {
 		return texts.get(key)!=null;
 	}
 
-	public function get(key:String, ?rs:mt.Rand, ?fl_firstRecurs=true) {
+	public function get(key:String, ?rs:Rand, ?fl_firstRecurs=true) {
 		if ( rs==null )
 			rs = rseed;
 		key = key.toLowerCase();

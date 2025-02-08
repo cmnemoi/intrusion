@@ -119,8 +119,8 @@ class Dialog {
 
 		var blist = new Array();
 		for (p in plist)
-			addButton( getLabelFromPhrase(p), callback(hackerSay,p) );
-//			blist.push( { label:next+getLabel(p), cb:callback(reply,next,p) } );
+			addButton( getLabelFromPhrase(p), hackerSay.bind(p) );
+//			blist.push( { label:next+getLabel(p), cb:reply.bind(next,p) } );
 //		blist.push( { label:getLabel(ShowOrders), cb:callback(addOrders) } );
 //		term.showCMenu(Manager.DM, 50, 50, blist );
 	}
@@ -297,7 +297,7 @@ class Dialog {
 	}
 
 	public static function getPhone(seed:Int, n:String) {
-		var rseed = new mt.Rand(0);
+		var rseed = new Rand(0);
 		rseed.initSeed(seed);
 		var ascii = new Array();
 		for (c in n.split(""))
@@ -313,7 +313,7 @@ class Dialog {
 	function getTargetSaying(id:String) : Phrase {
 		var s = TD.dialogs.get(id);
 
-		// réponses forcées
+		// rï¿½ponses forcï¿½es
 		var forcedNext :String = null;
 		if ( s.indexOf(">")>=0 ) {
 			forcedNext = Data.trimSpaces(s.split(">")[1]);

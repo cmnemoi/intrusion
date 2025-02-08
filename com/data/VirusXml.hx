@@ -22,7 +22,15 @@ typedef Virus = {
 }
 
 
-private class AllData extends haxe.xml.Proxy<"../xml/virus.xml",Virus> {
+private abstract AllData(String -> Null<Virus>) {
+    public function new(get: String -> Null<Virus>) {
+		this = get;
+	}
+
+	@:resolve
+	public function getVirus(key: String): Virus {
+		return this(key);
+	}
 }
 
 class VirusXml {
@@ -35,22 +43,16 @@ class VirusXml {
 		static var autoRun = init();
 	#end
 
-	public static function init() {
-		#if flash
-			var raw = Manager.getEncodedXml("virus");
-		#end
-		#if neko
-			var raw = neko.io.File.getContent( neko.Web.getCwd() + Const.get.XML + "virus.xml" );
-		#end
-
+	public static function init(lang: String) {
+		var raw = haxe.Resource.getString("xml_virus_"+lang);
 		var xml = Xml.parse(raw);
-		var doc = new haxe.xml.Fast( xml.firstElement() );
+		var doc = new haxe.xml.Access( xml.firstElement() );
 		var h : Hash<Virus> = new Hash();
 		for (catnode in doc.nodes.cat)
 			for (vnode in catnode.nodes.v)
 				getFromNode(h, vnode, catnode.att.id, catnode.att.name);
 
-		// non triés dans une catégorie ?
+		// non triï¿½s dans une catï¿½gorie ?
 		for (vnode in doc.nodes.v)
 			throw "found uncategorized virus : "+vnode.att.id;
 		ALL = h;
@@ -108,7 +110,7 @@ class VirusXml {
 	}
 
 
-	// virus reçus à la création d'un nouveau compte User
+	// virus reï¿½us ï¿½ la crï¿½ation d'un nouveau compte User
 	public static function getStartingViruses() {
 		var list = Lambda.filter(ALL, function(v) { return v.start; });
 		return list;
@@ -132,18 +134,14 @@ class VirusXml {
 	public static function createInstance(vkey:String) {
 		var v = ALL.get(vkey);
 		if ( v==null )
-			#if flash
-				Manager.fatal("createInstance : unknown virus "+vkey);
-			#else
 				throw "createInstance : unknown virus "+vkey;
-			#end
 		return Reflect.copy(v);
 	}
 
 
 	// *** PRIVATES
 
-	static function getFromNode(h:Hash<Virus>,vnode:haxe.xml.Fast, catId:String, catName:String) {
+	static function getFromNode(h:Hash<Virus>,vnode:haxe.xml.Access, catId:String, catName:String) {
 		var id = vnode.att.id;
 		if( id == null )
 			throw "Missing 'id' in virus.xml : "+vnode;

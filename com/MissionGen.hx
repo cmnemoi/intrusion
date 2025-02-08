@@ -115,7 +115,7 @@ class MissionGen {
 	}
 
 
-	public static function getPrimeByLevel(gl:Int, ?rseed:mt.Rand) {
+	public static function getPrimeByLevel(gl:Int, ?rseed:Rand) {
 		var total = Math.floor( 400 + Math.pow(gl, 1.45)*400 );
 
 		// -30 % de variation
@@ -130,17 +130,17 @@ class MissionGen {
 	}
 
 	public function generate(glevel:Int,seed:Int) : MissionData {
-		var rseed = new mt.Rand(0);
+		var rseed = new Rand(0);
 		rseed.initSeed(seed);
 
 		var list = getMissionList(rseed,glevel);
 
 
-		/*** Missions forcées
+		/*** Missions forcï¿½es
 		#if debug
 			list = [
 //				_MTutorialDelete("mail",5),
-				_MTVTheft(names.get("hotTv"), names.get("hotProgTheft")),
+				_MTVTheft(names.get("hotTv", rseed), names.get("hotProgTheft", rseed)),
 //				_MTutorial,
 			];
 		#end
@@ -171,7 +171,7 @@ class MissionGen {
 			_color	: getCorpColor(rseed),
 			_prime	: mprime.prime,
 			_bonus	: mprime.bonus,
-			_corp	: names.get("corp"),
+			_corp	: names.get("corp", rseed),
 			_short	: "",
 			_details	: "",
 			_type	: mtype,
@@ -184,12 +184,12 @@ class MissionGen {
 	}
 
 
-	function drawOne(rseed:mt.Rand, list:Array<Dynamic>) {
+	function drawOne(rseed:Rand, list:Array<Dynamic>) {
 		return list[ rseed.random(list.length) ];
 	}
 
 
-	function getMissionList(rseed:mt.Rand,glevel) {
+	function getMissionList(rseed:Rand,glevel) {
 		var list = new Array();
 		if ( glevel==1 )
 			list = list.concat([
@@ -201,74 +201,74 @@ class MissionGen {
 			]);
 		if ( glevel==3 )
 			list = list.concat([
-				_MTutorialBypass(fsNames.get("tutorial_doc")),
+				_MTutorialBypass(fsNames.get("tutorial_doc", rseed)),
 			]);
 		if ( glevel>=4 && glevel<5 )
 			list = list.concat([
-				_MDelete(names.get("musername"),fsNames.get("mission_doc")),
-//				_MInfectNet(names.get("virusname")),
+				_MDelete(names.get("musername", rseed),fsNames.get("mission_doc", rseed)),
+//				_MInfectNet(names.get("virusname", rseed)),
 			]);
 		if ( glevel>=4 && glevel<6 )
 			list = list.concat([
-				_MCleanTerminal(names.get("musername")),
-				_MCopy(names.get("musername"),fsNames.get("mission_doc")),
-				_MSteal(names.get("musername"),fsNames.get("mission_doc")),
+				_MCleanTerminal(names.get("musername", rseed)),
+				_MCopy(names.get("musername", rseed),fsNames.get("mission_doc", rseed)),
+				_MSteal(names.get("musername", rseed),fsNames.get("mission_doc", rseed)),
 			]);
 		if ( glevel>=4 && glevel<7 )
 			list = list.concat([
-				_MCopyMail(names.get("musername"),names.get("musername")),
+				_MCopyMail(names.get("musername", rseed),names.get("musername", rseed)),
 			]);
 
 		if ( glevel>=5 ) {
 			var parentKey = drawOne(rseed,["/doc","/mail"]);
 			list = list.concat([
-				_MSpy(names.get("musername")),
-				_MDeliverFile(parentKey, fsNames.get(parentKey), fsNames.get("secret.doc"), names.get("musername")),
+				_MSpy(names.get("musername", rseed)),
+				_MDeliverFile(parentKey, fsNames.get(parentKey), fsNames.get("secret.doc", rseed), names.get("musername", rseed)),
 			]);
 		}
 		if ( glevel>=5 && glevel<7 )
 			list = list.concat([
-				_MGetVirus(names.get("virusname"),drawOne(rseed,["lib","prog"]),rseed.random(5)+5),
-				_MCrashPrinter(fsNames.get("/sys_printer")),
-				_MCrashTerminal(names.get("musername")),
+				_MGetVirus(names.get("virusname", rseed),drawOne(rseed,["lib","prog"]),rseed.random(5)+5),
+				_MCrashPrinter(fsNames.get("/sys_printer", rseed)),
+				_MCrashTerminal(names.get("musername", rseed)),
 			]);
 		if ( glevel>=6 )
 			list = list.concat([
 				_MCorruptDisplay(texts.get("place").toLowerCase()),
-				_MPasswords(fsNames.get("/sys_db")),
-				_MDeleteAll(names.get("musername"),"mail"),
+				_MPasswords(fsNames.get("/sys_db", rseed)),
+				_MDeleteAll(names.get("musername", rseed),"mail"),
 //				_MSpyPad(),
 			]);
 		if ( glevel>=6 && glevel<9 )
 			list = list.concat([
-				_MDeleteAll(names.get("musername"),"doc"),
-				_MModerate(names.get("musername")),
-				_MOverwriteFiles(names.get("musername"),"doc"),
-				_MOverwriteFiles(names.get("musername"),"mail"),
+				_MDeleteAll(names.get("musername", rseed),"doc"),
+				_MModerate(names.get("musername", rseed)),
+				_MOverwriteFiles(names.get("musername", rseed),"doc"),
+				_MOverwriteFiles(names.get("musername", rseed),"mail"),
 			]);
 		if ( glevel>=7 )
 			list = list.concat([
-				_MFindMails(names.get("musername"),rseed.random(3)+2),
-				_MCompromiseMail(names.get("musername")),
-				_MTV(names.get("hotTv"),names.get("badTv")),
-				_MTVTheft(names.get("tv"), names.get("tvProgTheft")),
-				_MTVTheft(names.get("hotTv"), names.get("hotProgTheft")),
-				_MTVCrash(names.get("tv")),
-				_MCrashDB(fsNames.get("/sys_db")),
+				_MFindMails(names.get("musername", rseed),rseed.random(3)+2),
+				_MCompromiseMail(names.get("musername", rseed)),
+				_MTV(names.get("hotTv", rseed),names.get("badTv", rseed)),
+				_MTVTheft(names.get("tv", rseed), names.get("tvProgTheft", rseed)),
+				_MTVTheft(names.get("hotTv", rseed), names.get("hotProgTheft", rseed)),
+				_MTVCrash(names.get("tv", rseed)),
+				_MCrashDB(fsNames.get("/sys_db", rseed)),
 			]);
 		if ( glevel>=8 )
 			list = list.concat([
 				_MSpyCam,
 				_MCleanSecurity,
-				_MCamRec(fsNames.get("archive.video")),
-				_MGameHack(names.get("gameName"), names.get("gameServer"), names.get("gameChar")),
+				_MCamRec(fsNames.get("archive.video", rseed)),
+				_MGameHack(names.get("gameName", rseed), names.get("gameServer", rseed), names.get("gameChar", rseed)),
 			]);
 
 		if ( glevel>=9 )
 			list = list.concat([
-				_MCleanCriminal(names.get("musername")),
-				_MFalsifyCam(fsNames.get("roomMission")),
-				_MArrest(names.get("musername")),
+				_MCleanCriminal(names.get("musername", rseed)),
+				_MFalsifyCam(fsNames.get("roomMission", rseed)),
+				_MArrest(names.get("musername", rseed)),
 			]);
 		return list;
 	}
@@ -451,7 +451,7 @@ class MissionGen {
 	}
 
 	public static function getTutorial(mdata:MissionData) {
-		#if flash
+		#if client
 		switch (mdata._type) {
 			case _MTutorial :
 				return Tutorial.get.first;

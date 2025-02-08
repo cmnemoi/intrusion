@@ -2,6 +2,8 @@ import data.AntivirusXml;
 import Types;
 import mt.bumdum.Lib;
 import mt.Timer;
+import common.MovieClip;
+import common.Filters;
 
 class FSNode {
 	public static var ICON_BY_LINE	= 5;
@@ -291,8 +293,11 @@ class FSNode {
 			mc._y = 200 + -x*hexHei*0.5 + y*hexHei*0.5;
 		}
 
-		var name = fnode.getName();
+		var name = fnode?.getName();
 		mc.field.text = name;
+		// TODO: text position is off, adjusting for it here..
+		mc.field.x += (120 - mc.field.width) / 2;
+		mc.field.y += 5;
 		mc.bar.field._visible = false;
 		mc.bar._visible = false;
 //		mc.icon.cacheAsBitmap = true;
@@ -300,8 +305,8 @@ class FSNode {
 
 //		mc.field._visible = false;
 //		if ( !fnode.fl_folder ) {
-//			mc.hit.onRollOver = function() { mc.field.textColor=0xffffff; }
-//			mc.hit.onRollOut = function() { mc.field.textColor=0xaaaaaa; }
+//			mc.hit.onRollOver = function() { mc.field.style.fill=0xffffff; }
+//			mc.hit.onRollOut = function() { mc.field.style.fill=0xaaaaaa; }
 ////			mc.hit.onRollOver = function() { mc.field._visible=true; }
 ////			mc.hit.onRollOut = function() { mc.field._visible=false; }
 ////			mc.hit.onReleaseOutside = mc.hit.onRollOut;
@@ -314,13 +319,13 @@ class FSNode {
 			fnode.redraw();
 		}
 		else
-			mc.field._visible = false;
+			mc.field.visible = false;
 
 		if ( fl_anim ) {
 			var delay = -0.5-0.15*index-Std.random(150)/100;
 			var a = term.startAnim(A_FadeIn, mc, name, delay);
 			a.spd *= 1.7;
-//			a.cb = callback( term.playSound, "single_03", 0.0 );
+//			a.cb =  term.playSound.bind("single_03", 0.0 );
 			term.startAnim(A_Text, mc, name, delay);
 			term.startAnim(A_PlayFrames, mc, name, delay); //.spd *= if(term.fl_lowq) 1.5 else 1;
 			for (emc in fnode.emcList)
@@ -338,9 +343,12 @@ class FSNode {
 		if ( fl_folder ) {
 			// folder
 			mc.icon.gotoAndStop("folder");
-			var mcc:{>MCField, lockIcon:flash.MovieClip} = cast mc.icon;
+			var mcc: MCFolder = cast mc.icon;
 			var str =  if ( TD.fsNames.exists(key+"_short") ) TD.fsNames.get(key+"_short") else "";
 			mcc.field.text = hasEffect(E_Masked) ? "" : str;
+			// Position isn't rendered correctly, adjusting it here
+			mcc.field.x += 8;
+			mcc.field.y += 2;
 			if ( password!=null || term.avman.folderContains(this, AntivirusXml.get.passwd) ) {
 				mcc.lockIcon._visible = true;
 				mcc.field._visible = false;
@@ -358,11 +366,15 @@ class FSNode {
 				if ( ext("antivir") ) {
 					// antivirus
 					mc.icon.gotoAndStop("antivir");
-					var mcc : {>MCField, lockIcon:flash.MovieClip} = cast mc.icon;
+					var mcc : MCFolder = cast mc.icon;
 					if ( av==null )
 						mcc.field.text = ":-)";
 					else
 						mcc.field.text = av.key.substr(0,3).toUpperCase();
+					// TODO: text position is off, adjusting for it here, but should be fixed when building MovieClip
+					mcc.field.x = mcc.field.x + 6;
+					mcc.field.y = mcc.field.y + 6;
+
 //					mc.icon.gotoAndStop("unknownAV");
 //					if ( av!=null )
 //						mc.icon.gotoAndStop(av.key);
@@ -427,22 +439,22 @@ class FSNode {
 			return 0;
 		}
 
-		// sécurité mode Scout
+		// sï¿½curitï¿½ mode Scout
 		if ( term.hasChipset(data.ChipsetsXml.get.scout) )
 			if ( key=="file.guardian" || key=="file.core" ) {
 				dmg = 0;
 				extra = Lang.get.Immune;
 			}
 
-		// multiplicateur de dégâts
+		// multiplicateur de dï¿½gï¿½ts
 		if ( fl_canBeBoosted ) {
 			if ( term.hasEffect(UE_DamageBurst) ) {
 				dmg+=term.getEffectSource(UE_DamageBurst).power;
-				term.vman.addEndEvent( function() {term.removeEffect(UE_DamageBurst);} );
+				term.vman.addEndEvent( function() {term.removeEffect(UE_DamageBurst); return 0;} );
 			}
 			if ( term.hasEffect(UE_Charge) ) {
 				dmg*=term.countEffect(UE_Charge);
-				term.vman.addEndEvent( function() {term.clearEffect(UE_Charge);} );
+				term.vman.addEndEvent( function() {term.clearEffect(UE_Charge); return 0;} );
 			}
 
 //			if ( term.hasEffect(UE_Charge3) ) {
@@ -474,7 +486,7 @@ class FSNode {
 			extra = Lang.get.Immune;
 		}
 
-		// Résistances spécifiques
+		// Rï¿½sistances spï¿½cifiques
 //		var absorb = AntivirMan.DEFENDER_ABSORB;
 //		if ( hasEffect(E_CorrResist) && dt==D_Corrupt ) {
 //			dmg = Math.max(0, dmg-absorb );
@@ -494,22 +506,22 @@ class FSNode {
 			extra+=" [x"+term.countEffect(UE_Charge)+"]";
 
 		// display
-		var final = Math.floor(dmg);
-		life = Std.int( Math.max(0, life-final) );
+		var final_dmg = Math.floor(dmg);
+		life = Std.int( Math.max(0, life-final_dmg) );
 
-		if ( fl_canSpread && final>0 && hasEffect(E_Tag) ) {
+		if ( fl_canSpread && final_dmg>0 && hasEffect(E_Tag) ) {
 			var sdamage = Math.floor( base * countEffect(E_Tag)/100 );
 			for (neig in term.fs.getFilesByEffect(E_Tag))
 				if ( neig!=this )
-					term.vman.addEndEvent( callback(neig.damage, sdamage, true, false, false) );
+					term.vman.addEndEvent( neig.damage.bind(sdamage, true, false, false) );
 		}
 
-		if ( mc._name!=null ) {
-			var pmc = term.popNumber(term.fs.sdm, -final, extra, mc._x+36, mc._y+15);
+		if ( mc!=null ) {
+			var pmc = term.popNumber(term.fs.sdm, -final_dmg, extra, mc._x+36, mc._y+15);
 			pmc.field.textColor = 0xdb95c2;
-			if ( final>0 )
+			if ( final_dmg>0 )
 				term.addIconRain(term.fs.sdm, mc);
-			if ( final<base ) {
+			if ( final_dmg<base ) {
 				term.playSound("shield");
 				var sh = term.fs.sdm.attach("shield", Data.DP_ITEM);
 				sh._x = this.mc._x;
@@ -520,46 +532,46 @@ class FSNode {
 		}
 
 
-		term.spam("Damage "+final+" (#"+id+")");
+		term.spam("Damage "+final_dmg+" (#"+id+")");
 
 		Tutorial.play(Tutorial.get.first, "shield");
 
 		// delete
 		if ( life<=0 ) {
 			term.playSound("explode_04");
-			if ( mc._name!=null )
+			if ( mc!=null )
 				term.log( Lang.fmt.Log_Death({_name:name}) );
 			else
-				term.log( Lang.fmt.Log_DistantDeath({_name:name, _n:final}) );
+				term.log( Lang.fmt.Log_DistantDeath({_name:name, _n:final_dmg}) );
 
-			// splash damage ! (librairie piégée)
+			// splash damage ! (librairie piï¿½gï¿½e)
 			if ( hasEffect(E_Splash) && !fl_deleted ) {
 				var sdamage = Math.floor( dmg * countEffect(E_Splash)/100 );
 				for (neig in term.fs.getFolderFiles(parent))
 					if ( neig.key=="file.core" || neig.key=="file.guardian" || neig.av!=null )
 						if ( neig!=this && !neig.fl_folder && !neig.fl_deleted )
-							term.vman.addEndEvent( callback(neig.damage, sdamage, true, false, true) );
+							term.vman.addEndEvent( neig.damage.bind(sdamage, true, false, true) );
 			}
 
 			term.fs.delete(this);
 			Tutorial.play(Tutorial.get.first, "coreExposed");
 		}
 		else
-			if ( mc._name!=null) {
-				if ( final>0 ) {
+			if ( mc!=null) {
+				if ( final_dmg>0 ) {
 					term.playSound("hit_01");
 					term.startAnim(A_Shake, mc);
 					term.startAnim(A_Blink, mc);
 				}
 			}
 			else
-				if ( final>0 )
-					term.log( Lang.fmt.Log_DistantDamage({_name:name, _n:final}) );
+				if ( final_dmg>0 )
+					term.log( Lang.fmt.Log_DistantDamage({_name:name, _n:final_dmg}) );
 
-		if ( final>0 )
-			term.avman.onDamageFile(final,this);
+		if ( final_dmg>0 )
+			term.avman.onDamageFile(final_dmg,this);
 
-		return final;
+		return final_dmg;
 	}
 
 	public function decode() {
@@ -573,7 +585,7 @@ class FSNode {
 
 	public function changeContent(str:String) {
 		content = str;
-		if ( mc._name!=null )
+		if ( mc!=null )
 			term.fs.onChangedContent(this);
 	}
 
@@ -595,11 +607,11 @@ class FSNode {
 			if ( av==AntivirusXml.get.oxy || av==AntivirusXml.get.bigoxy )
 				dmg = Math.ceil(dmg*0.5);
 
-		// dégâts réduits
+		// dï¿½gï¿½ts rï¿½duits
 		if ( hasEffect(E_Weaken) )
 			dmg = Math.round(dmg / (countEffect(E_Weaken)));
 
-		// boost dégâts
+		// boost dï¿½gï¿½ts
 		var av = AntivirusXml.get.inferno;
 		if ( term.avman.systemContains(av) )
 			dmg = Math.floor(dmg * av.power/100);
@@ -679,7 +691,7 @@ class FSNode {
 		displayContent();
 		if ( key=="file.pack" )
 			term.showCMenu(term.fs.sdm, mc._x+35, mc._y+58, term.fs.clearTarget, [
-				{ label:Lang.get.MenuExtract, cb:callback(term.vman.exec, data.VirusXml.get.extrac, this, null) },
+				{ label:Lang.get.MenuExtract, cb:term.vman.exec.bind(data.VirusXml.get.extrac, this, null) },
 			]);
 
 		if ( key=="file.guardian" )
@@ -722,24 +734,24 @@ class FSNode {
 		mc._visible = !fl_deleted;
 
 		if ( fl_crypted )
-			term.bubble(mc.hit, Lang.fmt.MaskedFile({_v:AntivirusXml.get.mask.key.toUpperCase()}), -2);
+			term.bubble(cast mc.hit, Lang.fmt.MaskedFile({_v:AntivirusXml.get.mask.key.toUpperCase()}), -2);
 		else {
 			if ( av!=null )
-				term.bubble(mc.hit, av.key.toUpperCase(), av.desc, -2);
+				term.bubble(cast mc.hit, av.key.toUpperCase(), av.desc, -2);
 			if ( canBeExtracted() )
-				term.bubble(mc.hit, Lang.get.Tooltip_Extract,-1);
+				term.bubble(cast mc.hit, Lang.get.Tooltip_Extract,-1);
 			if ( key=="file.guardian" )
-				term.bubble(mc.hit, Lang.get.Tooltip_Guardian,-1);
+				term.bubble(cast mc.hit, Lang.get.Tooltip_Guardian,-1);
 			if ( key=="file.core" )
-				term.bubble(mc.hit, Lang.get.Tooltip_Core,-1);
+				term.bubble(cast mc.hit, Lang.get.Tooltip_Core,-1);
 			if ( key=="file.control" )
-				term.bubble(mc.hit, Lang.get.Tooltip_Control,-1);
+				term.bubble(cast mc.hit, Lang.get.Tooltip_Control,-1);
 			if ( key=="file.log" )
-				term.bubble(mc.hit, Lang.get.Tooltip_LogFile,-1);
+				term.bubble(cast mc.hit, Lang.get.Tooltip_LogFile,-1);
 		}
 
 		if ( life<=0 && lifeTotal>0 ) {
-			mc.field.textColor = Data.CORRUPT;
+			mc.field.style.fill = Data.CORRUPT;
 			mc.field.filters = [];
 		}
 	}
@@ -763,7 +775,7 @@ class FSNode {
 //		}
 //		redraw();
 //
-//		// répétitions
+//		// rï¿½pï¿½titions
 //		if ( cp.tics<=0 )
 //			return true;
 //		else {
@@ -817,7 +829,7 @@ class FSNode {
 //		if ( freezeTimer>0 ) {
 //			mc.bar2._visible = false;
 //			freezeTimer-=1;
-//			mc.field.textColor = 0x54e0e0;
+//			mc.field.style.fill = 0x54e0e0;
 //			if( freezeTimer<=0 )
 //				unfreeze();
 //			else
@@ -837,7 +849,7 @@ class FSNode {
 //			i++;
 //		}
 //
-//		mc.field.textColor = 0xff0000;
+//		mc.field.style.fill = 0xff0000;
 //		curCast.timer -= Timer.tmod;
 //
 //		mc.bar2._visible = true;
@@ -942,7 +954,7 @@ class FSNode {
 		for (emc in emcList)
 			emc.removeMovieClip();
 		emcList = new Array();
-		if ( mc._name==null || hasEffect(E_Masked) )
+		if ( mc==null || mc._name==null || hasEffect(E_Masked) )
 			return;
 		for (e in effects) {
 			var frame =
@@ -979,9 +991,9 @@ class FSNode {
 			emc._y = 50;
 			emc.field.text = ""+e.cpt;
 			emc.field._visible = (e.cpt>1);
-//			emc.field._width = emc.field.textWidth+5;
+//			emc.field._width = emc.field._width+5;
 			var over = function() {
-				emc.filters = [ new flash.filters.GlowFilter(0xffffff,1, 3,3, 600) ];
+				emc.filters = GlowFilter.create(0xffffff,1, 3,3, 600);
 			}
 			var out = function() {
 				emc.filters = [];

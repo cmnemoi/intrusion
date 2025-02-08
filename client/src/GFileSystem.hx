@@ -18,7 +18,7 @@ class GFileSystem {
 	var ml					: Dynamic;
 	var fl_lock				: Bool;
 	var seed				: Int;
-	var rseed				: mt.Rand;
+	var rseed				: Rand;
 	public var rawTree		: Array<FSNode>;
 	var tree				: IntHash<Array<FSNode>>;
 	public var patternName	: String;
@@ -36,20 +36,20 @@ class GFileSystem {
 	public var matrix		: Array<Array<Bool>>;
 	public var mwid			: Int; // matrix width
 
-	var scroller			: flash.MovieClip;
+	var scroller			: MovieClip;
 	public var sdm			: mt.DepthManager;
 //	var mc_cmd				: MCField;
 	var fmcList				: Array<MCField>;
 	var exitIcon			: MCField;
-	var bg					: flash.MovieClip;
+	var bg					: MovieClip;
 	var title				: MCField;
 	var sub					: MCField;
-	var wallL				: flash.MovieClip;
-	var wallR				: flash.MovieClip;
-	var wpaper				: flash.MovieClip;
-	var tmc					: TargetMC;
-	var scrollPrev			: flash.MovieClip;
-	var scrollNext			: flash.MovieClip;
+	var wallL				: MovieClip;
+	var wallR				: MovieClip;
+	var wpaper				: MovieClip;
+	var tmc					: MovieClip;
+	var scrollPrev			: MovieClip;
+	var scrollNext			: MovieClip;
 
 	var zoom				: Float;
 	var stimer				: Float;
@@ -63,7 +63,7 @@ class GFileSystem {
 	public var fl_crashed	: Bool;
 	public var fl_auth		: Bool;
 	public var fl_authRecent: Bool;
-	public var fl_fresh		: Bool; // jamais connecté
+	public var fl_fresh		: Bool; // jamais connectï¿½
 
 	var localSounds			: List<String>;
 
@@ -160,9 +160,9 @@ class GFileSystem {
 	}
 
 
-	// *** GÉNÉRATION
+	// *** Gï¿½Nï¿½RATION
 
-	function getSubClass(rseed:mt.Rand, max:Int) {
+	function getSubClass(rseed:Rand, max:Int) {
 		var minLevel = 4;
 		if ( term.gameLevel<=minLevel )
 			return 1;
@@ -175,7 +175,7 @@ class GFileSystem {
 		if ( uniq>0 ) throw "generate should be called once !";
 		seed = s;
 
-		// schéma de génération
+		// schï¿½ma de gï¿½nï¿½ration
 		initRand();
 		patternName = switch(nodeType) {
 			case Terminal		: "/sys_terminal_"+getSubClass(rseed,5);
@@ -200,6 +200,7 @@ class GFileSystem {
 			case TargetEmpty	: null;
 			case Entrance		: null;
 			case Treasure		: "/sys_treasure";
+			case Unused			: null;
 		};
 		#if debugGen
 			trace("generateFS : patt="+patternName);
@@ -250,7 +251,7 @@ class GFileSystem {
 			hidePasswords();
 		}
 
-		// Fichiers spéciaux réservés aux niveaux difficiles
+		// Fichiers spï¿½ciaux rï¿½servï¿½s aux niveaux difficiles
 		highLevelFiles("index",2);
 		highLevelFiles("log",3);
 		highLevelFiles("route",4);
@@ -353,7 +354,7 @@ class GFileSystem {
 			return;
 		var list = getFilesByExt("pack");
 
-		// filtrage des pack déjà remplis
+		// filtrage des pack dï¿½jï¿½ remplis
 		list = Lambda.array( Lambda.filter(list, function(f) {
 			return f.content==null;
 		}) );
@@ -380,7 +381,7 @@ class GFileSystem {
 			return;
 		var list = getFilesByExt("pack");
 
-		// filtrage des pack déjà remplis
+		// filtrage des pack dï¿½jï¿½ remplis
 		list = Lambda.array( Lambda.filter(list, function(f) {
 			return f.content==null;
 		}) );
@@ -517,7 +518,7 @@ class GFileSystem {
 //			var max = Data.MATRIX_WID-1;
 //			for (i in 0...max)
 //				ptList.splice(rs.random(ptList.length), 1);
-//			// répartition
+//			// rï¿½partition
 //			while ( ptList.length>0 ) {
 //				var pt = ptList.splice( rs.random(ptList.length),1 )[0];
 //				files[rs.random(files.length)].allowMatrix[pt.x][pt.y] = true;
@@ -572,7 +573,7 @@ class GFileSystem {
 		if ( file.fl_target )
 			return false;
 
-		// un parent est locké ?
+		// un parent est lockï¿½ ?
 		var p = file.parent;
 		while (p!=null) {
 			if ( p.password!=null )
@@ -595,7 +596,7 @@ class GFileSystem {
 			return f.parent!=null && f.key!="/program";
 		}) );
 
-		// on évite de locker tous les dossiers d'un système qui en contient peu (genre Tv)
+		// on ï¿½vite de locker tous les dossiers d'un systï¿½me qui en contient peu (genre Tv)
 		if ( pool.length<=3 && rseed.random(100)<60 )
 			return;
 
@@ -644,7 +645,7 @@ class GFileSystem {
 					fl_done = true;
 			}
 
-			// pas réussi ? on crée un dossier dans root !
+			// pas rï¿½ussi ? on crï¿½e un dossier dans root !
 			if ( !fl_done && possibleKeys.length==0 ) {
 				var root = getRoot();
 				generateFolder(root,"/pass", root.depth);
@@ -660,6 +661,7 @@ class GFileSystem {
 	function buildTree() {
 		tree = new IntHash();
 		index = new Hash();
+		index.set("log", new List());
 		for (f in rawTree) {
 			var key = if(f.parent==null) -1 else f.parent.id;
 			if (tree.get(key)==null) tree.set(key,new Array());
@@ -703,7 +705,7 @@ class GFileSystem {
 		if ( parent==null )
 			parent = curFolder;
 
-		// prend la place d'un fichier effacé
+		// prend la place d'un fichier effacï¿½
 		var rep : FSNode = null;
 		for (i in 0...rawTree.length) {
 			var f = rawTree[i];
@@ -773,7 +775,7 @@ class GFileSystem {
 		return list[rseed.random(list.length)];
 	}
 
-	public function replaceFile(fname:String,?owner:String,?fl_target=true) { // TODO gérer unicité de nom
+	public function replaceFile(fname:String,?owner:String,?fl_target=true) { // TODO gï¿½rer unicitï¿½ de nom
 		var ext = fname.split(".")[1];
 		var list = getFilesByExt(ext);
 		var f = list[ rseed.random(list.length) ];
@@ -786,7 +788,7 @@ class GFileSystem {
 		return f;
 	}
 
-	public function replaceFileByKey(k:String, fname:String,?owner:String,?fl_target=true) { // TODO gérer unicité de nom
+	public function replaceFileByKey(k:String, fname:String,?owner:String,?fl_target=true) { // TODO gï¿½rer unicitï¿½ de nom
 		var list = getFilesByKey(k);
 		var f = list[ rseed.random(list.length) ];
 		f.name = fname;
@@ -905,6 +907,7 @@ class GFileSystem {
 			case TargetEmpty	: return false;
 			case Entrance		: return false;
 			case Treasure		: return false;
+			case Unused			: return false;
 		}
 		return false;
 	}
@@ -994,8 +997,8 @@ class GFileSystem {
 				tmc.c3._visible = false;
 			}
 			else {
-				tmc.blendMode = "screen";
-				tmc.filters = [ new flash.filters.GlowFilter(0xffffff,0.7,12,12,1) ];
+				tmc.blendMode = pixi.core.Pixi.BlendModes.SCREEN;
+				tmc.filters = GlowFilter.create(0xffffff,0.7,12,12,1);
 			}
 
 		}
@@ -1009,7 +1012,7 @@ class GFileSystem {
 			tmc._yscale = tmc._xscale*0.5;
 			if ( target.allowMatrix!=null )
 				term.showCMenu(sdm, target.mc._x+35, target.mc._y+58, [
-					{ label:"hack", cb:callback(term.showSystemGame,target) },
+					{ label:"hack", cb:term.showSystemGame.bind(target) },
 				]);
 		}
 
@@ -1023,7 +1026,7 @@ class GFileSystem {
 		}
 		focus(file.mcIndex);
 
-//		file.mc.icon.filters = [ new flash.filters.GlowFilter(0xffffff,1, 3,3, 10) ];
+//		file.mc.icon.filters = [ GlowFilter.create(0xffffff,1, 3,3, 10) ];
 	}
 
 	public function onChangedContent(f:FSNode) {
@@ -1046,7 +1049,7 @@ class GFileSystem {
 	public function clearTarget() {
 		Manager.stopTimers();
 		term.detachCMenu();
-		tmc.removeMovieClip();
+		tmc?.removeMovieClip();
 		tmc=null;
 //		target.mc.icon.filters = null;
 		if ( target!=null )
@@ -1130,7 +1133,7 @@ class GFileSystem {
 	}
 
 	public function delete(f:FSNode,?a:Anim,?fl_stealth=false) {
-		var oldAvKey = f.av.key;
+		var oldAvKey = f.av?.key;
 		f.fl_deleted = true;
 		f.clearEffect(E_Dot);
 		if ( f.hasKeyExt("log") ) {
@@ -1165,7 +1168,7 @@ class GFileSystem {
 			if ( f.fl_deleted || !f.hasEffect(E_Masked) )
 				continue;
 			var a = term.startAnim(A_Decrypt, f.mc, f.name, -Std.random(100)/100);
-			a.cb = callback(onUnmask,f);
+			a.cb = onUnmask.bind(f);
 		}
 	}
 
@@ -1378,7 +1381,7 @@ class GFileSystem {
 		if ( delta==0 )
 			return;
 
-		if ( scrollPrev._name!=null && !term.fl_lowq )
+		if ( scrollPrev!=null && !term.fl_lowq )
 			if ( delta>0 ) {
 				if ( !term.hasAnim(scrollNext, 0.7) )
 					term.startAnim(A_Blink, scrollNext);
@@ -1417,6 +1420,7 @@ class GFileSystem {
 
 
 	function updateScrollPos() {
+		if (scroller==null) return;
 		if ( sty!=null ) {
 			var delta = (sty-sy)*0.1;
 			if ( delta>-1 && delta<0 )
@@ -1476,14 +1480,15 @@ class GFileSystem {
 		var scale = zoom*100;
 //		cont._xscale = zoom*100;
 //		cont._yscale = cont._xscale;
-//		cont._x = Data.WID*0.5-cont._width*0.5;
+//		cont._x = Data.WID*0.5-cont.width*0.5;
 		var index=0;
 		for (mc in fmcList) {
 			mc._xscale = scale;
 			mc._yscale = scale;
-			mc.field._xscale = 100-0.5*(scale-100);
-			mc.field._yscale = mc.field._xscale;
-			mc.field._visible = zoom>=1;
+			// TODO: Apply scale
+			//mc.field._xscale = 100-0.5*(scale-100);
+			//mc.field._yscale = mc.field._xscale;
+			mc.field.visible = zoom>=1;
 
 			var x = (index%FSNode.ICON_BY_LINE);
 			var y = Math.floor(index/FSNode.ICON_BY_LINE);
@@ -1500,14 +1505,14 @@ class GFileSystem {
 		fl_lock = true;
 		clearTarget();
 		detachFolder();
-		bg.removeMovieClip();
-		title.removeMovieClip();
-		wallR.removeMovieClip();
-		scrollPrev.removeMovieClip();
-		scrollNext.removeMovieClip();
-		scroller.removeMovieClip();
-		flash.Mouse.removeListener(ml);
-		sdm.destroy();
+		bg?.removeMovieClip();
+		title?.removeMovieClip();
+		wallR?.removeMovieClip();
+		scrollPrev?.removeMovieClip();
+		scrollNext?.removeMovieClip();
+		scroller?.removeMovieClip();
+		//flash.Mouse.removeListener(ml);
+		sdm?.destroy();
 		term.detachBubble();
 	}
 
@@ -1516,7 +1521,8 @@ class GFileSystem {
 
 		bg = Manager.DM.attach("bg",Data.DP_FS);
 		bg.stop();
-		bg.blendMode = "layer";
+		// TODO: Might not be correct.
+		bg.blendMode = pixi.core.Pixi.BlendModes.OVERLAY;
 		bg.useHandCursor = false;
 		bg.onRelease = function() {};
 
@@ -1529,10 +1535,16 @@ class GFileSystem {
 		scroller._x = 32;
 		sdm = new mt.DepthManager(scroller);
 
+		wallL = sdm.attach("wallIso",Data.DP_BG_ITEM);
+		wallL._x = 380;
+		wallL._y = 50;
+		Col.setPercentColor(wallR, 45, 0x0);
+
 		title = cast sdm.attach("title", Data.DP_TOP);
 		title._x = 0;
 		title._y = 5;
-		title.cacheAsBitmap = true;
+		// TODO: that doesn't render well, disabled for now.
+		title.cacheAsBitmap = false;
 
 		sub = cast sdm.attach("title", Data.DP_TOP);
 		sub._x = 10;
@@ -1540,19 +1552,15 @@ class GFileSystem {
 		sub._xscale = 60;
 		sub._yscale = sub._xscale;
 		sub._alpha = 70;
-		sub.cacheAsBitmap = true;
+		sub.cacheAsBitmap = false;
 
 		attachFolder(getRoot());
 
-		wallL = sdm.attach("wallIso",Data.DP_BG_ITEM);
-		wallL._x = 380;
-		wallL._y = 50;
-		Col.setPercentColor(wallR, 45, 0x0);
 		zoom = 1;
 //		changeZoom();
 		ml = {};
 		Reflect.setField(ml, "onMouseWheel", onMouseWheel);
-		flash.Mouse.addListener(ml);
+		//flash.Mouse.addListener(ml);
 		updateBg();
 
 		for (f in rawTree)
@@ -1600,18 +1608,19 @@ class GFileSystem {
 		}
 
 		attach();
+		unlock();
 		term.showCmdLine();
 		Manager.stopLoading();
 	}
 
 
 	function setWallpaper(link:String,frame:Dynamic) {
-		wpaper.removeMovieClip();
+		wpaper?.removeMovieClip();
 		wpaper = wallL.smc.attachMovie(link,"mc_"+Data.UNIQ, Data.UNIQ++);
 		wpaper._xscale = 300;
 		wpaper._yscale = wpaper._xscale;
 		wpaper.gotoAndStop(frame);
-		wpaper.blendMode = "screen";
+		wpaper.blendMode = pixi.core.Pixi.BlendModes.SCREEN;
 		wpaper._x = -wpaper._width*2;
 		wpaper._y = -wpaper._height;
 		wpaper._alpha = 30;
@@ -1620,8 +1629,8 @@ class GFileSystem {
 	function updateBg() {
 		var f = if(fl_auth) 2 else 1;
 		bg.gotoAndStop(f);
-		wallL.smc.gotoAndStop(f);
-		wallR.smc.gotoAndStop(f);
+		wallL?.smc.gotoAndStop(f);
+		wallR?.smc.gotoAndStop(f);
 		if ( fl_auth )
 			setWallpaper("sicon","corrupt");
 
@@ -1646,12 +1655,13 @@ class GFileSystem {
 		detachFolder();
 
 		if ( fl_anim==null )
-			fl_anim = parent!=curFolder.parent;
+			fl_anim = parent!=curFolder?.parent;
 
 		var nodes = getFolderSorted(parent);
 //		nodes = shuffle(parent,nodes);
 
 		var mc = FSNode.attach(sdm,false);
+		parent.mc = mc;
 		term.startAnim(A_FadeIn,mc);
 		mc.hit.onRelease = onGotoParent;
 		mc.icon.gotoAndStop( if(parent.parent!=null) "parent" else "disconnect" );
@@ -1663,9 +1673,9 @@ class GFileSystem {
 		for (f in nodes) {
 			var mc = FSNode.attach(sdm,fl_anim, f,i);
 			if ( f.fl_folder )
-				mc.hit.onRelease = callback(onReleaseFolder,f);
+				mc.hit.onRelease = onReleaseFolder.bind(f);
 			else
-				mc.hit.onRelease = callback(onReleaseFile,f);
+				mc.hit.onRelease = onReleaseFile.bind(f);
 			i++;
 			fmcList.push(mc);
 		}
@@ -1687,18 +1697,18 @@ class GFileSystem {
 		updateBg();
 
 		// scrolling arrows
-		scrollPrev.removeMovieClip();
-		scrollNext.removeMovieClip();
+		scrollPrev?.removeMovieClip();
+		scrollNext?.removeMovieClip();
 		if ( fmcList.length/FSNode.ICON_BY_LINE >= 2 ) {
 			scrollPrev = Manager.DM.attach("scrollArrow", Data.DP_FX);
 			scrollPrev._x = 510;
 			scrollPrev._y = 50;
-			scrollPrev.onRelease = callback( scroll, -1 );
+			scrollPrev.onRelease =  scroll.bind(-1 );
 			scrollNext = Manager.DM.attach("scrollArrow", Data.DP_FX);
 			scrollNext._x = scrollPrev._x+30;
 			scrollNext._y = scrollPrev._y+17;
 			scrollNext.smc.smc._xscale *= -1;
-			scrollNext.onRelease = callback( scroll, 1 );
+			scrollNext.onRelease =  scroll.bind(1 );
 			term.startAnim(A_FadeIn, scrollPrev, -2);
 			term.startAnim(A_FadeIn, scrollNext, -2.5);
 		}
@@ -1735,7 +1745,7 @@ class GFileSystem {
 //			updateScrollPos();
 //		}
 
-		if ( tmc._name!=null ) {
+		if ( tmc!=null ) {
 			var spd = 4;
 			tmc.c1._rotation+=spd;
 			if ( !term.fl_lowq ) {

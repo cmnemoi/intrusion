@@ -14,7 +14,7 @@ class AntivirMan {
 
 	var term		: UserTerminal;
 	public var fast	: Hash<List<FSNode>>;
-	var mcList		: Array<flash.MovieClip>;
+	var mcList		: Array<MovieClip>;
 //	var scanLevel	: Int;
 
 	public var endTurn		: List<Void->Void>;
@@ -29,6 +29,9 @@ class AntivirMan {
 
 	public function scan(fs:GFileSystem) {
 		fast = new Hash();
+		for (v in AntivirusXml.ALL.keys()) {
+			fast.set(v, new List());
+		}
 		for ( f in fs.rawTree )
 			if ( f.av!=null )
 				register(f);
@@ -65,7 +68,7 @@ class AntivirMan {
 	}
 
 
-	public function generate(rseed:mt.Rand,fs:GFileSystem) {
+	public function generate(rseed:Rand,fs:GFileSystem) {
 		var diff = fs.getDiff();
 		var pool = Lambda.array( Lambda.filter(fs.rawTree, function(f) { return f.av==AntivirusXml.get.avslot; }) );
 		var avList = new Array();
@@ -73,7 +76,7 @@ class AntivirMan {
 			if ( av.minLevel<=term.gameLevel )
 				avList.push(av);
 
-//		// Anti-virus forcé
+//		// Anti-virus forcï¿½
 //		#if debug
 //			avList = [AntivirusXml.get.fantassin];
 //		#end
@@ -81,7 +84,7 @@ class AntivirMan {
 		if ( avList.length<=0 )
 			return;
 
-		// génération
+		// gï¿½nï¿½ration
 		while (diff>0 && pool.length>0) {
 			var av = null;
 			var tries = 0;
@@ -136,20 +139,20 @@ class AntivirMan {
 	}
 
 	function queueAttackAll(av:Antivirus, ?fl_local=false) {
-		endTurn.add( callback(attackAll, av, fl_local) );
+		endTurn.add( attackAll.bind(av, fl_local) );
 	}
 
 	function attackAll(av:Antivirus,?fl_local=false) {
 		var list = fast.get(av.key);
 		for (f in list) {
-			if ( !fl_local || fl_local && f.parent==term.fs.curFolder ) {
+			if ( !fl_local || fl_local && f.parent==term?.fs?.curFolder ) {
 				if ( f.hasEffect(E_SkipAction) ) {
 					f.removeEffect(E_SkipAction);
 					term.log( Lang.fmt.AntivirusBlocked({_name:f.name, _av:f.av.key.toUpperCase()}) );
 					continue;
 				}
 
-				// actions non-détectables
+				// actions non-dï¿½tectables
 				if ( term.hasEffect(UE_Furtivity) ) {
 					logDodge(f);
 					continue;
@@ -167,7 +170,7 @@ class AntivirMan {
 
 				var dmg = f.getAttackModified(av);
 				if ( dmg>0 ) {
-					endTurn.add( callback(onAttackSuccessful, f) );
+					endTurn.add( onAttackSuccessful.bind(f) );
 					logDamage(f.name, f.av, dmg);
 					term.damage(dmg);
 				}
@@ -235,7 +238,8 @@ class AntivirMan {
 	}
 
 	public function systemContains(av:Antivirus) {
-		return fast.get(av.key).length > 0;
+		var existingAvs = fast.get(av.key);
+		return existingAvs!=null && existingAvs.length > 0;
 //		for (f in fast.get(av.key))
 //			if (!f.hasEffect(E_Ignored))
 //				return true;
@@ -264,10 +268,10 @@ class AntivirMan {
 			for (f2 in term.fs.getFilesByKey("file.core"))
 				f2.removeEffect(E_CShield);
 		if (!fl_stealth) {
-			endTurn.add( callback(attackAll, AntivirusXml.get.repurgator, null) );
+			endTurn.add( attackAll.bind(AntivirusXml.get.repurgator, null) );
 			if ( f.key=="file.core" || f.key=="file.guardian" || f.key=="file.control" )
 				if ( systemContains(AntivirusXml.get.sysdef) )
-					endTurn.add( callback(attackAll, AntivirusXml.get.sysdef, null) );
+					endTurn.add( attackAll.bind(AntivirusXml.get.sysdef, null) );
 		}
 	}
 
@@ -307,7 +311,7 @@ class AntivirMan {
 					term.log( Lang.fmt.Log_Bomb({_n:n, _max:BOMB_LIMIT}) );
 			}
 			else
-				endTurn.add( callback(onExplodeBomb,f) );
+				endTurn.add( onExplodeBomb.bind(f) );
 		}
 	}
 
@@ -315,7 +319,7 @@ class AntivirMan {
 		// eject
 		if ( folderContains(term.fs.curFolder, AntivirusXml.get.eject) )
 			for (f in getAllByFolder(term.fs.curFolder,AntivirusXml.get.eject))
-				endTurn.add(callback(onEject,f));
+				endTurn.add(onEject.bind(f));
 		// tique
 		queueAttackAll(AntivirusXml.get.tique);
 	}
@@ -425,10 +429,10 @@ class AntivirMan {
 //			#if debug
 //				mc.field.text+=" (+"+v+")";
 //			#end
-//			mc._x = Math.round(Data.WID-5-mc.field.textWidth);
+//			mc._x = Math.round(Data.WID-5-mc.field.width);
 //			mc._y = Math.round(5 + 16*mcList.length);
-//			var onOver = function() { mc.field.textColor = 0xffffff; };
-//			var onOut = function() { mc.field.textColor = Data.GREEN; };
+//			var onOver = function() { mc.field.style.fill = 0xffffff; };
+//			var onOut = function() { mc.field.style.fill = Data.GREEN; };
 //			term.bubble(mc, k.toUpperCase(), av.desc+extra, -2, onOver, onOut );
 //			mcList.push(mc);
 //			if ( fl_anim )
@@ -437,7 +441,7 @@ class AntivirMan {
 //		#if debug
 //			var mc : MCField = cast Manager.DM.attach("logLine",Data.DP_TOP);
 //			mc.field.text = "TOTAL = "+total+" points";
-//			mc._x = Math.round(Data.WID-5-mc.field.textWidth);
+//			mc._x = Math.round(Data.WID-5-mc.field.width);
 //			mc._y = Math.round(5 + 16*mcList.length);
 //			mcList.push(mc);
 //		#end

@@ -3,10 +3,11 @@ class Live {
 	static var IMAGE_URL = "http://search.yahooapis.com/ImageSearchService/rss/imageSearch.xml?appid=yahoosearchimagerss&query=%%";
 	public static var term		: UserTerminal = null;
 
-	// TODO implémenter un timeout pour éviter
-	// qu'on se recoive une requête tardivement et que ca zappe le panel de droite...
+	// TODO implï¿½menter un timeout pour ï¿½viter
+	// qu'on se recoive une requï¿½te tardivement et que ca zappe le panel de droite...
 
 	public static function loadVideo(f:FSNode) {
+		/*
 		var keywords = getKeywords(f);
 		var url = VIDEO_URL.split("%%").join(keywords);
 		var r = new haxe.Http(url);
@@ -14,29 +15,31 @@ class Live {
 			onVideoData(data,f);
 		}
 		r.request(true);
+		*/
 	}
 
 	public static function onVideoData(data:String, f:FSNode) {
 		try {
 			var xml = Xml.parse(data);
-			var doc = new haxe.xml.Fast(xml.firstChild());
+			var doc = new haxe.xml.Access(xml.firstChild());
 			var node = doc.node.entry.node.id;
 			var id = node.innerData.split("/").pop();
 			if ( id==null )
 				throw "no id";
 			f.embedData = "video|"+id;
 			term.updateCopies(f);
-			Manager.delay( callback(UserTerminal.CNX.JsMain.embedVideo.call, [f.name, id]), Std.random(1000)+2000 );
+			Manager.delay( UserTerminal.jsMain.embedVideo.bind(f.name, id), Std.random(1000)+2000 );
 		}
 		catch(e:String) {
 			#if debug trace("FAILURE : "+e); #end
-			UserTerminal.CNX.JsMain.print.call([f.name,Lang.get.ExternalError]);
+			UserTerminal.jsMain.print(f.name,Lang.get.ExternalError);
 		}
 	}
 
 	// ***
 
 	public static function loadImage(f:FSNode) {
+		/*
 		var keywords = getKeywords(f);
 		var url = IMAGE_URL.split("%%").join(keywords);
 		var r = new haxe.Http(url);
@@ -44,12 +47,13 @@ class Live {
 			onImageData(data,f);
 		}
 		r.request(true);
+		*/
 	}
 
 	public static function onImageData(data:String, f:FSNode) {
 		try {
 			var xml = Xml.parse(data);
-			var doc = new haxe.xml.Fast(xml.firstChild());
+			var doc = new haxe.xml.Access(xml.firstChild());
 			var items = doc.node.channel.nodes.item;
 			if ( items==null )
 				throw "no item";
@@ -66,11 +70,11 @@ class Live {
 			var pic = list[f.id%list.length];
 			f.embedData = "image|"+pic.thumb+"|"+pic.big;
 			term.updateCopies(f);
-			Manager.delay( callback(UserTerminal.CNX.JsMain.embedImage.call, [f.name, pic.thumb, pic.big]), Std.random(1000)+1000 );
+			Manager.delay( UserTerminal.jsMain.embedImage.bind(f.name, pic.thumb, pic.big), Std.random(1000)+1000 );
 		}
 		catch(e:String) {
 			#if debug trace("FAILURE : "+e); #end
-			UserTerminal.CNX.JsMain.print.call([f.name,Lang.get.ExternalError]);
+			UserTerminal.jsMain.print(f.name,Lang.get.ExternalError);
 		}
 	}
 

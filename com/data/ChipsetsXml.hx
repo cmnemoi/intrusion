@@ -8,7 +8,15 @@ typedef ChipsetData = {
 	level	: Int,
 }
 
-private class AllData extends haxe.xml.Proxy<"../xml/chipsets.xml",ChipsetData> {
+private abstract AllData(String -> Null<ChipsetData>) {
+    public function new(get: String -> Null<ChipsetData>) {
+		this = get;
+	}
+
+	@:resolve
+	public function getChipsetData(key: String): ChipsetData {
+		return this(key);
+	}
 }
 
 class ChipsetsXml {
@@ -17,19 +25,14 @@ class ChipsetsXml {
 	public static var ALL : Hash<ChipsetData> = new Hash();
 	public static var get : AllData = null;
 	#if neko
-		static var autoRun = init();
+		static var autoRun = init("fr");
 	#end
 
-	public static function init() {
-		#if flash
-			var raw = Manager.getEncodedXml("chipsets");
-		#end
-		#if neko
-			var raw = neko.io.File.getContent( neko.Web.getCwd() + Const.get.XML + FILE );
-		#end
+	public static function init(lang: String) {
+		var raw = haxe.Resource.getString("xml_chipsets_"+lang);
 		var h : Hash<ChipsetData> = new Hash();
 		var xml = Xml.parse(raw);
-		var doc = new haxe.xml.Fast( xml.firstElement() );
+		var doc = new haxe.xml.Access( xml.firstElement() );
 		for( node in doc.nodes.c ) {
 			var id = node.att.id.toLowerCase();
 			if( id == null )

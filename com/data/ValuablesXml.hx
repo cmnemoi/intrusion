@@ -7,7 +7,15 @@ typedef Valuable = {
 	fl_rare	: Bool,
 }
 
-private class AllData extends haxe.xml.Proxy<"../xml/valuables.xml",Valuable> {
+private abstract AllData(String -> Null<Valuable>) {
+    public function new(get: String -> Null<Valuable>) {
+		this = get;
+	}
+
+	@:resolve
+	public function getValuable(key: String): Valuable {
+		return this(key);
+	}
 }
 
 class ValuablesXml {
@@ -15,19 +23,14 @@ class ValuablesXml {
 	public static var ALL : Hash<Valuable> = new Hash();
 	public static var get : AllData = null;
 	#if neko
-		static var autoRun = init();
+		static var autoRun = init("fr");
 	#end
 
-	public static function init() {
-		#if flash
-			var raw = Manager.getEncodedXml("valuables");
-		#end
-		#if neko
-			var raw = neko.io.File.getContent( neko.Web.getCwd() + Const.get.XML + "valuables.xml" );
-		#end
+	public static function init(lang: String) {
+		var raw = haxe.Resource.getString("xml_valuables_"+lang);
 		var h : Hash<Valuable> = new Hash();
 		var xml = Xml.parse(raw);
-		var doc = new haxe.xml.Fast( xml.firstElement() );
+		var doc = new haxe.xml.Access( xml.firstElement() );
 		for( node in doc.nodes.v ) {
 			var id = node.att.id.toLowerCase();
 			if( id == null )

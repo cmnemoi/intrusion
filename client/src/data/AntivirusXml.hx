@@ -1,7 +1,15 @@
 package data;
 import Types;
 
-private class AllData extends haxe.xml.Proxy<"../xml/antivirus.xml",Antivirus> {
+private abstract AllData(String -> Null<Antivirus>) {
+    public function new(get: String -> Null<Antivirus>) {
+		this = get;
+	}
+
+	@:resolve
+	public function getAntivirus(key: String): Antivirus {
+		return this(key);
+	}
 }
 
 class AntivirusXml {
@@ -10,7 +18,7 @@ class AntivirusXml {
 	public static var get : AllData = null;
 
 	public static function init() {
-		var raw = Manager.getEncodedXml("antivirus");
+		var raw = haxe.Resource.getString("xml_antivirus_"+Manager.LANG);
 		var xml = Xml.parse(raw).firstElement();
 		var h : Hash<Antivirus> = new Hash();
 		for( x in xml.elements() ) {

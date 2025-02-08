@@ -12,14 +12,36 @@ typedef TutStep = {
 	fl_auto	: Bool,
 }
 
-typedef T_TutoPop = {
-	> flash.MovieClip,
-	title		: flash.TextField,
-	field		: flash.TextField,
-	bg			: flash.MovieClip,
+@:forward
+abstract T_TutoPop(MovieClip) from MovieClip to MovieClip {
+	public var title(get, never)		: Text;
+	public var field(get, never)		: Text;
+	public var bg(get, never)			: MovieClip;
+	public function new(mc: MovieClip) {
+		this = mc;
+	}
+
+	public function get_title(): Text {
+		return cast this.get("title");
+	}
+
+	public function get_field(): Text {
+		return cast this.get("field");
+	}
+	public function get_bg(): MovieClip {
+		return cast this.get("bg");
+	}
 }
 
-private class AllData extends haxe.xml.Proxy<"../xml/tutorials.fr.xml",Tut> {
+private abstract AllData(String -> Null<Tut>) {
+    public function new(get: String -> Null<Tut>) {
+		this = get;
+	}
+
+	@:resolve
+	public function getTutorial(key: String): Tut {
+		return this(key);
+	}
 }
 
 class Tutorial {
@@ -31,9 +53,9 @@ class Tutorial {
 	static var term			: UserTerminal = null;
 	static var current		: Tut = null;
 	static var currentStep	: TutStep = null;
-	static var cmc			: MCField = null;
-//	static var arrow : flash.MovieClip = null;
-	static var indicators	: List<flash.MovieClip> = new List();
+	static var cmc			: MovieClip = null;
+//	static var arrow :MovieClip = null;
+	static var indicators	: List<MovieClip> = new List();
 //	public static var nextCB : Void->Void = null;
 	static var pop			: T_TutoPop;
 
@@ -45,7 +67,7 @@ class Tutorial {
 
 	static function initXml() {
 		var xml = Xml.parse(haxe.Resource.getString("xml_tutorials_"+Manager.LANG));
-		var doc = new haxe.xml.Fast(xml.firstElement());
+		var doc = new haxe.xml.Access(xml.firstElement());
 		var h : Hash<Tut> = new Hash();
 		for( node in doc.nodes.t ) {
 			var id = node.att.id;
@@ -92,12 +114,12 @@ class Tutorial {
 	}
 
 	public static function end() {
-		cmc.removeMovieClip();
+		cmc?.removeMovieClip();
 		current = null;
 		currentStep = null;
 //		nextCB = null;
 		for (mc in indicators)
-			mc.removeMovieClip();
+			mc?.removeMovieClip();
 		indicators = new List();
 		print();
 	}
@@ -125,7 +147,7 @@ class Tutorial {
 		indicators = new List();
 //		nextCB = null;
 
-		if ( cmc._name!=null )
+		if ( cmc!=null )
 			term.startAnim(A_FadeRemove,cmc);
 
 
@@ -133,17 +155,17 @@ class Tutorial {
 		if ( currentStep.fl_auto ) {
 			term.attachMask(onAutoNext, Data.DP_TOPTOP);
 			print(currentStep.txt, currentStep.y);
-//			nextCB = callback( onAutoNext, callback( );
-//			term.popUp(currentStep.txt, callback(play, current, current.steps[sid+1].id));
+//			nextCB =  onAutoNext.bind(callback( );
+//			term.popUp(currentStep.txt, play.bind(current, current.steps[sid+1].id));
 		}
 		else {
 			print(currentStep.txt, currentStep.y, true);
-//			term.printSide(Lang.get.TutorialTitle, "<div class='tutorial'>"+Data.htmlize(currentStep.txt)+"</div>");
+			term.printSide(Lang.get.TutorialTitle, "<div class='tutorial'>"+Data.htmlize(currentStep.txt)+"</div>");
 		}
 //			var mc : MCField = cast dm.attach("logLine", Data.DP_TOPTOP);
 //			mc.field.text = "[TUTORIAL] "+currentStep.txt;
-//			mc._x = Data.WID*0.5 - mc.field.textWidth*0.5;
-//			mc._y = Data.HEI*0.5 - mc.field.textHeight*0.5;
+//			mc._x = Data.WID*0.5 - mc.field.width*0.5;
+//			mc._y = Data.HEI*0.5 - mc.field.height*0.5;
 //			mc._x = Math.floor(mc._x);
 //			mc._y = Math.floor(mc._y);
 //			term.startAnim(A_Text, mc, mc.field.text).spd*=0.5;
@@ -182,8 +204,8 @@ class Tutorial {
 		mc._y = y;
 		mc._rotation = rotat;
 
-		// on bouge la pop up si elle gêne
-		if ( pop._name!=null ) {
+		// on bouge la pop up si elle gï¿½ne
+		if ( pop!=null ) {
 			var yAvg = mc._y;
 			var n = 1;
 			for (ind in indicators)
@@ -194,9 +216,9 @@ class Tutorial {
 			yAvg = Math.round(yAvg/n);
 
 			var global = Data.localToGlobal(mc._parent, 0, yAvg);
-			if ( Math.abs((pop._y+pop._height*0.5)-global.y)<=150 )
+			if ( Math.abs((pop._y+pop.height*0.5)-global.y)<=150 )
 				pop._y = DEFAULT_TOP;
-			if ( Math.abs((pop._y+pop._height*0.5)-global.y)<=150 )
+			if ( Math.abs((pop._y+pop.height*0.5)-global.y)<=150 )
 				pop._y = DEFAULT_BOTTOM;
 		}
 		indicators.add(mc);
@@ -231,8 +253,8 @@ class Tutorial {
 
 	public static function print(?str:String, ?y:Int, ?fl_blockClick=false) {
 		if ( str==null || str=="" )
-//			UserTerminal.CNX.JsMain.clearTutorial.call([]);
-			pop.removeMovieClip();
+//			UserTerminal.jsMain.clearTutorial();
+			pop?.removeMovieClip();
 		else {
 			str = StringTools.replace(str,"::name::",term.username);
 
@@ -241,21 +263,24 @@ class Tutorial {
 			str = "";
 			for (i in 0...list.length)
 				if(i%2!=0)
-					str+="<font color='#FFFF00'>"+list[i]+"</font>";
+					// TODO: support HTML text?
+					//str+="<font color='#FFFF00'>"+list[i]+"</font>";
+					str+=list[i];
 				else
 					str+=list[i];
-			term.startAnim(A_FadeRemove, pop);
+			if (pop != null)
+				term.startAnim(A_FadeRemove, pop);
 			pop = cast Manager.DM.attach("tutoPop", Data.DP_TOPTOP);
 			pop._y = y;
 			pop.title.text = Lang.get.TutorialTitle;
-			pop.field.htmlText = str;
-			pop.field._height = pop.field.textHeight+10;
-			pop.bg._height = Math.max( 81, pop.field._y + pop.field.textHeight + 10 );
+			pop.field.text = str;
+			pop.field._height = pop.field.height+10;
+			pop.bg._height = Math.max( 81, pop.field._y + pop.field.height + 10 );
 			if ( fl_blockClick )
 				pop.bg.onRelease = function() {};
 			term.startAnim(A_FadeIn, pop).spd*=2;
 			term.startAnim(A_HtmlText, pop, str);
-//			UserTerminal.CNX.JsMain.printTutorial.call([
+//			UserTerminal.jsMain.printTutorial.call([
 //				Lang.get.TutorialTitle, Data.htmlize(str) + if(fl_nextButton) getNextButton() else ""
 //			]);
 		}

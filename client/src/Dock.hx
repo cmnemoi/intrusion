@@ -2,30 +2,38 @@ import mt.bumdum.Lib;
 import Types;
 import data.VirusXml;
 import GNetwork;
+import pixi.core.textures.Texture;
+import pixi.core.renderers.webgl.filters.Filter;
 
-typedef DockMC = {
-	> MCField,
-	virusId	: flash.TextField,
+@:forward
+abstract DockMC(MCField) from MovieClip to MovieClip {
+	public var virusId(get, never): Text;
+	public function new(mc: MovieClip) {
+		this = mc;
+	}
+	public function get_virusId(): Text {
+		return cast this.get("virusId");
+	}
 }
 
 typedef DockSlot = {
-	mc		: DockMC,
+	mc		: MovieClip,
 	virus	: Virus,
 //	hotkey	: Int,
 }
 class Dock {
 	static public var ICON_WIDTH = 39;
 
-	var root			: flash.MovieClip;
+	var root			: MovieClip;
 	var dm				: mt.DepthManager;
 	var decks			: Array<{name:String, content:Array<DockSlot>}>;
 	var currentDeck		: Int;
 	var term			: UserTerminal;
 	var pending			: DockSlot;
 	var fl_lock			: Bool;
-	var baseFilters		: Array<flash.filters.BitmapFilter>;
+	var baseFilters		: Array<Filter>;
 	var emcList			: List<MCField>;
-	var urlList			: List<{mc:flash.MovieClip, url:String}>;
+	var urlList			: List<{mc:MovieClip, url:String}>;
 	var swButton		: MCField;
 	var fButton			: MCField;
 
@@ -38,18 +46,19 @@ class Dock {
 		emcList = new List();
 		decks = new Array();
 		currentDeck = 0;
-		baseFilters = new Array();
-		baseFilters.push( new flash.filters.GlowFilter(0x0,1, 3,3, 600) );
+		baseFilters = GlowFilter.create(0x0,1, 3,3, 600);
 	}
 
 
 	public function detach() {
 		for (p in getCurrentDeck()) {
-			var a = term.startAnim( A_Move, p.mc );
-			a.spd*=0.5;
-			a.ty-=42;
-			term.startAnim( A_FadeRemove, p.mc ).spd*=0.5;
-			p.mc = null;
+			if ( p.mc!=null ) {
+				var a = term.startAnim( A_Move, p.mc );
+				a.spd*=0.5;
+				a.ty-=42;
+				term.startAnim( A_FadeRemove, p.mc ).spd*=0.5;
+				p.mc = null;
+			}
 		}
 	}
 
@@ -107,10 +116,11 @@ class Dock {
 
 
 	public function attach() {
-		// bouton "fichiers copiés"
+		// bouton "fichiers copiï¿½s"
 		if ( fButton==null ) {
 			fButton = cast Manager.DM.attach("menuButton", Data.DP_TOP);
-			fButton._x = Data.WID-fButton._width-4;
+			//fButton.initTextField("field");
+			fButton._x = Data.WID-fButton.width-4;
 			fButton._y = 4;
 			fButton.field.text = Lang.get.ButtonMyFiles;
 			term.initStandardButton(fButton, onMyFiles);
@@ -119,6 +129,7 @@ class Dock {
 		// bouton "changer de deck"
 		if ( swButton==null && decks.length>1 ) {
 			swButton = cast Manager.DM.attach("menuButton", Data.DP_TOP);
+			//swButton.initTextField("field");
 			swButton._x = 4;
 			swButton._y = 4;
 			swButton.field.text = Lang.get.ButtonSwitchDeck;
@@ -141,10 +152,10 @@ class Dock {
 				mc.virusId.text = ds.virus.id.toUpperCase();
 			}
 			else {
-				mc.onRelease = callback(onClickSlot,ds);
+				mc.onRelease = onClickSlot.bind(ds);
 				mc.field.text = ""+(i+1);
 				mc.virusId.text = "";
-				mc.virusId._visible = false;
+				mc.virusId.visible = false;
 			}
 			var a = term.startAnim(A_Move,mc);
 			a.fl_killFilters = false;
@@ -156,7 +167,7 @@ class Dock {
 		loadIcons();
 		updateBubbles();
 
-		// on cache les virus épuisés
+		// on cache les virus ï¿½puisï¿½s
 		for (ds in list)
 			if ( ds.virus.uses==0 )
 				ds.mc.smc._alpha = 0;
@@ -170,17 +181,12 @@ class Dock {
 			for(ds in deck.content) {
 				if ( ds.virus==null )
 					continue;
-				var mcl = new flash.MovieClipLoader();
-				mcl.onLoadComplete = function(mc) {me.onLoadComplete(ds);}
-				mcl.onLoadError = onLoadError;
+
 				var url = Manager.PARAMS._iconsUrl+ds.virus.id+".png?v="+Manager.PARAMS._iconsVer;
-//				var mc = ds.mc.createEmptyMovieClip("loader",1);
-				var  mc = ds.mc.smc;
-				mcl.loadClip(url, mc);
-				urlList.add({
-					mc	: mc,
-					url	: url,
-				});
+				var promise = ((untyped Texture).fromURL(url))
+					.then((texture) -> {
+						ds.mc.smc.attachBitmap(texture, 1);
+					});
 			}
 	}
 
@@ -236,11 +242,13 @@ class Dock {
 	}
 
 	public function showSwitcher() {
-		swButton._visible = true;
+		if (swButton!=null)
+			swButton._visible = true;
 	}
 
 	public function hideSwitcher() {
-		swButton._visible = false;
+		if (swButton!=null)
+			swButton._visible = false;
 		term.detachCMenu();
 	}
 
@@ -248,14 +256,14 @@ class Dock {
 	function setPending(p:DockSlot) {
 		if ( fl_lock ) return;
 		pending = p;
-		pending.mc.filters = [
-			new flash.filters.GlowFilter(Data.GREEN,1, 2,2, 10, 1, true ),
-			new flash.filters.GlowFilter(Data.GREEN,1, 32,32, 1, 1),
-		];
+		pending.mc.filters =
+			GlowFilter.create(Data.GREEN,1, 2,2, 10, 1, true )
+			.concat(GlowFilter.create(Data.GREEN,1, 32,32, 1, 1));
 	}
 
 	public function clearPending() {
-		pending.mc.filters = baseFilters;
+		if (pending != null)
+			pending.mc.filters = baseFilters;
 		pending = null;
 	}
 
@@ -306,7 +314,7 @@ class Dock {
 		var options = new Array();
 		for (f in term.storage)
 			if ( f.getContent()!=null && f.getContent().length>0 )
-				options.push({ label:f.name, cb:callback(displayFile, f) });
+				options.push({ label:f.name, cb:displayFile.bind(f) });
 		term.showCMenu(Manager.DM, fButton._x-5,fButton._y+12, options );
 	}
 
@@ -319,7 +327,7 @@ class Dock {
 			var label = d.name;
 			if ( i==currentDeck )
 				label = "* "+label;
-			options.push({ label:label, cb:callback(switchDeck, i) });
+			options.push({ label:label, cb:switchDeck.bind(i) });
 		}
 		term.showCMenu(Manager.DM, swButton._x+5, swButton._y+12, options );
 	}
@@ -395,7 +403,7 @@ class Dock {
 		if ( pending!=null )
 			dm.over(pending.mc);
 //		displayEffects();
-		ds.mc.filters = [ new flash.filters.GlowFilter(0xffffff,1, 3,3,600) ];
+		ds.mc.filters = GlowFilter.create(0xffffff,1, 3,3,600);
 	}
 
 	function onRollOut(ds:DockSlot) {
@@ -408,7 +416,7 @@ class Dock {
 
 	public function updateBubbles() {
 		for (ds in getCurrentDeck())
-			term.bubble(ds.mc, ds.virus.name, getDesc(ds.virus),-1, callback(onRollOver,ds), callback(onRollOut,ds));
+			term.bubble(ds.mc, ds.virus.name, getDesc(ds.virus),-1, onRollOver.bind(ds), onRollOut.bind(ds));
 	}
 
 	function detachEffects() {
