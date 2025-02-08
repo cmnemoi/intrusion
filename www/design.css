@@ -1,0 +1,1376 @@
+body, a, p, table, tr, td, body, ul, li, dl, dt, dd, h1, h2, h3, pre {
+	margin : 0px;
+	padding : 0px;
+}
+pre {
+	padding : 10px;
+	border : 1px solid #b6be79;
+	color : #798a00;
+	background-color : #e9eec6;
+	margin : 10px;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+}
+ul {
+	list-style : none;
+}
+input {
+	border-style : none;
+}
+.clear {
+	clear : both;
+	line-height : 0pt;
+	font-size : 0pt;
+}
+img.helptip {
+	width : 12px;
+	height : 12px;
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png");
+	background-position : -5px -170px;
+	cursor : help;
+}
+img.unknown {
+	width : 10px;
+	height : 11px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") -5px -127px;
+}
+a img {
+	border-style : none;
+}
+.iewarning {
+	display : none;
+	text-align : center;
+	background-color : black;
+	color : white;
+	padding : 5px 0px;
+}
+.iewarning img {
+	vertical-align : -10%;
+}
+.iewarning a {
+	color : white;
+	text-decoration : underline;
+}
+img.warning {
+	width : 12px;
+	height : 12px;
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png");
+	background-position : -30px -170px;
+}
+.cache {
+	position : absolute;
+	top : -3000px;
+}
+.reload {
+	width : 53px;
+	height : 24px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/reload.gif") no-repeat top left;
+	margin : 12px;
+}
+body, body.inframe {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/bg_repeat.gif") repeat top left;
+}
+body, td, input, textarea, select {
+	color : #424242;
+	font-family : Trebuchet MS, Arial, Verdana, sans-serif;
+	font-size : 10pt;
+}
+.mxtophead {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/head_bg_repeat_twinoid.jpg") repeat-x 0px 34px;
+}
+.mxhead {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/head_twinoid.jpg") no-repeat top left;
+	width : 900px;
+	margin : 0px auto 0px auto;
+	padding-top : 1px;
+}
+.mxhead a.logo {
+	position : absolute;
+	margin-left : 5px;
+	display : block;
+	outline : none;
+	margin-top : 20px;
+	width : 329px;
+	height : 86px;
+}
+.mxheadnoel {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/head_noel.jpg");
+}
+.mxmainmenu {
+	position : absolute;
+	z-index : 1;
+	margin-top : 126px;
+	margin-left : 7px;
+}
+.mxmainmenu li {
+	float : left;
+	position : relative;
+	margin-right : 50px;
+}
+.mxmainmenu li a {
+	color : #808080;
+	text-decoration : none;
+	font-weight : bold;
+	font-size : 11pt;
+	margin-top : 0px;
+	padding-left : 3px;
+}
+.mxmainmenu li a:hover {
+	color : #5f5858;
+	text-shadow : #fff 1px 1px 0px,#fff -1px -1px 0px;;
+}
+.mxmainmenu li a.mxactive {
+	text-shadow : #fff 1px 1px 0px,#fff -1px -1px 0px;;
+}
+.mxmainmenu li img {
+	vertical-align : -30%;
+}
+.mxtopmaincontent {
+	margin-top : 168px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/topmaincontent.gif") no-repeat top left;
+	padding-top : 6px;
+	margin-bottom : 15px;
+}
+.mxbordermaincontent {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/bgmaincontent.gif") repeat-y top left;
+}
+.mxbottommaincontent {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/bottommaincontent.gif") no-repeat bottom left;
+	padding-bottom : 6px;
+}
+.mxbottommaincontent .mxcontent {
+	min-height : 380px;
+	padding-top : 4px;
+	padding-bottom : 10px;
+	padding-left : 10px;
+	padding-right : 10px;
+}
+.mxbottom {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/bottom_bg.gif") repeat-x 0px -3px;
+	height : 22px;
+	margin : 9px auto 0px auto;
+	text-align : center;
+	padding-top : 7px;
+	color : #fff;
+	font-size : 9pt;
+}
+.mxbottom a {
+	color : #fff;
+	text-decoration : underline;
+}
+.mxbottom img {
+	vertical-align : -17%;
+}
+.mxtopmenu {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/top_bg.gif") repeat-x top left;
+}
+.mxtopmenu a {
+	outline : none;
+}
+.mxtopmenucontent {
+	width : 900px;
+	height : 34px;
+	margin : auto;
+	color : #fff;
+	font-size : 10pt;
+	overflow : hidden;
+}
+.mxtopmenucontent .mxactive {
+	background-color : #fff;
+	color : #424242;
+}
+.mxtopmenucontent .mxactive a {
+	color : #424242;
+}
+.mxtopmenucontent .more {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") no-repeat -29px -71px;
+	width : 14px;
+	height : 15px;
+}
+ul.mxdirectnav {
+	width : 500px;
+}
+ul.mxdirectnav li {
+	float : left;
+	position : relative;
+}
+ul.mxdirectnav li, ul.mxlogged li {
+	display : block;
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/navbut.png");
+	text-align : center;
+	cursor : pointer;
+}
+ul.mxdirectnav li img, ul.mxlogged li img {
+	vertical-align : -17%;
+}
+ul.mxdirectnav li a, ul.mxlogged li a {
+	display : block;
+	color : #fff;
+	text-decoration : none;
+}
+ul.mxdirectnav li a:hover, ul.mxlogged li a:hover {
+	text-decoration : none;
+}
+ul.mxdirectnav li.mxnews, ul.mxlogged li.mxnews {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/navbut2.png");
+}
+ul.mxdirectnav li:hover, ul.mxlogged li:hover, .mxadmin ul li:hover {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/navbutover.png");
+}
+ul.mxdirectnav li.mxnews:hover, ul.mxlogged li.mxnews:hover, .mxadmin ul li.mxnews:hover {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/navbut2over.png");
+}
+.mxminilogo a {
+	padding-top : 9px;
+	text-align : center;
+	width : 70px;
+	height : 25px;
+}
+.mxminilogo img {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/minilogo.png") no-repeat top left;
+	width : 55px;
+	height : 16px;
+	display : block;
+	margin : auto;
+}
+.mxshow {
+	margin-left : 2px;
+	width : 65px;
+	height : 26px;
+	padding-top : 8px;
+}
+.mxapp, .mxcut_game, .mxcut_app, .mxcut_forum, .mxcut_group {
+	margin-left : 2px;
+	width : 30px;
+	height : 32px;
+}
+.mxapp img, .mxcut_game img, .mxcut_app img, .mxcut_forum img, .mxcut_group img {
+	width : 16px;
+	height : 16px;
+	display : block;
+	margin : 8px auto 0px auto;
+	padding-top : 1px;
+}
+.mxapp a.mxali, .mxcut_game a.mxali, .mxcut_app a.mxali, .mxcut_forum a.mxali, .mxcut_group a.mxali {
+	height : 32px;
+	padding-top : 1px;
+}
+.mxcut_game img, .mxcut_forum img {
+	width : auto;
+	height : auto;
+}
+.mxcut_forum img.navforum {
+	position : absolute;
+	width : 12px;
+	height : 11px;
+	margin-top : 16px;
+	margin-left : 16px;
+}
+.mxnews {
+	position : absolute;
+}
+.mxnews a {
+	height : 27px;
+	padding-top : 7px;
+	padding-left : 8px;
+	padding-right : 8px;
+}
+.mxnews span {
+	text-shadow : #000 -1px 0px 0px,#000 0px 1px 0,#000 1px 0px 0px,#000 0px -1px 0px;
+	color : #fff;
+	font-weight : bold;
+	font-variant : small-caps;
+	font-size : 8pt;
+}
+.mxnews img {
+	vertical-align : -30% !important;
+}
+ul.mxlogged {
+	float : right;
+	position : relative;
+}
+ul.mxlogged li {
+	float : left;
+	position : relative;
+	margin-left : 2px;
+}
+ul.mxlogged li img {
+	vertical-align : -17%;
+}
+ul.mxlogged li img.token {
+	vertical-align : -25%;
+	cursor : help;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/token.png") no-repeat top left;
+	width : 17px;
+	height : 17px;
+}
+ul.mxlogged li.mxmail a {
+	width : 30px;
+	height : 27px;
+	padding-top : 7px;
+	padding-left : 5px;
+	padding-right : 5px;
+}
+ul.mxlogged li.mxmail .howmany {
+	text-shadow : #000 -1px 0px 0px,#000 0px 1px 0,#000 1px 0px 0px,#000 0px -1px 0px;
+	font-weight : bold;
+	font-size : 8pt;
+	position : absolute;
+	z-index : 3;
+	color : #fff;
+	margin-left : 3px;
+	margin-top : 8px;
+}
+ul.mxlogged li.token a {
+	min-width : 40px;
+	height : 26px;
+	padding-top : 8px;
+	padding-left : 5px;
+	padding-right : 5px;
+}
+ul.mxlogged li.token img {
+	vertical-align : -25%;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/token.png") no-repeat top left;
+	width : 17px;
+	height : 17px;
+}
+ul.mxlogged li.moretokens a {
+	width : 100px;
+	height : 27px;
+	padding-top : 7px;
+}
+ul.mxlogged li.mxconnect a {
+	width : 95px;
+	height : 26px;
+	padding-top : 8px;
+}
+ul.mxlogged li.prevuser {
+	padding-top : 3px;
+	height : 31px;
+	width : 110px;
+	white-space : nowrap;
+}
+ul.mxlogged li.prevuser a {
+	overflow : hidden;
+	width : 110px;
+	height : 30px;
+}
+ul.mxlogged li.prevuser img.avatar {
+	width : 28px;
+	height : 28px;
+	vertical-align : middle !important;
+}
+a.mxlostpass {
+	float : right;
+	position : relative;
+	margin-left : 7px;
+	line-height : 9pt;
+	color : #fff;
+	font-size : 9pt;
+	width : 55px;
+	display : block;
+	height : 29px;
+	padding-top : 5px;
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/navbut.png");
+	text-align : center;
+	cursor : pointer;
+}
+a.mxlostpass img {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") no-repeat -30px -226px;
+	width : 11px;
+	height : 13px;
+	vertical-align : -15%;
+}
+a.mxlostpass:hover {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/navbutover.png");
+}
+a.mxlostpass:hover {
+	text-decoration : none;
+}
+.mxloginbox {
+	float : right;
+	position : relative;
+	padding-top : 6px;
+}
+.mxloginbox input {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/loginbox.gif") no-repeat top left;
+	width : 89px;
+	height : 21px;
+	padding-left : 3px;
+}
+.mxloginbox .enter {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/buttons/entre.gif") no-repeat top left;
+	width : 73px;
+	height : 23px;
+	cursor : pointer;
+	font-variant : small-caps;
+	font-weight : bold;
+	color : #2d89c5;
+	padding-bottom : 2px;
+}
+.mxloginbox .enter:hover {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/buttons/entre_over.gif") no-repeat top left;
+}
+.mxadmin {
+	width : 100px;
+	position : absolute;
+	z-index : 1;
+	left : 5px;
+	top : 30px;
+	background-color : #f2f2f2;
+	padding : 3px 5px;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+	border : 1px solid #fff;
+	color : #424242;
+	font-size : 9pt;
+}
+.mxadmin h3 {
+	background-image : none;
+	font-variant : small-caps;
+}
+.mxadmin li a {
+	color : #424242 !important;
+}
+.mxadmin input.inputusername {
+	width : 68px;
+	height : 15px;
+	border : 1px solid #424242;
+	font-size : 8pt;
+}
+.mxadmin input.inputsearch {
+	border : 1px solid #424242;
+	height : 20px;
+	font-size : 8pt;
+}
+#navMenu {
+	position : absolute;
+	margin-top : 34px;
+	z-index : 10;
+}
+.mxnav {
+	background-color : transparent;
+	background-image : none;
+	background-position : left top;
+}
+.mxnav .reload {
+	margin : 0px;
+	padding : 10px;
+}
+.mxnav .mxnavbg {
+	background-repeat : repeat-y;
+	background-position : left top;
+	padding-left : 5px;
+	padding-top : 2px;
+}
+.mxnav .mxnavbottom {
+	background-repeat : no-repeat;
+	background-position : left bottom;
+	padding-bottom : 10px;
+	margin-bottom : 12px;
+}
+.mxnav ul {
+	margin-top : -5px;
+}
+.mxnav li {
+	cursor : pointer;
+}
+.mxnav li a {
+	text-decoration : none;
+	color : #2d89c5;
+}
+.mxnav li a img {
+	vertical-align : -17%;
+}
+.mxnav li:hover {
+	background-color : #fff;
+}
+.mxnav a.ali {
+	display : block;
+	padding : 5px 3px;
+}
+.mxnav img.account {
+	width : 15px;
+	height : 15px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") no-repeat -53px -110px;
+	vertical-align : -17%;
+}
+.mxnav img.whattokens {
+	width : 13px;
+	height : 16px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") -30px -52px;
+}
+.mxnav img.moretokens {
+	width : 17px;
+	height : 17px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") -50px -50px;
+}
+.mxnav img.histokens {
+	width : 17px;
+	height : 17px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") -4px -50px;
+}
+.mxnav_muxxu, .mxnav_user, .mxnav_token {
+	width : 168px;
+	padding-top : 8px;
+}
+.mxnav_muxxu .mxnavbg, .mxnav_user .mxnavbg, .mxnav_token .mxnavbg {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnav2bg.png");
+	padding-right : 11px;
+}
+.mxnav_muxxu .mxnavbottom, .mxnav_user .mxnavbottom, .mxnav_token .mxnavbottom {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnav2bottom.png");
+}
+.mxnav_muxxu {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavmuxxutop.png") no-repeat left top;
+}
+.mxnav_games .mxnavbg, .mxnav_msg .mxnavbg {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavbg.png");
+	padding-right : 12px;
+}
+.mxnav_games .mxnavbottom, .mxnav_msg .mxnavbottom {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavbottom.png");
+}
+.mxnav_games {
+	padding-top : 8px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavgamestop.png") no-repeat top left;
+	width : 320px;
+}
+.mxnav_games ul.mxgames {
+	padding-bottom : 1px;
+}
+.mxnav_games ul.mxgames li {
+	float : left;
+	position : relative;
+	width : 100px;
+}
+.mxnav_games ul.mxgames li img {
+	vertical-align : -17%;
+}
+.mxnav_games ul.mxgames li a.beta {
+	color : #cd1f06;
+}
+.mxnav_msg {
+	position : absolute;
+	width : 321px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavmsgtop.png") no-repeat left top;
+	padding-top : 8px;
+	z-index : 2;
+	font-size : 9pt;
+}
+.mxnav_msg .imail {
+	position : absolute;
+	margin-top : -36px;
+	margin-left : 284px;
+}
+.mxnav_msg h3, .mxnav_msg ul, .mxnav_msg li, .mxnav_msg p {
+	margin : 0px;
+	padding : 0px;
+	color : #424242;
+}
+.mxnav_msg .avatar img {
+	width : 28px;
+	height : 28px;
+	position : absolute;
+}
+.mxnav_msg h3, .mxnav_msg p {
+	margin-left : 35px;
+}
+.mxnav_msg h3 {
+	line-height : 10pt;
+	font-size : 9pt;
+	font-weight : normal;
+}
+.mxnav_msg li {
+	margin-bottom : 4px;
+	padding-bottom : 2px;
+	padding-left : 1px;
+	padding-top : 1px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/linehoriz.gif") repeat-x left bottom;
+	width : 296px;
+	height : 32px;
+	overflow : hidden;
+}
+.mxnav_msg p {
+	font-size : 9pt;
+}
+.mxnav_msg p img {
+	vertical-align : -8%;
+}
+.mxnav_msg p a {
+	color : #798a00;
+}
+.mxnav_msg p a:hover {
+	text-decoration : none;
+}
+.mxnav_msg a.ali {
+	color : #424242;
+	margin : 0px;
+	padding : 0px;
+}
+.mxnav_msg span.olda {
+	color : #798a00;
+}
+.mxnav_msg .unread {
+	font-weight : bold;
+}
+.mxnav_msg a.compose, .mxnav_msg a.eall {
+	color : #2d89c5;
+	text-decoration : none;
+}
+.mxnav_msg a.compose:hover, .mxnav_msg a.eall:hover {
+	text-decoration : underline;
+}
+.mxnav_msg a.compose {
+	float : right;
+	position : relative;
+	margin-right : 4px;
+}
+.mxnav_msg a.compose img {
+	vertical-align : -17%;
+}
+.mxnav_msg a.compose:hover {
+	text-decoration : none;
+}
+.mxnav_msg a.compose:hover span {
+	text-decoration : underline;
+}
+.mxnav_user img.profil {
+	vertical-align : bottom;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") no-repeat -29px -92px;
+	width : 13px;
+	height : 15px;
+}
+.mxnav_user img.logoff {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") no-repeat -52px -248px;
+	width : 11px;
+	height : 13px;
+	vertical-align : -15%;
+}
+.mxnav_user, .mxnav_token {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnav2top.png") no-repeat left top;
+}
+.overclose {
+	position : fixed;
+	width : 100%;
+	height : 100%;
+	z-index : 8;
+	top : 0px;
+	bottom : 0px;
+	left : 0px;
+}
+.tiptop {
+	width : 263px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/tiptop.png") no-repeat top left;
+	padding-top : 7px;
+	padding-bottom : 1px;
+}
+.tiptop .tipbottom {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/tipbottom.png") no-repeat bottom left;
+	padding-bottom : 10px;
+}
+.tiptop .tipbottom .tipbg {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/tipbg.png") repeat-y top left;
+	padding : 1px;
+	padding-left : 10px;
+	padding-right : 10px;
+	font-size : 9pt;
+	min-height : 25px;
+}
+.tiptop .tipbottom .tipbg h1 {
+	margin : 0px;
+	padding : 0px;
+	height : auto;
+	padding-bottom : 2px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/tiph.gif") no-repeat bottom left;
+	font-size : 10pt;
+	color : #424242;
+	padding-left : 16px;
+}
+.tiptop .tipbottom .tipbg span {
+	color : #798a00;
+	font-weight : bold;
+}
+.tiptop .tipbottom .tipbg .hint {
+	float : right;
+	margin-top : -20px;
+}
+.iframe {
+	position : absolute;
+	z-index : 9;
+	width : 350px;
+	height : 250px;
+	margin-left : 587px;
+	margin-top : 35px;
+	border-style : none;
+}
+#mxtop.mxextern {
+	background-position : top left;
+}
+body.connection {
+	background-color : transparent;
+	background-image : none;
+}
+body.connection .mxconnecttop {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavmsgtop.png") no-repeat top left;
+	width : 320px;
+	padding-top : 8px;
+}
+body.connection .mxconnectbg {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavbg.png") repeat-y top left;
+}
+body.connection .mxconnectbottom {
+	padding-bottom : 10px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/mxnavbottom.png") no-repeat bottom left;
+}
+body.connection .connectext {
+	padding : 0px 20px 0px 10px;
+}
+body.connection .connectext form, body.connection .connectext table {
+	margin : 0px;
+	padding : 0px;
+}
+body.connection .connectext h2 {
+	height : 20px;
+	font-variant : normal;
+	letter-spacing : 0px;
+	background-image : none;
+	margin : 0px;
+	padding : 0px;
+	color : #424242;
+	border-bottom : 1px dashed #828282;
+}
+body.connection .connectext h2 .minilogobox {
+	float : right;
+	position : relative;
+}
+body.connection .connectext table.tableiframe {
+	width : 215px;
+	margin : 5px auto 5px auto;
+}
+body.connection .connectext table.tableiframe td.entertd {
+	text-align : center;
+	padding-top : 5px;
+	padding-left : 65px;
+}
+body.connection .connectext input.loginboxframe {
+	width : 128px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/loginboxframe.gif") no-repeat top left;
+	margin : 0px;
+	padding : 0px;
+	font-size : 9pt;
+	padding-left : 3px;
+	padding-top : 3px;
+	padding-bottom : 6px;
+}
+body.connection .connectext .boxmenu {
+	font-size : 7.5pt;
+}
+body.connection .connectext .boxmenu img {
+	vertical-align : -24%;
+}
+body.connection .connectext .boxmenu .closebox {
+	float : right;
+	position : relative;
+	cursor : pointer;
+}
+.identifying {
+	font-size : 12pt;
+	text-align : center;
+	margin-top : 50px;
+	margin-bottom : 50px;
+}
+.iframenav {
+	position : absolute;
+	z-index : 9000;
+	width : 320px;
+	height : 200px;
+	margin-left : 0px;
+	margin-top : -1px;
+	border-style : none;
+	overflow : hidden;
+}
+#iframeapp {
+	padding : 0px;
+	margin : 0px;
+	width : 870px;
+}
+body.appauth {
+	background-color : transparent;
+	background-image : none;
+}
+body.appauth .help {
+	margin-left : auto;
+	margin-right : auto;
+	margin-top : 50px;
+	background-color : #ebebeb;
+	width : 400px;
+	height : 150px;
+}
+body.appauth .help p {
+	text-align : center;
+}
+body.appauth .help ul {
+	margin-left : 75px;
+}
+body.appauth .help ul li {
+	padding : 20px;
+	float : left;
+}
+.button {
+	width : 87px;
+	height : 28px;
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/buttons/buttonblue_s.gif");
+	background-position : top left;
+	background-repeat : no-repeat;
+	background-color : transparent;
+	font-size : 8pt;
+	cursor : pointer;
+	color : #0d5e93;
+	line-height : 21pt;
+	display : block;
+	text-decoration : none;
+	text-align : center;
+}
+.button:hover {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/buttons/buttonblue_s_over.gif");
+}
+.mxbuttonlong {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/buttons/buttonblue.gif") no-repeat top left;
+	width : 141px;
+	text-align : center;
+	height : 28px;
+	font-size : 8pt;
+	cursor : pointer;
+	color : #0d5e93;
+	line-height : 21pt;
+	display : block;
+	text-decoration : none;
+}
+.mxbuttonlong:hover {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/buttons/buttonblue_over.gif");
+}
+.corneravatar {
+	position : absolute;
+	background : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/corneravatar80.png") no-repeat top left;
+	width : 80px;
+	height : 80px;
+}
+.profilavatar {
+	position : absolute;
+	margin-top : 8px;
+}
+.profilavatar img {
+	width : 80px;
+	height : 80px;
+}
+.muxxumaintain img {
+	position : absolute;
+}
+.muxxumaintain p {
+	margin-left : 220px;
+}
+.pagination {
+	width : 145px;
+	margin : auto;
+}
+.pagination a {
+	color : #798a00;
+}
+.back {
+	float : left;
+	position : relative;
+}
+.next {
+	float : left;
+	position : relative;
+	margin-left : 5px;
+}
+.pages {
+	font-size : 9pt;
+	padding-top : 3px;
+	color : #798a00;
+	font-variant : small-caps;
+	font-weight : bold;
+	float : left;
+	position : relative;
+	text-align : center;
+	margin-left : 5px;
+}
+body.inframe .black {
+	display : none;
+}
+.black {
+	position : fixed;
+	width : 100%;
+	height : 100%;
+	z-index : 8;
+	top : 0px;
+	bottom : 0px;
+	left : 0px;
+	background-color : black;
+	opacity : 0.4;
+	filter : alpha(opacity=40);
+	zoom : 1;
+}
+.sitePopup {
+	position : absolute;
+	z-index : 9;
+	width : 650px;
+	margin : 200px 0px 0px 125px;
+	border-radius : 10px;
+	-moz-border-radius : 10px;
+	-webkit-border-radius : 10px;
+	border : 2px solid #b6be79;
+	background-color : #ebebeb;
+	text-align : left;
+}
+.sitePopup .popupbg {
+	padding-bottom : 10px;
+}
+.sitePopup .signimage {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/confirm.gif") no-repeat 25px center;
+}
+.sitePopup .ptext {
+	color : #424242;
+	padding-left : 70px;
+	padding-right : 10px;
+	margin-top : 10px;
+	margin-bottom : 10px;
+	min-height : 20px;
+}
+.sitePopup a.button {
+	margin : auto;
+}
+.siteError {
+	border-color : #e5877a;
+	outline : none;
+}
+.siteError .signimage {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/error.gif");
+}
+body.hideSwf .swf object, body.hideSwf .swf embed {
+	visibility : hidden;
+}
+body.hideSwf .opaque object, body.hideSwf .opaque embed, body.hideSwf .transparent object, body.hideSwf .transparent embed {
+	visibility : visible;
+}
+body.beta ul.mxlogged li.token img {
+	background-image : url("/web/20130403040528im_/http://data.muxxu.com/img/token_beta.png");
+}
+.mxurlcomment {
+	width : 385px;
+	color : #424242;
+	margin-top : 10px;
+}
+.mxurlcomment a, .mxurlcomment p, .mxurlcomment ul, .mxurlcomment li, .mxurlcomment form, .mxurlcomment textarea {
+	margin : 0px;
+	padding : 0px;
+	font-size : 10pt;
+	color : black;
+	background : none;
+	border : none;
+}
+.mxurlcomment .avatar30 {
+	position : absolute;
+	cursor : pointer;
+}
+.mxurlcomment .avatar30 img {
+	width : 30px;
+	height : 30px;
+}
+.mxurlcomment p.commuser, .mxurlcomment p.commdate, .mxurlcomment p.commcomm {
+	margin-left : 35px;
+}
+.mxurlcomment p.commdate {
+	font-size : 7.5pt;
+	color : #777;
+}
+.mxurlcomment a {
+	color : #2d89c5;
+	text-decoration : none;
+}
+.mxurlcomment a:hover {
+	text-decoration : underline;
+}
+.mxurlcomment .delicon {
+	float : right;
+	margin-right : 0px;
+	margin-top : 0px;
+	width : 12px;
+	height : 12px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") -30px -229px;
+	display : block;
+}
+.mxurlcomment .commenticon {
+	width : 15px;
+	height : 16px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") -5px -244px;
+}
+.mxurlcomment textarea {
+	border : none;
+	width : 375px;
+	height : 74px;
+	overflow : hidden;
+	margin-left : 55px;
+	margin-bottom : 20px;
+	padding : 15px 5px 5px 5px;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/comment1.gif") no-repeat;
+}
+.mxurlcomment .button {
+	margin : auto;
+}
+.mxurlcomment li, .mxurlcomment .header {
+	background-color : #DBE3EB;
+	color : #424242;
+	margin : 0px;
+	padding : 5px;
+	margin-bottom : 6px;
+}
+.mxurlcomment li.hidden {
+	display : none;
+}
+.mxurlcomment .forceComments li.hidden {
+	display : block;
+}
+.mxurlcomment .forceComments li.morecomments {
+	display : none;
+}
+.mxurlcomment li.morecomments .grouphistcomment p {
+	margin : 0px;
+	margin-left : 5px;
+}
+.mxurlcomment .header span {
+	float : right;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/misc_img.png") no-repeat -5px -244px;
+	padding-left : 17px;
+	height : 16px;
+}
+.mxchat {
+	width : 300px;
+	padding : 10px;
+}
+.mxchat #mxchat_connect {
+	width : 8px;
+	height : 8px;
+	border : 1px solid #666;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+	background-color : #888;
+	display : inline-block;
+	zoom : 1;
+	*display : inline;
+}
+.mxchat #mxchat_connect.on {
+	background-color : green;
+	border-color : #b6be79;
+}
+.mxchat #mxchat_connect.off {
+	background-color : red;
+	border-color : #e5877a;
+}
+.mxchat form {
+	display : inline;
+}
+.mxchat form .mxfield {
+	width : 170px;
+	border : 1px solid #b6be79;
+}
+.mxchat form #mxchat_sending, .mxchat form .reload, .mxchat form .button {
+	display : inline-block;
+	zoom : 1;
+	*display : inline;
+}
+.mxchat form .reload {
+	margin : 0px;
+	padding : 0px;
+	width : 16px;
+	height : 16px;
+}
+.mxchat .mxchat_content {
+	margin : 3px;
+	padding : 3px;
+	border : 1px solid black;
+	background-color : white;
+	height : 300px;
+	overflow : auto;
+}
+.mxchat .mxchat_content .avatar {
+	width : 20px;
+	height : 20px;
+	vertical-align : -5px;
+}
+.mxchat .mxchat_content .ann {
+	color : #888;
+}
+.error {
+	padding : 15px;
+	border-radius : 10px;
+	-moz-border-radius : 10px;
+	-webkit-border-radius : 10px;
+	padding-left : 50px;
+	margin-bottom : 10px;
+	color : #424242;
+	border : 1px solid #e5877a;
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/design/basic/error.gif") no-repeat 5px center;
+}
+.error a {
+	color : #cd1f06;
+}
+body.ie6 .iewarning {
+	display : block;
+}
+body.ie6 .mxbordermaincontent {
+	border : 1px solid #ebebeb;
+	margin-right : -1px;
+}
+body.ie6 .black {
+	display : none;
+}
+body.ie6 .mxtopmenu .mxtopmenucontent form {
+	margin : 0px;
+	padding : 0px;
+}
+body.ie6 .shortbottom {
+	height : 12px;
+}
+body.ie6 .shorttop {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/shorttop.png', sizingMethod='crop');
+}
+body.ie6 .mxtopmenu .mxtopmenucontent .mxminilogo {
+	background-image : none;
+}
+body.ie6 .mxtopmenu .mxtopmenucontent ul.mxlogged img.token {
+	background-image : none;
+}
+body.ie6 .mxminilogo {
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/minilogo.png', sizingMethod='crop');
+}
+body.ie6 .mxtopmenu .mxtopmenucontent ul.mxlogged img.token {
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/token.png', sizingMethod='crop');
+}
+body.ie6 .avatar40 .corneravatar40 {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/corneravatar40.png', sizingMethod='crop');
+}
+body.ie6 .avatar30 .corneravatar30 {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/corneravatar30.png', sizingMethod='crop');
+}
+body.ie6 .mailer .readmessag tr.even .bgmailermessage .corneravatar40, body.ie6 .forum ul.msg .even .corneravatar40 {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/corneravatar40b.png', sizingMethod='crop');
+}
+body.ie6 .corneravatar {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/corneravatar80.png', sizingMethod='crop');
+}
+body.ie6 .cornergame {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/roundedgamecorner.png', sizingMethod='crop');
+}
+body.ie6 .soon {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/soon.png', sizingMethod='crop');
+}
+body.ie6 .mxconnectbg {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/loginframe.png', sizingMethod='crop');
+}
+body.ie6 .mxnavmenu {
+	width : 330px;
+	height : 145px;
+}
+body.ie6 .mxtopmenu .mxtopmenucontent li {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/navbut.png', sizingMethod='crop');
+}
+body.ie6 .mxtopmenu .mxtopmenucontent li:hover {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/navbutover.png', sizingMethod='crop');
+}
+body.ie6 .gameslisttop {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/gameslisttop.png', sizingMethod='crop');
+}
+body.ie6 .gameslisttop img {
+	width : 16px;
+	height : 16px;
+}
+body.ie6 .mxtopmenu .mxtopmenucontent li:hover {
+	background-image : none;
+	filter : progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://muxxu.com/img/design/basic/navbutover.png', sizingMethod='crop');
+}
+body.ie6 ul.mxlogged li {
+	height : 10px !important;
+	padding : 7px 0px 0px 0px !important;
+	height : 20px !important;
+}
+body.ie6 ul.mxlogged li.mxmail {
+	width : 30px;
+	height : 20px !important;
+	padding : 5px 0px 0px 0px !important;
+}
+body.ie6 ul.mxlogged li.mxmail a {
+	height : 20px !important;
+	padding : 0px !important;
+}
+body.ie6 ul.mxlogged li.prevuser {
+	height : 20px !important;
+	width : 90px;
+	height : 20px !important;
+}
+body.ie6 ul.mxlogged li.prevuser a {
+	height : 20px !important;
+	padding : 0px !important;
+}
+body.ie6 ul.mxlogged li.prevuser img {
+	display : none;
+}
+body.ie6 ul.mxlogged li.token {
+	height : 20px !important;
+	width : 80px;
+}
+body.ie6 ul.mxlogged li.token a {
+	height : 20px !important;
+	padding : 0px !important;
+}
+body.ie6 ul.mxlogged li.moretokens {
+	height : 20px !important;
+	width : 100px;
+}
+body.ie6 ul.mxlogged li.moretokens a {
+	height : 20px !important;
+	padding : 0px !important;
+}
+body.ie6 ul.mxlogged li.logoff {
+	height : 20px !important;
+}
+body.ie6 ul.mxlogged li.logoff a {
+	padding : 0px !important;
+	height : 20px !important;
+}
+body.ie6 .mailboxbottom .compose {
+	float : none;
+}
+body.ie6 .mxnav .mxnavbg {
+	border : 1px solid transparent;
+}
+body.ie7 .mxnavmenu {
+	width : 330px;
+	height : 145px;
+}
+body.ie7 .shortbottom, body.ie7 .shortbg {
+	min-height : 110px;
+}
+body.ie7 ul.mxlogged li.prevuser img {
+	float : none;
+	vertical-align : top;
+}
+body.ie7 .gameslistbg {
+	border-bottom : 1px solid transparent;
+}
+body.ie7 .mailboxbottom .compose {
+	float : none;
+}
+body.ie7 .mxnav .mxnavbg {
+	border : 1px solid transparent;
+}
+body.ie7 .mxurlcomment .avatar30 {
+	margin : 0px;
+	padding : 0px;
+	float : left;
+	margin-left : -35px;
+}
+body.ie7 .mxurlcomment p.commuser {
+	margin-top : -20px;
+}
+body.ie7 .mxurlcomment .commenticon {
+	display : none;
+}
+body.ie7 .mxurlcomment .delicon {
+	display : none;
+}
+body.mx_twinoid #mxcontent .tid_stream {
+	margin-bottom : 10px;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+	border : 1px solid #b6be79;
+	width : 390px;
+	overflow : hidden;
+}
+body.mx_twinoid #mxcontent .tid_stream .tid_ptitle {
+	color : #798a00;
+	font-size : 11pt !important;
+	font-weight : bold;
+	text-transform : none;
+}
+body.mx_twinoid #tid_bar_custom_content {
+	display : none;
+}
+body.mx_twinoid #tid_bar_custom {
+	padding-top : 4px;
+}
+body.mx_twinoid #tid_bar_custom img {
+	vertical-align : -25%;
+}
+body.mx_twinoid #tid_bar_custom .mxtoken a {
+	min-width : 40px;
+	height : 26px;
+	padding-top : 8px;
+	padding-left : 5px;
+	padding-right : 5px;
+	text-decoration : none;
+}
+body.mx_twinoid #tid_bar_custom .mxtoken img {
+	background : transparent url("/web/20130403040528im_/http://data.muxxu.com/img/token.png") no-repeat top left;
+	width : 17px;
+	height : 17px;
+}
+body.mx_twinoid #tid_bar_custom .mxmail a, body.mx_twinoid #tid_bar_custom .mxmail a:hover {
+	text-decoration : none;
+}
+body.mx_twinoid #tid_bar_custom .mxmail img {
+	vertical-align : -10%;
+}
+body.mx_twinoid #tid_bar_custom .mxmail .howmany {
+	text-shadow : #000 -1px 0px 0px,#000 0px 1px 0,#000 1px 0px 0px,#000 0px -1px 0px;
+	font-weight : bold;
+	font-size : 8pt;
+	color : #fff;
+}
+body.mx_twinoid .mxtophead {
+	background-position : 0 0;
+}
+body.mx_twinoid .mxtopmenu {
+	display : none;
+}
+body.mx_twinoid .mxbottom {
+	display : none;
+}
+
+/*
+     FILE ARCHIVED ON 04:05:28 Apr 03, 2013 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 16:47:14 Feb 08, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.486
+  exclusion.robots: 0.019
+  exclusion.robots.policy: 0.009
+  esindex: 0.01
+  cdx.remote: 56.578
+  LoadShardBlock: 217.486 (3)
+  PetaboxLoader3.datanode: 268.729 (5)
+  PetaboxLoader3.resolve: 272.483 (3)
+  load_resource: 415.196 (2)
+*/

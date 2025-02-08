@@ -1,0 +1,2337 @@
+body {
+	background-position : center 23px;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/site_header_bg.png");
+	background-repeat : repeat-x;
+	background-color : #3b3d28;
+}
+.mxtophead {
+	background-position : center top !important;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/site_header.png");
+	background-repeat : no-repeat;
+	background-color : transparent;
+	min-height : 165px;
+}
+body.inframe .mxtophead {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/site_header_inframe.png");
+}
+.mxhead {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/pixel.gif");
+}
+.mxhead a.logo:hover {
+	background : none;
+}
+.sitePopup {
+	margin-top : 230px;
+	border : 1px solid #d0d194;
+	outline : 2px solid black;
+	background-color : #595c3c;
+	border-radius : 0px;
+	-moz-border-radius : 0px;
+	-webkit-border-radius : 0px;
+}
+.sitePopup .popuptop {
+	padding-top : 14px;
+	background-color : #d0d194;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_title.png");
+	background-position : 0px 2px;
+	background-repeat : repeat-x;
+}
+.sitePopup .popupbg {
+	border : 1px solid #3b3d28;
+	border-top-width : 3px;
+	background-color : #595c3c;
+}
+.sitePopup .signimage {
+	background-image : none;
+	padding-top : 8px;
+	padding-bottom : 8px;
+}
+.sitePopup .signimage p, .sitePopup .signimage .ptext {
+	font-size : 11.5pt;
+	font-weight : bold;
+	padding-left : 10px;
+	color : #d0d194;
+}
+.sitePopup .signimage p strong, .sitePopup .signimage .ptext strong {
+	color : #fed82a;
+}
+.sitePopup .button {
+	margin-bottom : 5px;
+	width : 150px;
+	height : auto;
+	padding : 0px;
+	text-align : center;
+	line-height : 12pt;
+	color : #e59f07;
+	font-size : 8pt;
+	background : #3b3d28;
+	border : 1px solid #e59f07;
+	outline : 1px solid black;
+}
+.sitePopup .button:hover {
+	background : #e59f07;
+	color : #3b3d28;
+}
+.siteError {
+	border-color : #e59f07;
+	border-top-color : #fed82a;
+}
+.siteError .popuptop {
+	background-color : #e59f07;
+	background-image : none;
+}
+.mxtopmaincontent {
+	padding-top : 0px;
+	background : transparent;
+}
+.mxbottommaincontent {
+	margin : 0px;
+	padding : 0px;
+	background : transparent;
+}
+.mxbordermaincontent {
+	margin : 0px;
+	padding : 0px;
+	background : transparent;
+}
+.mxcontent {
+	color : #d0d194;
+	font-family : Arial, Trebuchet MS, sans-serif;
+	font-size : 10pt;
+	word-spacing : 1pt;
+	padding : 0px !important;
+}
+.mxcontent .clear {
+	font-size : 0pt;
+	line-height : 0pt;
+	margin : 0px;
+	padding : 0px;
+	width : 100%;
+	clear : both;
+}
+.mxcontent input, .mxcontent textarea.text, .mxcontent select {
+	color : #d0d194;
+	font-family : Arial, Trebuchet MS, sans-serif;
+	font-size : 10pt;
+	word-spacing : 1pt;
+}
+.mxcontent select {
+	background-color : #3b3d28;
+	border : 1px solid #d0d194;
+	cursor : pointer;
+}
+.mxcontent select:focus, .mxcontent select:hover {
+	border-color : #e59f07;
+	outline : 1px solid #3b3d28;
+}
+.mxcontent select:focus {
+	color : #3b3d28;
+	background-color : #e59f07;
+}
+.mxcontent option {
+	color : #e59f07;
+	background-color : #3b3d28;
+	border-bottom : 1px dashed #595c3c;
+}
+.mxcontent option:hover {
+	background-color : #e59f07;
+}
+.mxcontent textarea.text {
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+	display : block;
+	width : 400px;
+	height : 150px;
+	margin-bottom : 5px;
+	background-color : #3b3d28;
+	border : 1px solid #292B1C;
+	outline : 1px solid #71754c;
+}
+.mxcontent .debug {
+	z-index : 999;
+	font-size : 0pt;
+	line-height : 0pt;
+	position : absolute;
+	margin-left : -20px;
+	width : 12px;
+	height : 12px;
+	background-color : #71754c;
+	border : 1px solid #d0d194;
+	outline : 2px solid #3b3d28;
+	overflow : hidden;
+}
+.mxcontent .debug a {
+	display : block;
+	width : 120px;
+}
+.mxcontent .debug:hover {
+	width : 400px;
+	height : auto;
+	padding : 10px;
+	font-size : 10pt;
+	line-height : 11pt;
+	letter-spacing : 0pt;
+	background-color : #595c3c;
+	font-family : "courier new";
+}
+.mxcontent a {
+	padding-left : 1px;
+	padding-right : 1px;
+	color : #e59f07;
+	text-decoration : underline;
+}
+.mxcontent a.button {
+	margin-bottom : 5px;
+	width : 150px;
+	height : auto;
+	padding : 0px;
+	text-align : center;
+	line-height : 12pt;
+	color : #e59f07;
+	font-size : 8pt;
+	background : #3b3d28;
+	border : 1px solid #e59f07;
+	outline : 1px solid black;
+	display : block;
+	text-decoration : none;
+}
+.mxcontent a.button img {
+	vertical-align : -25%;
+}
+.mxcontent a.button:hover {
+	background : #e59f07;
+	color : #3b3d28;
+}
+.mxcontent input.button {
+	display : inline-block;
+}
+.mxcontent .offButton {
+	margin-bottom : 5px;
+	width : 150px;
+	height : auto;
+	padding : 0px;
+	text-align : center;
+	line-height : 12pt;
+	color : #e59f07;
+	font-size : 8pt;
+	background : #3b3d28;
+	border : 1px solid #e59f07;
+	outline : 1px solid black;
+	display : block;
+	border-color : #71754c;
+	color : #d0d194;
+	text-decoration : line-through;
+	outline : 1px solid #3b3d28;
+	cursor : default;
+}
+.mxcontent .offButton:hover {
+	color : #d0d194;
+	background-color : #3b3d28;
+}
+.mxcontent a:hover {
+	color : #595c3c;
+	background-color : #e59f07;
+	text-decoration : none;
+}
+.mxcontent strong {
+	color : #fed82a;
+}
+.mxcontent em {
+	color : #a8bdc8;
+}
+a.anchor {
+	font-size : 0pt;
+	line-height : 0pt;
+	margin : 0px !important;
+	padding : 0px !important;
+}
+h1 {
+	letter-spacing : 2pt;
+	font-size : 12pt;
+	padding-bottom : 8px;
+	color : #fed82a;
+	font-weight : normal;
+	text-transform : uppercase;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/h1.png");
+	background-repeat : repeat-x;
+	background-position : left bottom;
+}
+h2 {
+	margin-top : 15px;
+	margin-left : 10px;
+	letter-spacing : 2pt;
+	font-size : 9pt;
+	color : #fed82a;
+	font-weight : bold;
+	border-bottom : 1px dashed #71754c;
+}
+p {
+	margin : 0px;
+	margin-bottom : 10px;
+}
+.noUp {
+	text-transform : none !important;
+}
+.mxcontent table.table {
+	margin : auto;
+	margin-top : 1px;
+	margin-bottom : 10px;
+	width : 90%;
+	border-collapse : collapse;
+	border-spacing : 0px;
+}
+.mxcontent table.table td {
+	color : #d0d194;
+	font-family : Arial, Trebuchet MS, sans-serif;
+	font-size : 10pt;
+	word-spacing : 1pt;
+	vertical-align : top;
+	padding : 3px;
+	padding-top : 0px;
+	padding-bottom : 7px;
+	padding-left : 17px;
+	background-position : left bottom;
+	background-repeat : no-repeat;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/table_td.png");
+}
+.mxcontent table.table th {
+	padding : 3px;
+	padding-left : 12px;
+	color : #fed82a;
+	text-transform : uppercase;
+	text-align : left;
+	vertical-align : bottom;
+	background-color : #71754c;
+	background-position : left 90%;
+	background-repeat : no-repeat;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/table_th.png");
+}
+.mxcontent table.table th.desc {
+	padding : 4px;
+	border-top : 3px solid #d0d194;
+	background-image : none;
+}
+.mxcontent table.table th.desc p {
+	font-style : italic;
+	font-weight : normal;
+	text-transform : none;
+	color : #3b3d28;
+}
+table.tabbed th {
+	border-top : 1px dashed #d0d194;
+}
+table.table tr.select td {
+	cursor : pointer;
+}
+table.table tr.select td div {
+	padding-left : 5px;
+}
+table.table tr.select:hover td.icon img {
+	border-color : #e59f07;
+}
+table.table tr.select:hover td div {
+	color : #3b3d28;
+	background-color : #e59f07;
+	background-image : none;
+}
+table.table tr.select:hover td .gameMoney {
+	color : #3b3d28;
+}
+ul.tabs {
+	margin : 0px;
+	padding : 0px;
+	list-style : none;
+	margin : auto;
+	padding-left : 30px;
+	height : 24px;
+	width : 90%;
+	list-style : none;
+}
+ul.tabs li {
+	margin : 0px;
+	padding : 0px;
+	float : left;
+	position : relative;
+	height : 16px;
+	padding : 3px;
+	margin-right : 3px;
+	background-color : #595c3c;
+	border : 1px solid #71754c;
+	border-bottom : 0px;
+}
+ul.tabs li a {
+	color : #e59f07;
+	font-size : 8pt;
+	text-transform : uppercase;
+}
+ul.tabs li img {
+	vertical-align : -25%;
+}
+ul.tabs li.active {
+	background-color : #d0d194;
+	border-top : 2px solid #e59f07;
+	outline : 1px solid #d0d194;
+}
+ul.tabs li.active a {
+	color : #3b3d28;
+	text-decoration : none;
+}
+ul.tabs li.active a:hover {
+	color : #3b3d28;
+}
+#tooltip .tiptop {
+	margin : 0px;
+	padding : 0px;
+	background-color : #3b3d28;
+	background-image : none;
+	border : 1px solid #d0d194;
+	outline : 2px solid #292B1C;
+	color : #d0d194;
+	border-radius : 0px;
+	-moz-border-radius : 0px;
+	-webkit-border-radius : 0px;
+}
+#tooltip .tipbottom {
+	margin : 0px;
+	padding : 0px;
+	background-image : none;
+}
+#tooltip .tipbg {
+	background-image : none;
+}
+#tooltip h1 {
+	padding-left : 10px;
+	margin-left : -10px;
+	margin-right : -10px;
+	margin-bottom : 7px;
+	letter-spacing : 0pt;
+	font-weight : bold;
+	color : #fed82a;
+	background-image : none;
+	background-color : #595c3c;
+	border-bottom : 1px solid #71754c;
+}
+#tooltip h1 em {
+	font-size : 7pt;
+	font-weight : normal;
+	font-style : normal;
+	letter-spacing : 0pt;
+	word-spacing : 0pt;
+	color : #fed82a;
+}
+#tooltip p {
+	margin-top : 5px;
+	margin-bottom : 5px;
+}
+#tooltip .infos {
+	clear : both;
+	padding-left : 10px;
+	margin-left : -10px;
+	margin-right : -10px;
+	margin-top : 5px;
+	padding-top : 0px;
+	font-size : 9pt;
+	border-top : 1px solid #71754c;
+	background-color : #292B1C;
+}
+#tooltip .infos p {
+	margin : 0px;
+	padding : 0px;
+}
+#tooltip strong {
+	color : #fed82a;
+}
+#tooltip img.vicon {
+	display : block;
+	float : left;
+	position : relative;
+	margin-right : 5px;
+	margin-top : 5px;
+	margin-bottom : 3px;
+}
+span.helpTip span {
+	font-size : 7pt;
+	text-decoration : underline;
+	color : #e59f07;
+	cursor : help;
+}
+span.helpTip:hover span {
+	color : #3b3d28;
+	background-color : #e59f07;
+	text-decoration : none;
+}
+dl {
+	margin-top : 10px;
+	padding-top : 10px;
+	padding-left : 10px;
+	border-top : 1px dashed #71754c;
+	border-bottom : 1px dashed #71754c;
+}
+dl dt {
+	font-size : 8pt;
+	color : #fed82a;
+}
+dl dd {
+	font-weight : bold;
+	margin-left : 10px;
+	margin-bottom : 10px;
+	color : white;
+}
+.help {
+	margin : 0px;
+	padding : 0px;
+	min-height : 40px;
+	margin-bottom : 10px;
+	padding-right : 10px;
+	padding-top : 10px;
+	padding-left : 65px;
+	padding-bottom : 10px;
+	color : #d0d194;
+	letter-spacing : 0.5pt;
+	border : 1px solid #cb9f83;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/help.png");
+	background-position : top left;
+	background-color : #4c2e25;
+	background-repeat : no-repeat;
+	cursor : help;
+	border-radius : 4px;
+	-moz-border-radius : 4px;
+	-webkit-border-radius : 4px;
+	outline : 2px solid #292B1C;
+}
+.help ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+}
+.mxmainmenu {
+	margin-top : 103px;
+	margin-left : 93px;
+}
+.mxmainmenu .locked, .mxmainmenu a {
+	padding-left : 4px;
+	padding-right : 3px;
+	color : #595c3c;
+	font-size : 10pt;
+	letter-spacing : 0pt;
+	text-decoration : none;
+}
+.mxmainmenu .locked img, .mxmainmenu a img {
+	vertical-align : -16%;
+}
+.mxmainmenu .locked {
+	color : #d0d194;
+	cursor : help;
+}
+.mxmainmenu .locked img {
+	opacity : 0.2;
+	filter : alpha(opacity=20);
+	zoom : 1;
+}
+.mxmainmenu a.current, .mxmainmenu a.current:hover {
+	color : #595c3c;
+	background-color : #e59f07;
+	outline : 1px solid #595c3c;
+	cursor : default;
+}
+.mxmainmenu a:hover {
+	color : #d0d194;
+	background-color : #595c3c;
+	text-decoration : none;
+}
+.mxmainmenu em {
+	font-style : normal;
+	color : #a3a67b;
+}
+#glevel, #money {
+	position : absolute;
+	width : 100px;
+	margin-left : 701px;
+	height : 18px;
+	font-size : 9pt;
+	font-weight : bold;
+	letter-spacing : 1pt;
+	text-align : right;
+	color : #3b3d28;
+	background-color : #b0b17c;
+	border-top : 1px solid #71754c;
+	outline : 1px solid #d0d194;
+}
+#glevel {
+	margin-top : -31px;
+	outline : 1px solid #838657;
+	border-top-color : #3b3d28;
+	background-color : #5f613f;
+	cursor : help;
+}
+#glevel .bar {
+	position : absolute;
+	z-index : 1;
+	width : 100px;
+	height : 1px;
+	padding-top : 1px;
+	margin-top : 16px;
+	background : #3b3d28;
+}
+#glevel .bar div {
+	background-color : #fed82a;
+	height : 1px;
+}
+#glevel span {
+	color : #d0d194;
+	padding-right : 4px;
+}
+#money {
+	cursor : pointer;
+}
+#money span {
+	padding-right : 4px;
+}
+#money .gameMoney {
+	color : #3b3d28;
+}
+#money .gameMoney img {
+	vertical-align : -17%;
+}
+#money:hover {
+	background-color : #e59f07;
+	outline : 1px solid white;
+}
+#money:hover span {
+	color : #292B1C;
+}
+#gain {
+	position : absolute;
+	padding-left : 5px;
+	padding-right : 5px;
+	margin-left : 715px;
+	margin-top : -1px;
+	font-size : 8pt;
+	letter-spacing : 0pt;
+	text-align : right;
+	color : #3b3d28;
+	background-color : #fed82a;
+	border : 1px solid #595c3c;
+	border-radius : 7px;
+	-moz-border-radius : 7px;
+	-webkit-border-radius : 7px;
+	cursor : help;
+}
+.gameMoney, .muxxuMoney {
+	letter-spacing : 0pt;
+	word-spacing : 0pt;
+}
+.gameMoney img, .muxxuMoney img {
+	vertical-align : -25%;
+}
+.gameMoney {
+	color : #c5db95;
+	font-weight : bold;
+}
+.muxxuMoney {
+	color : #fed82a;
+	font-weight : bold;
+}
+code {
+	color : #a8bdc8;
+	padding-left : 3px;
+	padding-right : 3px;
+	border : 1px solid #71754c;
+}
+.decks h2 {
+	border : 0px;
+	margin : 0px;
+	margin-bottom : 5px;
+	font-size : 7.5pt;
+	letter-spacing : 1.5pt;
+}
+.decks ul.tabs {
+	width : auto;
+	padding-left : 10px;
+	margin-bottom : -2px;
+	border-bottom : 2px solid #d0d194;
+}
+.decks ul.tabs li {
+	font-size : 7pt;
+	font-weight : bold;
+	letter-spacing : 0pt;
+}
+.decks ul.tabs li a {
+	padding-left : 2px;
+	padding-right : 2px;
+	text-transform : none !important;
+}
+.decks .container {
+	margin-bottom : 15px;
+	padding : 10px;
+	border : 1px solid #d0d194;
+	background-color : #71754c;
+}
+.decks ul.bg {
+	position : absolute;
+}
+.decks ul.bg li {
+	margin : 0px;
+	padding : 0px;
+	float : left;
+	position : relative;
+	width : 38px;
+	height : 39px;
+	margin-right : 3px;
+	text-align : center;
+	cursor : hand;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/dockicon_border.png");
+	background-repeat : no-repeat;
+	border : 1px solid #595c3c;
+}
+.decks ul.bg .id {
+	position : absolute;
+	width : 28px;
+	height : 11px;
+	padding-left : 2px;
+	padding-right : 2px;
+	margin-top : 39px;
+	font-size : 7.5pt;
+	font-weight : bold;
+	line-height : 8pt;
+	color : #fed82a;
+}
+.decks #deck {
+	margin-bottom : 10px;
+}
+.decks #loading {
+	display : none;
+	position : absolute;
+	width : 300px;
+	padding : 20px;
+	margin-left : 270px;
+	margin-top : -10px;
+	z-index : 100;
+	text-align : center;
+	color : #fed82a;
+	font-weight : bold;
+	font-size : 9pt;
+	border : 1px solid #d0d194;
+	background-color : #3b3d28;
+	opacity : 0.8;
+	filter : alpha(opacity=80);
+	zoom : 1;
+	outline : 2px solid black;
+}
+.decks .infos {
+	min-height : 85px;
+	margin-top : 15px;
+	padding-top : 10px;
+	border-top : 1px solid #71754c;
+}
+.decks .infos label {
+	display : block;
+	margin-top : 10px;
+	font-size : 8pt;
+}
+.decks .infos .row {
+	margin-bottom : 10px;
+}
+.decks .infos .row a {
+	position : absolute;
+	width : 200px;
+	margin-left : 200px;
+	font-size : 8pt;
+	text-align : right;
+}
+.decks .actions {
+	position : absolute;
+	margin-left : 702px;
+}
+.decks #poolContainer, .decks #deckContainer {
+	padding : 5px;
+	border : 1px solid #595c3c;
+}
+.decks .highlight {
+	border-color : #e59f07 !important;
+	background-color : #71754c;
+	outline : 1px solid #3b3d28;
+}
+.decks .chipsets ul li a {
+	margin : 0px;
+	padding : 0px;
+	float : left;
+	position : relative;
+	padding : 5px;
+	margin-right : 2px;
+	max-width : 100px;
+	height : 40px;
+	font-size : 7pt;
+	line-height : 8pt;
+	text-transform : uppercase;
+	text-align : center;
+	border : 1px dashed #71754c;
+}
+.decks .chipsets ul li a img {
+	display : block;
+	margin : auto;
+	margin-bottom : 2px;
+}
+.decks .chipsets ul li.active a {
+	color : #fed82a;
+	text-decoration : none;
+	background-color : #71754c;
+	border : 1px solid #d0d194;
+	outline : 1px solid #3b3d28;
+}
+ul.deckDisabled li {
+	opacity : 0.2;
+	filter : alpha(opacity=20);
+	zoom : 1;
+}
+ul.virusList {
+	margin : 0px;
+	padding : 0px;
+	list-style : none;
+	min-height : 41px;
+	height : 41px;
+}
+ul.virusList li.label, ul.virusList li.check {
+	margin : 0px;
+	padding : 0px;
+	padding-top : 12px;
+	height : 27px;
+	font-size : 10pt;
+	line-height : 12pt;
+	background : transparent;
+}
+ul.virusList li.check form {
+	margin : 0px;
+	padding : 0px;
+	width : 35px;
+}
+ul.virusList li.label {
+	margin : 0px;
+	padding : 0px;
+	float : none;
+	width : 450px;
+	height : 20px;
+	margin-left : 36px;
+	margin-top : 10px;
+	font-weight : bold;
+	position : absolute;
+	background : #e59f07;
+	color : black;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+	opacity : 0.8;
+	filter : alpha(opacity=80);
+	zoom : 1;
+}
+ul.virusList li {
+	margin : 0px;
+	padding : 0px;
+	font-size : 0pt;
+	line-height : 0pt;
+	float : left;
+	position : relative;
+	width : 35px;
+	height : 36px;
+	padding-left : 3px;
+	padding-top : 3px;
+	margin-right : 3px;
+	text-align : center;
+	cursor : hand;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/dockicon_border.png");
+	background-repeat : no-repeat;
+	border : 1px solid #595c3c;
+}
+ul.virusList li img {
+	letter-spacing : 0pt;
+	font-size : 7pt;
+	line-height : 9pt;
+}
+ul.virusList li.receiver {
+	background : transparent;
+	cursor : default;
+}
+ul.virusList li.SortCursor {
+	border : 1px dashed #e59f07;
+}
+ul.virusList a {
+	margin : 0px;
+	padding : 0px;
+	display : block;
+	width : 32px;
+	height : 32px;
+}
+ul.virusList a:hover {
+	color : #e59f07;
+	background : transparent;
+}
+ul.virusList a:hover img {
+	outline : 1px solid #e59f07;
+}
+ul.virusList a.icon {
+	display : block;
+}
+form input.field {
+	padding : 1px;
+	color : #d0d194;
+	background-color : #595c3c;
+	border : 1px solid #d0d194;
+	border-radius : 0px;
+	-moz-border-radius : 0px;
+	-webkit-border-radius : 0px;
+}
+form input.field:focus {
+	color : #e59f07;
+	background-color : #595c3c;
+	border-color : transparent;
+	border-bottom : 1px dashed #e59f07;
+	outline : 1px solid #3b3d28;
+}
+form input.field:hover {
+	outline : 1px solid #3b3d28;
+}
+form input.button {
+	margin-bottom : 5px;
+	width : 150px;
+	height : auto;
+	padding : 0px;
+	text-align : center;
+	line-height : 12pt;
+	color : #e59f07;
+	font-size : 8pt;
+	background : #3b3d28;
+	border : 1px solid #e59f07;
+	outline : 1px solid black;
+	line-height : 10pt;
+}
+form input.button:hover {
+	background : #e59f07;
+	color : #3b3d28;
+}
+.shop table.table {
+	width : 100%;
+}
+.shop table.table td {
+	vertical-align : middle;
+}
+.shop table.table tr.virus td.icon {
+	padding : 0px;
+	padding-bottom : 4px;
+	padding-left : 10px;
+	width : 48px;
+}
+.shop table.table tr.virus td.cc {
+	padding-left : 0px;
+	text-align : center;
+	width : 100px;
+}
+.shop table.table tr.chipset td.name {
+	padding-left : 5px;
+	width : 210px;
+	font-weight : bold;
+}
+.shop table.table tr.chipset td.name img {
+	vertical-align : -25%;
+}
+.shop table.table tr.chipset td.desc {
+	font-style : italic;
+	font-size : 8pt;
+}
+.shop table.table tr.chipset .offButton, .shop table.table tr.chipset a.button {
+	width : 70px;
+}
+.shop table.table td.price {
+	padding-left : 0px;
+	text-align : center;
+	width : 70px;
+}
+.shop table.table td.price .out .gameMoney {
+	color : #790000;
+}
+.shop table.table td.price .out .gameMoney img {
+	opacity : 0.2;
+	filter : alpha(opacity=20);
+	zoom : 1;
+}
+.shop table.table td.bought .gameMoney {
+	color : #3b3d28;
+}
+.shop table.table img.new {
+	vertical-align : -30%;
+}
+.shop table.table .recom {
+	padding : 0px;
+	padding-left : 2px;
+	padding-right : 2px;
+	font-size : 7.5pt;
+	letter-spacing : 0pt;
+	word-spacing : 0pt;
+	color : #fed82a;
+	background-color : #3b3d28;
+	border : 1px solid black;
+}
+.shop .window {
+	width : auto;
+}
+.shopDetails .boxPanel {
+	float : left;
+	position : relative;
+	width : 180px;
+	margin-right : 10px;
+}
+.shopDetails .boxPanel .button {
+	margin-top : 10px;
+}
+.shopDetails .boxPanel .vbox {
+	width : 151px;
+	height : 146px;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/box_damage.png");
+	background-repeat : no-repeat;
+}
+.shopDetails .boxPanel .vbox img {
+	position : absolute;
+	margin-left : 10px;
+	margin-top : 68px;
+	border : 1px solid #666;
+}
+.shopDetails .boxPanel .vbox .name {
+	position : absolute;
+	margin-top : 19px;
+	margin-left : 10px;
+	font-weight : bold;
+	letter-spacing : -0.5pt;
+	font-size : 13pt;
+	text-transform : uppercase;
+	color : white;
+}
+.shopDetails .boxPanel .vbox .name em {
+	color : white;
+	font-size : 8pt;
+	font-style : normal;
+}
+.shopDetails .detailsPanel {
+	float : left;
+	position : relative;
+	width : 670px;
+}
+.shopDetails .detailsPanel a.offButton, .shopDetails .detailsPanel a.button {
+	margin-top : 20px;
+}
+img.vicon {
+	border : 1px solid black;
+	outline : 1px solid #71754c;
+}
+.window {
+	outline : 1px solid #292B1C;
+	margin-bottom : 15px;
+}
+.window .wtitle {
+	padding-left : 10px;
+	color : #71754c;
+	text-transform : uppercase;
+	font-size : 8pt;
+	background-color : #d0d194;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_title.png");
+	background-position : left center;
+	background-repeat : repeat-x;
+	border : 3px solid #d0d194;
+	border-top-width : 1px;
+}
+.window .wtitle span {
+	padding-left : 5px;
+	padding-right : 5px;
+	background-color : #d0d194;
+}
+.window .container {
+	padding : 10px;
+	background-color : #595c3c;
+	border : 1px solid #d0d194;
+	outline : 1px solid #3b3d28;
+	background-position : top left;
+	background-repeat : repeat-x;
+}
+.window img.wbutton {
+	float : right;
+	position : relative;
+	width : 18px;
+	height : 13px;
+	margin-top : 0px;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_close.png");
+}
+.window img.wbutton:hover {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_close_over.png");
+}
+.window .help {
+	outline : 1px solid #3b3d28;
+}
+.file {
+	cursor : pointer;
+	float : left;
+	position : relative;
+	width : 270px;
+	height : 70px;
+	margin-right : 10px;
+}
+.file img.diff {
+	display : block;
+	margin-left : 8px;
+	position : absolute;
+}
+.file .level {
+	position : absolute;
+	z-index : 2;
+	width : 15px;
+	margin-left : 18px;
+	margin-top : 16px;
+	font-size : 7pt;
+	font-weight : bold;
+	letter-spacing : 0pt;
+	word-spacing : 0pt;
+	color : white;
+	text-align : center;
+	text-shadow : 0px 2px 1px black;
+}
+.file .value {
+	position : absolute;
+	margin-top : 34px;
+	width : 47px;
+	color : #fed82a;
+	text-align : center;
+	font-size : 7pt;
+	letter-spacing : 0pt;
+	background-color : #3b3d28;
+	border : 1px solid #71754c;
+	overflow : hidden;
+}
+.file .value strong {
+	font-weight : normal;
+	color : red;
+}
+.file .value img {
+	vertical-align : -35%;
+}
+.file .label {
+	position : absolute;
+	margin-left : 54px;
+	width : 190px;
+	height : 47px;
+	padding : 2px;
+	font-size : 8pt;
+	letter-spacing : 0pt;
+	color : #d0d194;
+	background-color : #3b3d28;
+	border : 1px solid #71754c;
+}
+.file:hover .label {
+	color : #3b3d28;
+	border-color : #e59f07;
+	background-color : #e59f07;
+}
+.file:hover .value {
+	background-color : #e59f07;
+}
+.file:hover .value .gameMoney {
+	color : #3b3d28;
+}
+.missions .unlocked .gameMoney {
+	color : #ff693e;
+}
+.missions .succeed .label {
+	color : #71754c;
+}
+.missions a.optionLink {
+	font-size : 8pt;
+}
+.missionDetails {
+	width : 700px;
+	margin-left : 120px;
+}
+.missionDetails .window {
+	width : auto;
+}
+.missionDetails .side {
+	float : left;
+	position : relative;
+	padding-top : 10px;
+	margin-right : 10px;
+	text-align : center;
+}
+.missionDetails .side a.button {
+	margin-top : 10px;
+	width : 70px;
+}
+.missionDetails .details {
+	float : left;
+	position : relative;
+	width : 510px;
+}
+.missionDetails .details .offButton, .missionDetails .details a.button {
+	width : auto;
+}
+.missionDetails .details dl {
+	margin : 0px;
+	padding : 0px;
+	border : 0px;
+}
+.missionDetails .details dl dd p {
+	font-weight : normal;
+	color : #d0d194;
+}
+.missionDetails .details .virusList {
+	margin-top : 5px;
+	padding-top : 5px;
+	margin-bottom : 5px;
+	border-top : 1px dashed #d0d194;
+}
+.missionDetails form {
+	position : absolute;
+	margin-left : 389px;
+	width : 100px;
+	height : 12px;
+}
+.missionDetails form strong {
+	font-size : 7pt;
+	letter-spacing : 0pt;
+}
+.missionDetails form select {
+	width : 100%;
+	font-size : 8pt;
+	letter-spacing : 0.8pt;
+}
+.missionDetails ul.virusList {
+	margin-bottom : 5px;
+}
+.missionDetails .chipset {
+	padding-top : 7px;
+	padding-bottom : 9px;
+	margin-bottom : 10px;
+}
+.missionDetails .chipset img {
+	vertical-align : -25%;
+}
+.missionDetails .chipset form {
+	position : absolute;
+	margin-top : -7px;
+	margin-left : 370px;
+	width : 120px;
+	height : 12px;
+}
+.missionDetails .chipset form strong {
+	display : block;
+	font-size : 7pt;
+	letter-spacing : 0pt;
+}
+.missionDetails .chipset form strong img {
+	vertical-align : -35%;
+}
+.missionDetails .chipset form select {
+	width : 100%;
+	font-size : 8pt;
+	letter-spacing : 0.8pt;
+}
+.missionDetails .bug {
+	font-size : 9pt;
+	width : 510px;
+	margin : auto;
+}
+.missionEnd {
+	padding-bottom : 50px;
+}
+.missionEnd .window {
+	width : 600px;
+	margin : auto;
+}
+.missionEnd .footer {
+	margin-top : 20px;
+	padding-top : 20px;
+	border-top : 1px dashed #71754c;
+}
+.missionEnd a.button {
+	width : auto;
+}
+.missionEnd .headerFailure, .missionEnd .headerSuccess {
+	height : 98px;
+	margin-top : -10px;
+	margin-left : -10px;
+	margin-right : -10px;
+	margin-bottom : 10px;
+	background-repeat : no-repeat;
+	background-position : top left;
+}
+.missionEnd .headerFailure {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/debriefing_failure.png");
+}
+.missionEnd .headerSuccess {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/debriefing_success.png");
+}
+.missionEnd .result .left, .missionEnd .result .right {
+	position : relative;
+	padding-top : 10px;
+	padding-bottom : 10px;
+}
+.missionEnd .result .left {
+	margin-top : 10px;
+	float : left;
+	padding : 10px;
+	width : 280px;
+	background-color : #3b3d28;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+}
+.missionEnd .result .left p {
+	text-align : justify;
+}
+.missionEnd .result .left ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+}
+.missionEnd .result .left strong.score {
+	font-size : 14pt;
+	vertical-align : -5%;
+}
+.missionEnd .result .left strong.rank {
+	font-size : 14pt;
+	vertical-align : -5%;
+	color : #a8bdc8;
+}
+.missionEnd .result .left strong.rank sup {
+	vertical-align : 25%;
+}
+.missionEnd .result .right {
+	float : right;
+	width : 250px;
+	min-height : 180px;
+	padding-left : 10px;
+	border-left : 1px solid #71754c;
+}
+.missionEnd .result .right table.table {
+	width : 100%;
+	margin-bottom : 20px;
+}
+.missionEnd .result .right table.table td {
+	font-size : 9pt;
+	letter-spacing : 0.5pt;
+}
+.missionEnd .result .levelUp {
+	padding-top : 15px;
+}
+.missionEnd .result .levelUp .title {
+	padding-left : 45px;
+	margin-bottom : 20px;
+	color : #fed82a;
+	font-weight : bold;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/levelUp.png");
+	background-repeat : no-repeat;
+}
+.missionEnd .result .levelUp ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+}
+.missionEnd .result .levelUp ul li {
+	margin-left : 15px;
+	margin-bottom : 5px;
+	color : #fed82a;
+	cursor : help;
+}
+.missionEnd .result .levelUp ul li:hover {
+	color : white;
+}
+.missionEnd .result .levelUp ul img {
+	width : 32px;
+	height : 32px;
+	vertical-align : -12px;
+	border : 1px solid #71754c;
+	outline : 1px solid #292B1C;
+}
+.missionEnd .result .goals {
+	margin-bottom : 15px;
+	margin-top : 15px;
+	padding-top : 10px;
+	border-top : 1px dashed #595c3c;
+}
+.missionEnd .result .goals p {
+	text-align : justify;
+}
+.missionEnd .result .goals ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+	padding-left : 20px;
+	margin-bottom : 0px;
+	font-size : 8pt;
+	letter-spacing : 0pt;
+	word-spacing : 0pt;
+}
+.missionEnd .result .goals ul li {
+	color : #fed82a;
+}
+.missionEnd .result .goals ul li strong {
+	color : white;
+}
+.missionEnd .tutorialDone {
+	padding : 10px;
+	margin-bottom : 20px;
+	background-color : #3b3d28;
+	border-radius : 5px;
+	-moz-border-radius : 5px;
+	-webkit-border-radius : 5px;
+}
+.missionEnd .tutorialDone img {
+	vertical-align : -20%;
+}
+.client a.anchor {
+	margin-top : -20px;
+}
+.client .swf {
+	width : 600px;
+	height : 400px;
+	border : 4px solid #3b3d28;
+	border-bottom-color : #96935C;
+	border-right-color : #71754c;
+	outline : 1px solid #3b3d28;
+	background-color : black;
+}
+.client #clientTip .box, .client #tutorial div {
+	margin-left : -5px;
+	margin-right : -5px;
+	padding : 5px;
+	color : white;
+	background-color : #71754c;
+	border-top : 1px solid #d0d194;
+	border-bottom : 3px solid #292B1C;
+}
+.client #clientTip .box a.button, .client #tutorial div a.button {
+	width : auto;
+	margin-top : 10px;
+}
+.client #tutorial div {
+	margin-bottom : 10px;
+}
+.client #clientTip .box {
+	border-top-color : #cb9f83;
+	background-color : #4c2e25;
+}
+.client #clientTip .box h1 {
+	background-color : #221511;
+}
+.client #clientTip {
+	display : none;
+	cursor : help;
+	margin-bottom : 10px;
+}
+.client #clientTip a.close {
+	position : absolute;
+	display : block;
+	width : 60px;
+	margin-left : 185px;
+	margin-top : 7px;
+	text-align : right;
+	font-size : 7pt;
+	text-transform : uppercase;
+}
+.client .briefingPanel {
+	padding : 5px;
+	margin-top : 7px;
+	background-color : #3b3d28;
+	border-bottom : 1px solid #71754c;
+}
+.client .briefingPanel p {
+	font-size : 9pt;
+	line-height : 9pt;
+	letter-spacing : 0pt;
+	margin-top : 3px;
+	margin-bottom : 3px;
+}
+.client .sidePanel {
+	position : absolute;
+	width : 250px;
+	height : 396px;
+	padding : 5px;
+	margin-left : 615px;
+	margin-top : 0px;
+	font-size : 9pt;
+	background-color : #3b3d28;
+	overflow : auto;
+	border : 1px solid #292B1C;
+	border-bottom : 1px solid #71754c;
+}
+.client .sidePanel p {
+	margin : 0px;
+	padding : 0px;
+	margin-bottom : 4px;
+	font-size : 9pt;
+}
+.client .sidePanel h1 {
+	margin : 0px;
+	padding : 0px;
+	margin-left : -5px;
+	margin-right : -5px;
+	margin-bottom : 10px;
+	padding-left : 5px;
+	background : transparent;
+	font-size : 10pt;
+	letter-spacing : 0.5pt;
+	background-color : #292B1C;
+}
+.client .sidePanel h2 {
+	margin : 0px;
+	padding : 0px;
+	padding-bottom : 4px;
+	margin-bottom : 10px;
+	font-size : 8pt;
+}
+.client .sidePanel em {
+	color : #71754c;
+}
+.client .sidePanel .mailHeader, .client .sidePanel .mailHeader p {
+	margin : 0px;
+	color : #fed82a;
+	font-style : italic;
+	font-size : 8pt;
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+}
+.client .sidePanel .mailHeader {
+	margin-bottom : 5px;
+	padding : 4px;
+	padding-left : 30px;
+	background-color : #595c3c;
+	border-top : 1px solid #71754c;
+	border-bottom : 1px solid #292B1C;
+	outline : 1px solid #292B1C;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/mail_header.png");
+	background-repeat : no-repeat;
+	background-position : 3px 3px;
+}
+.client .sidePanel .file_index, .client .sidePanel .file_control, .client .sidePanel .file_log {
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+}
+.client .sidePanel .file_log p {
+	border-bottom : 1px dashed #595c3c;
+}
+.client .sidePanel .file_log .time {
+	font-size : 7.5pt;
+	color : #d0d194;
+}
+.client .sidePanel a.pic img {
+	border : 1px solid #292B1C;
+	outline : 1px solid #71754c;
+}
+.client .sidePanel a.pic:hover {
+	background : transparent;
+}
+.client .sidePanel a.pic:hover img {
+	outline : 1px solid #e59f07;
+}
+.client .sidePanel .bin {
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+}
+.client .sidePanel .encoded {
+	color : #b19cb1;
+}
+.client .sidePanel .fixed {
+	color : #eeb793;
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+}
+.storage table.files {
+	float : left;
+	position : relative;
+	margin-left : 0px;
+	width : 570px;
+}
+.storage .viewer {
+	float : right;
+	position : relative;
+	width : 260px;
+}
+.storage .viewer .sidePanel {
+	position : static;
+	margin : 0px;
+}
+.storage .viewer form {
+	background-color : #71754c;
+	margin-bottom : 10px;
+	padding : 5px;
+	padding-top : 1px;
+	border-radius : 7px;
+	-moz-border-radius : 7px;
+	-webkit-border-radius : 7px;
+}
+.storage .viewer form span {
+	color : #fed82a;
+	font-size : 7pt;
+	font-weight : bold;
+}
+.storage .viewer form .field {
+	width : 235px;
+}
+.storage table.market {
+	margin-bottom : 30px;
+}
+.storage table.market .window p {
+	margin-top : 5px;
+	margin-bottom : 20px;
+	text-align : justify;
+}
+.storage table.market td {
+	vertical-align : middle;
+}
+.storage table.market td.price {
+	padding-left : 0px;
+	padding-right : 0px;
+	text-align : center;
+	width : 115px;
+}
+.storage table.market td.count {
+	text-align : center;
+	width : 50px;
+}
+.storage table.market td.act {
+	background : none;
+	padding-top : 2px;
+	padding-left : 5px;
+	width : 60px;
+}
+.storage table.market td.act a.button {
+	width : 60px;
+}
+.storage table.market tr.noStock .gameMoney, .storage table.market tr.noStock td {
+	color : #71754c;
+}
+.storage table.market tr.noStock .gameMoney img {
+	opacity : 0.2;
+	filter : alpha(opacity=20);
+	zoom : 1;
+}
+.storage table.market form {
+	width : 110px;
+	height : 20px;
+}
+.storage table.market form .field {
+	float : left;
+	position : relative;
+	width : 30px;
+	margin-right : 4px;
+}
+.storage table.market form .button {
+	float : left;
+	position : relative;
+	width : 60px;
+}
+.storage h1 {
+	margin-bottom : 5px;
+}
+.storage .creditCard {
+	margin : 0px;
+	padding : 0px;
+	margin : 10px;
+	padding : 5px;
+	text-align : center;
+	border : 1px solid #d0d194;
+	background-color : #71754c;
+}
+.storage .creditCard .button {
+	display : inline;
+	vertical-align : 5%;
+	margin-bottom : 0px;
+}
+.unused .sidePanel, .unused .briefingPanel {
+	margin-top : 8px;
+	padding : 8px;
+	font-family : "Arial", "Trebuchet MS";
+	color : #ddd;
+	overflow : auto;
+	background-color : #202835;
+	border-radius : 10px;
+	-moz-border-radius : 10px;
+	-webkit-border-radius : 10px;
+}
+.unused .briefingPanel {
+	margin-bottom : 10px;
+	width : 980px;
+}
+.unused .briefingPanel .full {
+	font-size : 8pt;
+	color : #bbb;
+}
+.unused .mailHeader {
+	color : #94a4be;
+}
+.unused .configTitle {
+	color : orange;
+	font-weight : bold;
+}
+.unused img.face {
+	width : 110px;
+	height : 110px;
+	float : left;
+	position : relative;
+	margin-right : 5px;
+	padding : 1px;
+	border : 1px dotted white;
+}
+.unused .file_log {
+	font-size : 8pt;
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+}
+.unused .old {
+	color : #d0d194;
+	font-style : italic;
+}
+.unused .ad {
+	font-size : 8.5pt;
+}
+.admin {
+	padding : 10px;
+	border : 1px solid #71754c;
+	border-left : 2px solid #fed82a;
+	background-color : #595c3c;
+	outline : 2px solid #292B1C;
+}
+.admin h1 {
+	margin-top : 25px;
+	margin-bottom : 15px;
+}
+.admin code {
+	display : block;
+}
+.admin form {
+	margin-top : 10px;
+	margin-bottom : 10px;
+}
+.admin .stat {
+	background-color : #3b3d28;
+	padding-left : 3px;
+	padding-right : 3px;
+	border-radius : 10px;
+	-moz-border-radius : 10px;
+	-webkit-border-radius : 10px;
+}
+.admin table.table {
+	width : 50%;
+}
+.admin table.table td {
+	vertical-align : middle;
+}
+.admin table.table img {
+	vertical-align : middle;
+}
+.admin table.table strong {
+	font-size : 130%;
+}
+.admin table.table td.count {
+	color : #fed82a;
+}
+.mxadmin .custom {
+	margin-top : 10px;
+	padding-top : 5px;
+	border-top : 1px dashed gray;
+}
+.mxadmin .custom .field {
+	width : 50px;
+}
+.intro {
+	height : 630px;
+}
+.intro .screens .container {
+	height : 245px;
+}
+.intro .subscribe {
+	position : absolute;
+	width : 323px;
+	height : 58px;
+	margin-left : 530px;
+	margin-top : 290px;
+	padding : 10px;
+	background-color : #595c3c;
+	border : 1px solid #d0d194;
+	outline : 2px solid #292B1C;
+}
+.intro .subscribe a {
+	width : auto;
+	height : auto;
+	font-size : 13pt;
+	line-height : 15pt;
+	margin-bottom : 4px;
+}
+.intro .subscribe em {
+	display : block;
+	color : #d0d194;
+	font-size : 9pt;
+	letter-spacing : 1pt;
+	word-spacing : 0pt;
+	text-align : justify;
+}
+.intro .screens {
+	position : absolute;
+	width : 345px;
+	margin-left : 530px;
+}
+.intro .screens .swf {
+	font-size : 0pt;
+	line-height : 0pt;
+	width : 320px;
+	height : 240px;
+	border : 1px solid #3b3d28;
+	border-right-color : #71754c;
+	border-bottom-color : #71754c;
+}
+.intro .infos .container {
+	height : 330px;
+}
+.intro .infos {
+	position : absolute;
+	width : 500px;
+	margin-left : 20px;
+}
+.intro .infos .synopsis {
+	margin-bottom : 15px;
+	padding-bottom : 10px;
+	font-size : 15pt;
+	letter-spacing : 0pt;
+	word-spacing : 0pt;
+	font-variant : small-caps;
+	font-weight : bold;
+	text-align : justify;
+	border-bottom : 1px dashed #71754c;
+}
+.intro .infos ul li {
+	padding-left : 23px;
+	margin-bottom : 10px;
+	font-size : 8pt;
+	background-repeat : no-repeat;
+	background-position : 0 0;
+}
+.intro .infos ul li.explore {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/uc.png");
+}
+.intro .infos ul li.market {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/money.png");
+}
+.intro .infos ul li.mission {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/disk.png");
+}
+.intro .infos ul li.deck {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/chip.png");
+}
+.intro .infos ul li.leet {
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/admin.png");
+}
+.intro .events {
+	position : absolute;
+	margin-left : 20px;
+	margin-top : 380px;
+	width : 855px;
+}
+.intro .events .container {
+	height : 230px;
+}
+.intro .events h1 {
+	background : transparent;
+}
+.intro .events iframe {
+	background : #EBECD2;
+	width : 825px;
+	height : 195px;
+	border : 3px solid #d0d194;
+	border-top-color : #494c32;
+	border-left-color : #494c32;
+	outline : 1px solid #26271a;
+}
+.userInfos form.friends, .userInfos form.search, .options form.friends, .options form.search {
+	position : absolute;
+	padding : 1px;
+	margin-left : 710px;
+	margin-top : -1px;
+	width : 170px;
+	height : 21px;
+	text-align : center;
+	font-size : 8pt;
+	font-weight : bold;
+	color : #fed82a;
+	letter-spacing : 0pt;
+	border : 1px solid #71754c;
+	border-bottom : 0px;
+	background-color : #595c3c;
+}
+.userInfos form.friends select, .userInfos form.search select, .options form.friends select, .options form.search select {
+	width : 90px;
+	letter-spacing : 0pt;
+}
+.userInfos form.search, .options form.search {
+	width : 200px;
+	margin-left : 500px;
+	text-align : left;
+}
+.userInfos form.search .field, .options form.search .field {
+	width : 110px;
+}
+.userInfos .disclaimer {
+	margin : -10px;
+	margin-bottom : 15px;
+	padding : 10px;
+	padding-bottom : 5px;
+	color : #fed82a;
+	background-color : #71754c;
+	border-bottom : 1px solid #d0d194;
+}
+.userInfos .disclaimer p {
+	font-size : 8pt;
+	line-height : 9pt;
+	letter-spacing : 1pt;
+	margin-bottom : 5px;
+}
+.userInfos .actions {
+	position : absolute;
+	margin-left : 750px;
+	margin-top : 24px;
+	width : 125px;
+}
+.userInfos .actions a.button {
+	width : auto;
+}
+.userInfos .actions form {
+	margin : 0px;
+	padding : 0px;
+}
+.userInfos .actions form label {
+	display : block;
+	font-size : 8pt;
+}
+.userInfos .actions form .field {
+	width : 123px;
+}
+.userInfos .avatar {
+	float : left;
+	position : relative;
+	margin-right : 10px;
+	margin-bottom : 20px;
+	overflow : hidden;
+	width : 80px;
+	height : 80px;
+	border : 1px solid #292B1C;
+	outline : 1px solid #71754c;
+}
+.userInfos .avatar img {
+	width : 80px;
+	height : 80px;
+}
+.userInfos ul.infos {
+	clear : both;
+	margin : 10px 0px;
+	padding : 10px 0px;
+	border-top : 1px dashed #71754c;
+	border-bottom : 1px dashed #71754c;
+}
+.userInfos ul.infos li.name {
+	font-size : 19pt;
+	font-weight : bold;
+}
+.userInfos ul.infos li.name a {
+	font-size : 8pt;
+}
+.userInfos ul.infos li.level {
+	font-size : 12pt;
+	color : #fed82a;
+}
+.userInfos ul.infos li.title {
+	font-weight : bold;
+	font-size : 12pt;
+	color : #292B1C;
+}
+.userInfos ul.infos li.title img {
+	vertical-align : -25%;
+}
+.userInfos .separator {
+	padding-top : 15px;
+	border-top : 1px dashed #71754c;
+}
+.userInfos .left {
+	float : left;
+	position : relative;
+	margin-bottom : 15px;
+	width : 300px;
+}
+.userInfos .right {
+	float : right;
+	position : relative;
+	margin-bottom : 15px;
+	width : 560px;
+}
+.userInfos .right {
+	padding : 5px;
+	min-height : 370px;
+	background-color : #3b3d28;
+	border : 1px solid #71754c;
+}
+.userInfos .right h1 {
+	margin : -5px;
+	padding : 5px;
+	margin-bottom : 0px;
+	background : #292B1C;
+}
+.userInfos .right table.table {
+	width : 100%;
+}
+.userInfos .right table.table td {
+	padding-left : 8px;
+	padding-right : 0px;
+	vertical-align : middle;
+}
+.userInfos .left h1 {
+	margin-bottom : 10px;
+}
+.userInfos dl {
+	border : 0px;
+}
+.userInfos table.stats td.value {
+	width : 70px;
+	text-align : center;
+	color : #fed82a;
+}
+.userInfos table.stats td.value strong {
+	font-size : 15pt;
+}
+.userInfos table.userDecks td.name {
+	width : 120px;
+	font-weight : bold;
+	color : #fed82a;
+	font-size : 8pt;
+}
+.userInfos table.userDecks ul li {
+	border : 0px;
+}
+.userInfos .chipset {
+	margin-top : 10px;
+	font-size : 12pt;
+}
+.userInfos .chipset img {
+	vertical-align : -20%;
+}
+.userInfos .chipset em {
+	font-size : 10pt;
+}
+.userInfos .cfgTitle {
+	margin-top : 20px;
+	color : #fed82a;
+	font-weight : bold;
+	font-size : 8pt;
+	font-variant : small-caps;
+}
+.userInfos .cfg {
+	padding : 10px;
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+	color : #a8bdc8;
+	background-color : #595c3c;
+	border : 0px;
+	border-radius : 10px;
+	-moz-border-radius : 10px;
+	-webkit-border-radius : 10px;
+	overflow : hidden;
+}
+.userInfos .cfg em {
+	color : #fed82a;
+}
+.userInfos .cfg p {
+	margin : 0px;
+	padding : 0px;
+}
+.options form {
+	margin-bottom : 25px;
+}
+.options form input[type=checkbox], .options form label {
+	cursor : pointer;
+}
+.options form label:hover {
+	color : #e59f07;
+}
+.options form .button {
+	margin-top : 10px;
+}
+.options form .row {
+	margin-bottom : 20px;
+}
+.options form .row em {
+	display : block;
+	font-size : 8pt;
+}
+.options .help p {
+	margin-bottom : 10px;
+}
+.corp {
+	width : 600px;
+	margin : auto;
+}
+.corp .container h1 {
+	margin : 0px;
+	padding : 0px;
+	padding-bottom : 5px;
+	padding-top : 5px;
+	margin-left : -10px;
+	margin-right : -10px;
+	margin-bottom : 25px;
+	font-size : 12pt;
+	text-align : center;
+	background : #fed82a;
+	color : #595c3c;
+}
+.corp .container p {
+	margin-bottom : 7px;
+}
+.corp .container .msg {
+	float : right;
+	position : relative;
+	width : 415px;
+}
+.corp .container .agent {
+	width : 150px;
+	height : 300px;
+	margin-bottom : 10px;
+	background-color : #3b3d28;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/johnson.png");
+	border : 1px solid #71754c;
+	outline : 1px solid #3b3d28;
+}
+.corp .container ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+}
+.corp .container .header, .corp .container .header p {
+	margin : 0px;
+	color : #fed82a;
+	font-style : italic;
+	font-size : 10pt;
+	font-family : "Courier new", fixed;
+	letter-spacing : 0.2pt;
+	word-spacing : 0pt;
+}
+.corp .container .header {
+	margin-bottom : 15px;
+	padding : 4px;
+	padding-left : 30px;
+	background-color : #595c3c;
+	border-top : 1px solid #71754c;
+	border-bottom : 1px solid #3b3d28;
+	outline : 1px solid #3b3d28;
+	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/mail_header.png");
+	background-repeat : no-repeat;
+	background-position : 3px 3px;
+}
+.corp .container .header strong {
+	font-style : normal;
+	color : white;
+}
+.corp .container .sign {
+	margin-bottom : 20px;
+	color : #292B1C;
+}
+.corp .container .sign p {
+	margin : 0px;
+	padding : 0px;
+}
+.guide .left {
+	float : left;
+	position : relative;
+	width : 200px;
+}
+.guide .right {
+	float : right;
+	position : relative;
+	width : 670px;
+}
+.guide .left ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+	padding-left : 15px;
+}
+.guide .left ul li a {
+	display : block;
+	margin-bottom : 3px;
+}
+.guide .left ul li.active a {
+	background-color : #e59f07;
+	text-decoration : none;
+	color : #595c3c;
+}
+.guide .right ul {
+	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	margin-top : 8px;
+	margin-bottom : 20px;
+	padding-left : 30px;
+}
+.guide .right ul.large li {
+	margin-bottom : 10px;
+}
+.guide .right img {
+	vertical-align : -25%;
+}
+.guide .right h1 {
+	margin-bottom : 20px;
+}
+.guide .right h2 {
+	margin-left : 0px;
+	margin-top : 30px;
+	margin-bottom : 20px;
+}
+.guide .right table.table {
+	width : 100%;
+}
+.guide .right table.table td {
+	padding-top : 5px;
+	padding-bottom : 5px;
+}
+.guide .right table.table tr td:first-child {
+	font-weight : bold;
+	font-size : 110%;
+	color : #fed82a;
+}
+.muxxumaintain {
+	padding : 10px;
+	border : 1px solid #71754c;
+	background-color : #595c3c;
+	min-height : 250px;
+}
+.mxapppage {
+	background-color : #595c3c;
+	background-position : left top;
+	background-repeat : repeat-x;
+	border : 1px solid #d0d194;
+	outline : 1px solid #3b3d28;
+	padding : 10px;
+}
+.mxmainmenu .mxappmenu {
+	margin-top : -3px;
+}
+.mxmainmenu .mxappmenu li h1 {
+	text-transform : none;
+	font-weight : normal;
+	background : transparent;
+}
+.mxmainmenu .mxappmenu li h1 a {
+	color : #595c3c;
+	text-shadow : none;;
+}
+.mxmainmenu .mxappmenu li h1:hover a {
+	color : #bebf87;
+	text-shadow : none;;
+}
+.mxmainmenu .mxappmenu li h1 a.active {
+	text-shadow : none;;
+	background-color : #e59f07;
+	color : #595c3c;
+	cursor : default;
+	outline : 1px solid #595c3c;
+}
+.mxmainmenu .mxappmenu li.adminli {
+	background-image : none;
+	color : #fff;
+	margin-top : 10px;
+	margin-left : -10px;
+}
+.mxmainmenu .mxappmenu li.adminli a {
+	text-decoration : underline;
+	color : #fff;
+}
+.challenge h1 {
+	margin-bottom : 35px;
+}
+.challenge table.ranking {
+	float : left;
+	margin-left : 5px;
+	margin-right : 5px;
+	width : 265px;
+}
+.challenge table.ranking th.header {
+	background : transparent;
+	text-align : center;
+}
+.challenge table.ranking td {
+	vertical-align : middle;
+}
+.challenge table.ranking td.pos {
+	font-size : 9pt;
+	font-weight : bold;
+	color : #71754c;
+}
+.challenge table.ranking td.name {
+	width : 150px;
+}
+.challenge table.ranking td.score {
+	font-size : 14pt;
+}
+.challenge .mxcomment {
+	margin-top : 50px;
+}
+.challenge .mlist {
+	padding : 10px;
+	padding-left : 20px;
+	margin-top : 20px;
+	margin-bottom : 10px;
+	border-radius : 10px;
+	-moz-border-radius : 10px;
+	-webkit-border-radius : 10px;
+}
+.challenge .mlist .file {
+	height : 56px;
+}
+.mxcomment {
+	border-top : 1px dashed #d0d194;
+}
+#tid_bar_down {
+	padding-top : 50px;
+	color : #D0D194;
+}
+#tid_bar_down table {
+	width : 900px;
+	margin : auto;
+}
+#tid_bar_down a {
+	color : #FFC600;
+}
+.forum th, .forum td, .forum .container {
+	color : #d0d194;
+}
+
+/*
+     FILE ARCHIVED ON 21:15:30 Mar 04, 2013 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 16:47:15 Feb 08, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.486
+  exclusion.robots: 0.018
+  exclusion.robots.policy: 0.007
+  esindex: 0.009
+  cdx.remote: 10.306
+  LoadShardBlock: 252.196 (3)
+  PetaboxLoader3.resolve: 230.542 (4)
+  PetaboxLoader3.datanode: 183.888 (4)
+  load_resource: 185.85
+*/
