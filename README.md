@@ -1,18 +1,30 @@
 
 
-##
+## Build
+Build the client:
 ```
 haxelib install client.hxml
 haxe client.hxml
+```
+Build the website:
+```
 haxelib install website.hxml
 haxe website.hxml
 cd website-bin; npm install;cd ..
+```
+
+## Launch
+You'll need to have a Redis instance running:
+```
+sudo service redis-server restart
+```
+Start the node app
+```
 node website-bin/website.js
 ```
 
-##TODO
+## TODO
 
-- Timer removed
 - Bitmaps not drawn properly
 - Key listeners disabled
 - Focus broken in user termninal
