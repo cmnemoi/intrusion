@@ -1,0 +1,130 @@
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+<div class="decks">
+    <div class="window chipsets">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Choix du Chipset Actif</span>
+        </div>
+
+        <div class="container">
+            <ul>
+                ::foreach chipsets::
+                <li class="chipset ::active::" name="::id::">
+                    <form name="::id::" method="POST" action="/decks/setActiveChipset">
+                        <input type="hidden" name="id"  value="::id::">
+                    </form>
+                    <a href="javascript:document.::id::.submit();"><img src="/img/icons/::icon::.png"/>::name::</a>
+                </li>
+                ::end::
+            </ul>
+        </div>
+    </div>
+
+    <ul class="tabs">
+        <li class="active">
+            <a href="test"> Deck Principal</a>
+        </li>
+        <!--
+        TODO: allow buying additional decks
+        <li>
+            <a href="test">Ajouter un Deck 2500 <img src="/img/icons/money.png" alt=""/> </a>
+        </li>
+        -->
+    </ul>
+    <div class="window">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Contenu du Deck</span>
+        </div>
+        ::foreach decks::
+        <div class="container">
+            <div class="help">
+                Grace a votre souris, faites glisser les icones depuis votre reserve vers un emplacement de de votre deck. Les changements sont automatiquement sauvegardes.
+            </div>
+            <div class="slots">
+                ::foreach slots::
+                <div class="slot">::rank::</div>
+                ::end::
+            </div>
+            <ul id="deckContainer" class="bg" name="::name::">
+                ::foreach viruses::
+                <li name="::id::"><img src="/img/dockicons/::id::.png"/></li>
+                ::end::
+            </ul>
+
+        <div class="infos">
+            <div class="actions">
+                <form id="save" method="POST" action="/decks">
+                    <input class="button" type="submit" value="Sauvegarder">
+                </form>
+                <a class="offButton">Re-initialiser</a>
+                <form name="expand" method="POST" action="/decks?expand=::name::">
+                </form>
+                ::if(money >= expandCost)::
+                <a class="button" href="javascript:document.expand.submit();">Agrandir ce deck (::expandCost:: <img src="/img/icons/money.png"/>)</a>
+                ::else::
+                <div class="offButton">Agrandir ce deck (::expandCost:: <img src="/img/icons/money.png"/>)</div>
+                ::end::
+                <a class="offButton">Definir comme favori</a>
+            </div>
+            <form>
+                <input class="field" type="text" id="deckName" name="name"  value="::name::">
+                <input class="button" type="submit" value="Renommer">
+            </form>
+        </div>
+    </div>
+    ::end::
+</div>
+    
+    <div class="window">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Reserve</span>
+        </div>
+        <div class="container">
+
+            <ul id="poolContainer" class="bg">
+                ::foreach availableViruses::
+                <li name="::id::"><img src="/img/dockicons/::id::.png"/></li>
+                ::end::
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    var deck = document.getElementById('deckContainer');
+    var pool = document.getElementById('poolContainer');
+
+    new Sortable(deck, {
+        group: {
+            name: 'viruses',
+            put: function (to) {
+            return to.el.children.length < ::deckCapacity::;
+            }
+        },
+        animation: 150
+    });
+    new Sortable(pool, {
+        group: 'viruses',
+        animation: 150
+    });
+
+    const form = document.getElementById('save');
+    form.addEventListener('formdata', ({formData}) => {
+        var activeChipset = document.getElementsByClassName("chipset active")[0].getAttribute('name');
+        formData.append('activeChipset', activeChipset);
+
+        var deck = document.getElementById("deckContainer")
+        var name = deck.getAttribute('name');
+        var elems = deck.getElementsByTagName("li");
+        var viruses = [];
+        for (let i = 0; i < elems.length; i++) {
+            var virus = elems.item(i);
+            viruses.push(virus.getAttribute('name'));
+        }
+        formData.append('decks', JSON.stringify([{name: name, content: viruses}]));
+    });
+</script>
+    

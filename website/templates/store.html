@@ -1,0 +1,244 @@
+    
+<script>
+    const elements = ["home", "dmg", "debuff", "combo", "utils", "chipset"] 
+
+    function onClick(element) {
+        for (e of elements) {
+            if (e == element) {
+                document.getElementById("tab_" + e).classList.add('active');
+                document.getElementById(e).classList.remove('hidden');
+
+            } else {
+                document.getElementById("tab_" + e).classList.remove('active');
+                document.getElementById(e).classList.add('hidden');
+            }
+        }
+    }
+</script>
+
+<div class="shop">
+    <ul class="tabs">
+        <li id="tab_home"::if (tab == "home"):: class="active"::end::>
+            <a onclick="onClick('home')">[Accueil]</a>
+        </li>
+        <li id="tab_dmg"::if (tab == "dmg"):: class="active"::end::>
+            <a onclick="onClick('dmg')">Virus Degats</a>
+        </li>
+        <li id="tab_debuff"::if (tab == "debuff"):: class="active"::end::>
+            <a onclick="onClick('debuff')">Virus Afflictions</a>
+        </li>
+        <li id="tab_combo"::if (tab == "combo"):: class="active"::end::>
+            <a onclick="onClick('combo')">Virus Combo</a>
+        </li>
+        <li id="tab_utils"::if (tab == "utils"):: class="active"::end::>
+            <a onclick="onClick('utils')">Virus Utilitaires</a>
+        </li>
+        <li id="tab_chipset"::if (tab == "chipset"):: class="active"::end::>
+            <a onclick="onClick('chipset')"><img src="/img/icons/chip.png"/>Chipsets</a>
+        </li>
+    </ul>
+    <div class="window">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Catalogue.prg</span>
+        </div>
+        <div id="home" class="container::if (tab != "home"):: hidden::end::">
+            <div class="help">
+                Le HackStore est un espace vous permettant:
+                <ul>
+                    <li>d'acquerir de nouveauz virus utilisables en mission</li>
+                    <li>d'acquerir des chipsets offrant des avantages secondaires a vos decks</li>
+                </ul>
+                Les achats sont regles en depensant vos <img src="/img/icons/money.png">. Choisissez une section de la boutique en cliquant sur un onglet ci-dessus.
+            </div>
+        </div>
+        <div id="dmg" class="container::if (tab != "dmg"):: hidden::end::">
+            <div class="help">
+                Pas de grande subtilite ici, les virus de type Degats sont concus pour detruire rapidement les fichiers qu'ils ciblent. La plupart de ces virus sont totalement illegaux dans le monde entier.
+            </div>
+            <table class="table">
+                <tr>
+                    <th colspan="2">Nom</th>
+                    <th>Cout en Ressources</th>
+                    <th>Prix</th>
+                    <th></th>
+                </tr>
+                ::foreach virus_dmg::
+                <tr class="select virus">
+                    <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
+                    <td class="desc"><div>::name::</div></td>
+                    <td class="cc"><div>::cc::</div></td>
+                    <td class="price::if bought:: bought::end::">
+                        <div class="::if (price > money)::out::end::">
+                            <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
+                        </div>
+                    </td>
+                    <td>
+                        ::if ((price > money) || bought)::
+                        <div class="offButton">Acheter</div>
+                        ::else::
+                        <form method="POST" action="/store?tab=dmg">
+                            <input type="text" name="virusId" class="hidden" value="::id::">
+                            <input type="submit" class="button" value="Acheter">
+                        </form>
+                        ::end::
+                    </td>
+                </tr>
+                ::end::
+            </table>
+        </div>
+        <div id="debuff" class="container::if (tab != "debuff"):: hidden::end::">
+            <div class="help">
+                Les virus de type Afflictions reduisent les capacites des anti-virus qu'ils touchend (voire les annulent totalement).
+            </div>
+            <table class="table">
+                <tr>
+                    <th colspan="2">Nom</th>
+                    <th>Cout en Ressources</th>
+                    <th>Prix</th>
+                    <th></th>
+                </tr>
+                ::foreach virus_debuff::
+                <tr class="select virus">
+                    <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
+                    <td class="desc"><div>::name::</div></td>
+                    <td class="cc"><div>::cc::</div></td>
+                    <td class="price::if bought:: bought::end::">
+                        <div class="::if (price > money)::out::end::">
+                            <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
+                        </div>
+                    </td>
+                    <td>
+                        ::if ((price > money) || bought)::
+                        <div class="offButton">Acheter</div>
+                        ::else::
+                        <form method="POST" action="/store?tab=debuff">
+                            <input type="text" name="virusId" class="hidden" value="::id::">
+                            <input type="submit" class="button" value="Acheter">
+                        </form>
+                        ::end::
+                    </td>
+                </tr>
+                ::end::
+            </table>
+        </div>
+        <div id="combo" class="container::if (tab != "combo"):: hidden::end::">
+            <div class="help">
+                Ces virus un peu particulies consomment des "points de combo". Ces points s'obtiennent en detruisant un anti-virus : plus voues avez de points, plus l'effet du virus-combo lance sera puissant.
+            </div>
+            <table class="table">
+                <tr>
+                    <th colspan="2">Nom</th>
+                    <th>Cout en Ressources</th>
+                    <th>Prix</th>
+                    <th></th>
+                </tr>
+                ::foreach virus_combo::
+                <tr class="select virus">
+                    <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
+                    <td class="desc"><div>::name::</div></td>
+                    <td class="cc"><div>::cc::</div></td>
+                    <td class="price::if bought:: bought::end::">
+                        <div class="::if (price > money)::out::end::">
+                            <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
+                        </div>
+                    </td>
+                    <td>
+                        ::if ((price > money) || bought)::
+                        <div class="offButton">Acheter</div>
+                        ::else::
+                        <form method="POST" action="/store?tab=combo">
+                            <input type="text" name="virusId" class="hidden" value="::id::">
+                            <input type="submit" class="button" value="Acheter">
+                        </form>
+                        ::end::
+                    </td>
+                </tr>
+                ::end::
+            </table>
+        </div>
+        <div id="utils" class="container::if (tab != "utils"):: hidden::end::">
+            <div class="help">
+                La panoplie du hacker : tout un arsenal de gadgets aux effets tres varies main neanmoins pratiques.
+            </div>
+            <table class="table">
+                <tr>
+                    <th colspan="2">Nom</th>
+                    <th>Cout en Ressources</th>
+                    <th>Prix</th>
+                    <th></th>
+                </tr>
+                ::foreach virus_utils::
+                <tr class="select virus">
+                    <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
+                    <td class="desc"><div>::name::</div></td>
+                    <td class="cc"><div>::cc::</div></td>
+                    <td class="price::if bought:: bought::end::">
+                        <div class="::if (price > money)::out::end::">
+                            <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
+                        </div>
+                    </td>
+                    <td>
+                        ::if ((price > money) || bought)::
+                        <div class="offButton">Acheter</div>
+                        ::else::
+                        <form method="POST" action="/store?tab=utils">
+                            <input type="text" name="virusId" class="hidden" value="::id::">
+                            <input type="submit" class="button" value="Acheter">
+                        </form>
+                        ::end::
+                    </td>
+                </tr>
+                ::end::
+            </table>
+        </div>
+        <div id="chipset" class="container::if (tab != "chipset"):: hidden::end::">
+            <div class="help">
+                Les chipsets sont des ameliorations passives pour vos decks. Ils permettend par exemple d'accelerer le lancement de vos virus ou d'en reduire le cout en ressources.
+            </div>
+            <table class="table">
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Niveau</th>
+                    <th>Prix</th>
+                    <th></th>
+                </tr>
+                ::foreach chipsets::
+                <tr class="select chipset">
+                    <td class="name"><div><img src="/img/icons/chip.png">::name::</div></td>
+                    <td><div>::desc::</div></td>
+                    <td class="cc"><div>::level::</div></td>
+                    <td class="price::if bought:: bought::end::">
+                        <div class="::if (price > money)::out::end::">
+                            <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
+                        </div>
+                    </td>
+                    <td>
+                        ::if ((price > money) || bought)::
+                        <div class="offButton">Acheter</div>
+                        ::else::
+                        <form method="POST" action="/store?tab=chipset">
+                            <input type="text" name="chipsetId" class="hidden" value="::id::">
+                            <input type="submit" class="button" value="Acheter">
+                        </form>
+                        ::end::
+                    </td>
+                </tr>
+                ::end::
+            </table>
+        </div>
+    </div>
+
+
+    <!--
+    <div id="tooltip">
+        <div class="tiptop">
+        <img class="vicon" src="/img/dockicons/xl/stun2.png"/>
+            <h1>Degats moyens <em>(DMGL)</em></h1>
+            Inflige 10 degats
+        <div class="infos">Cout en Ressources: 8</div>
+    </div>
+    </div>
+    -->
+</div>

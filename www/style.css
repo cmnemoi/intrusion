@@ -1,21 +1,21 @@
 body {
 	background-position : center 23px;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/site_header_bg.png");
+	background-image : url("img/design/site_header_bg.png");
 	background-repeat : repeat-x;
 	background-color : #3b3d28;
 }
 .mxtophead {
 	background-position : center top !important;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/site_header.png");
+	background-image : url("img/design/site_header.png");
 	background-repeat : no-repeat;
 	background-color : transparent;
 	min-height : 165px;
 }
 body.inframe .mxtophead {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/site_header_inframe.png");
+	background-image : url("img/design/site_header_inframe.png");
 }
 .mxhead {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/pixel.gif");
+	background-image : url("img/design/pixel.gif");
 }
 .mxhead a.logo:hover {
 	background : none;
@@ -32,7 +32,7 @@ body.inframe .mxtophead {
 .sitePopup .popuptop {
 	padding-top : 14px;
 	background-color : #d0d194;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_title.png");
+	background-image : url("img/design/window_title.png");
 	background-position : 0px 2px;
 	background-repeat : repeat-x;
 }
@@ -253,7 +253,7 @@ h1 {
 	color : #fed82a;
 	font-weight : normal;
 	text-transform : uppercase;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/h1.png");
+	background-image : url("img/design/h1.png");
 	background-repeat : repeat-x;
 	background-position : left bottom;
 }
@@ -293,7 +293,7 @@ p {
 	padding-left : 17px;
 	background-position : left bottom;
 	background-repeat : no-repeat;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/table_td.png");
+	background-image : url("img/design/table_td.png");
 }
 .mxcontent table.table th {
 	padding : 3px;
@@ -305,7 +305,7 @@ p {
 	background-color : #71754c;
 	background-position : left 90%;
 	background-repeat : no-repeat;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/table_th.png");
+	background-image : url("img/design/table_th.png");
 }
 .mxcontent table.table th.desc {
 	padding : 4px;
@@ -338,6 +338,9 @@ table.table tr.select:hover td div {
 table.table tr.select:hover td .gameMoney {
 	color : #3b3d28;
 }
+.hidden {
+	display: none;
+}
 ul.tabs {
 	margin : 0px;
 	padding : 0px;
@@ -364,6 +367,7 @@ ul.tabs li a {
 	color : #e59f07;
 	font-size : 8pt;
 	text-transform : uppercase;
+	cursor: pointer;
 }
 ul.tabs li img {
 	vertical-align : -25%;
@@ -490,7 +494,7 @@ dl dd {
 	color : #d0d194;
 	letter-spacing : 0.5pt;
 	border : 1px solid #cb9f83;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/help.png");
+	background-image : url("img/design/help.png");
 	background-position : top left;
 	background-color : #4c2e25;
 	background-repeat : no-repeat;
@@ -501,7 +505,7 @@ dl dd {
 	outline : 2px solid #292B1C;
 }
 .help ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -668,23 +672,45 @@ code {
 	padding : 10px;
 	border : 1px solid #d0d194;
 	background-color : #71754c;
+    overflow-x: auto;
 }
 .decks ul.bg {
-	position : absolute;
+	margin : 0px;
+	padding : 0px;
+	list-style : none;
+	min-height : 41px;
+	height : 41px;
 }
 .decks ul.bg li {
 	margin : 0px;
 	padding : 0px;
-	float : left;
+	float: left;
 	position : relative;
 	width : 38px;
 	height : 39px;
-	margin-right : 3px;
+	margin-top: 3px;
 	text-align : center;
-	cursor : hand;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/dockicon_border.png");
+	cursor : pointer;
+	background-image : url("img/design/dockicon_border.png");
 	background-repeat : no-repeat;
 	border : 1px solid #595c3c;
+}
+.decks ul.bg li img {
+	margin-top: 3px;
+}
+.decks ul.bg li img:hover {
+	outline : 1px solid #e59f07;
+}
+.decks .slots {
+	margin-left: 8px;
+}
+.decks .slot {
+	margin-left : -2px;
+	margin-right : -2px;
+	padding : 0px;
+	display: inline-block;
+	text-align : center;
+	width: 38px;
 }
 .decks ul.bg .id {
 	position : absolute;
@@ -839,8 +865,8 @@ ul.virusList li {
 	padding-top : 3px;
 	margin-right : 3px;
 	text-align : center;
-	cursor : hand;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/dockicon_border.png");
+	cursor : pointer;
+	background-image : url("img/design/dockicon_border.png");
 	background-repeat : no-repeat;
 	border : 1px solid #595c3c;
 }
@@ -927,6 +953,12 @@ form input.button:hover {
 	text-align : center;
 	width : 100px;
 }
+.shop table.table tr.virus td.desc {
+	width : 500px;
+}
+.shop table.table tr.virus .offButton, .shop table.table tr.virus .button {
+	width : 70px;
+}
 .shop table.table tr.chipset td.name {
 	padding-left : 5px;
 	width : 210px;
@@ -939,7 +971,7 @@ form input.button:hover {
 	font-style : italic;
 	font-size : 8pt;
 }
-.shop table.table tr.chipset .offButton, .shop table.table tr.chipset a.button {
+.shop table.table tr.chipset .offButton, .shop table.table tr.chipset .button {
 	width : 70px;
 }
 .shop table.table td.price {
@@ -987,7 +1019,7 @@ form input.button:hover {
 .shopDetails .boxPanel .vbox {
 	width : 151px;
 	height : 146px;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/box_damage.png");
+	background-image : url("img/design/box_damage.png");
 	background-repeat : no-repeat;
 }
 .shopDetails .boxPanel .vbox img {
@@ -1033,7 +1065,7 @@ img.vicon {
 	text-transform : uppercase;
 	font-size : 8pt;
 	background-color : #d0d194;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_title.png");
+	background-image : url("img/design/window_title.png");
 	background-position : left center;
 	background-repeat : repeat-x;
 	border : 3px solid #d0d194;
@@ -1058,13 +1090,20 @@ img.vicon {
 	width : 18px;
 	height : 13px;
 	margin-top : 0px;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_close.png");
+	background-image : url("/img/design/window_close.png");
 }
 .window img.wbutton:hover {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/window_close_over.png");
+	background-image : url("/img/design/window_close_over.png");
 }
 .window .help {
 	outline : 1px solid #3b3d28;
+}
+.offers .container {
+	display:inline-block;
+	width: 879px;
+}
+.offers .container.hidden {
+	display:none;
 }
 .file {
 	cursor : pointer;
@@ -1183,7 +1222,7 @@ img.vicon {
 	margin-top : 5px;
 	padding-top : 5px;
 	margin-bottom : 5px;
-	border-top : 1px dashed #d0d194;
+	/*Removed: border-top : 1px dashed #d0d194;*/ 
 }
 .missionDetails form {
 	position : absolute;
@@ -1261,10 +1300,13 @@ img.vicon {
 	background-position : top left;
 }
 .missionEnd .headerFailure {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/debriefing_failure.png");
+	background-image : url("img/design/debriefing_failure.png");
 }
 .missionEnd .headerSuccess {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/debriefing_success.png");
+	background-image : url("img/design/debriefing_success.png");
+}
+.missionEnd .result {
+    display:inline-block;
 }
 .missionEnd .result .left, .missionEnd .result .right {
 	position : relative;
@@ -1285,7 +1327,7 @@ img.vicon {
 	text-align : justify;
 }
 .missionEnd .result .left ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -1307,6 +1349,7 @@ img.vicon {
 	width : 250px;
 	min-height : 180px;
 	padding-left : 10px;
+	margin-left : 10px;
 	border-left : 1px solid #71754c;
 }
 .missionEnd .result .right table.table {
@@ -1325,11 +1368,11 @@ img.vicon {
 	margin-bottom : 20px;
 	color : #fed82a;
 	font-weight : bold;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/levelUp.png");
+	background-image : url("img/design/levelUp.png");
 	background-repeat : no-repeat;
 }
 .missionEnd .result .levelUp ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -1360,7 +1403,7 @@ img.vicon {
 	text-align : justify;
 }
 .missionEnd .result .goals ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -1508,7 +1551,7 @@ img.vicon {
 	border-top : 1px solid #71754c;
 	border-bottom : 1px solid #292B1C;
 	outline : 1px solid #292B1C;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/mail_header.png");
+	background-image : url("img/design/mail_header.png");
 	background-repeat : no-repeat;
 	background-position : 3px 3px;
 }
@@ -1820,19 +1863,19 @@ img.vicon {
 	background-position : 0 0;
 }
 .intro .infos ul li.explore {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/uc.png");
+	background-image : url("img/icons/uc.png");
 }
 .intro .infos ul li.market {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/money.png");
+	background-image : url("img/icons/money.png");
 }
 .intro .infos ul li.mission {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/disk.png");
+	background-image : url("img/icons/disk.png");
 }
 .intro .infos ul li.deck {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/chip.png");
+	background-image : url("img/icons/chip.png");
 }
 .intro .infos ul li.leet {
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/admin.png");
+	background-image : url("img/icons/admin.png");
 }
 .intro .events {
 	position : absolute;
@@ -2107,12 +2150,12 @@ img.vicon {
 	height : 300px;
 	margin-bottom : 10px;
 	background-color : #3b3d28;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/johnson.png");
+	background-image : url("img/design/johnson.png");
 	border : 1px solid #71754c;
 	outline : 1px solid #3b3d28;
 }
 .corp .container ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -2134,7 +2177,7 @@ img.vicon {
 	border-top : 1px solid #71754c;
 	border-bottom : 1px solid #3b3d28;
 	outline : 1px solid #3b3d28;
-	background-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/design/mail_header.png");
+	background-image : url("img/design/mail_header.png");
 	background-repeat : no-repeat;
 	background-position : 3px 3px;
 }
@@ -2161,7 +2204,7 @@ img.vicon {
 	width : 670px;
 }
 .guide .left ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -2177,7 +2220,7 @@ img.vicon {
 	color : #595c3c;
 }
 .guide .right ul {
-	list-style-image : url("/web/20130304211530im_/http://data.intrusion.muxxu.com/img/icons/dot.png");
+	list-style-image : url("img/icons/dot.png");
 	margin-top : 8px;
 	margin-bottom : 20px;
 	padding-left : 30px;
@@ -2314,24 +2357,3 @@ img.vicon {
 .forum th, .forum td, .forum .container {
 	color : #d0d194;
 }
-
-/*
-     FILE ARCHIVED ON 21:15:30 Mar 04, 2013 AND RETRIEVED FROM THE
-     INTERNET ARCHIVE ON 16:47:15 Feb 08, 2025.
-     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
-
-     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
-     SECTION 108(a)(3)).
-*/
-/*
-playback timings (ms):
-  captures_list: 0.486
-  exclusion.robots: 0.018
-  exclusion.robots.policy: 0.007
-  esindex: 0.009
-  cdx.remote: 10.306
-  LoadShardBlock: 252.196 (3)
-  PetaboxLoader3.resolve: 230.542 (4)
-  PetaboxLoader3.datanode: 183.888 (4)
-  load_resource: 185.85
-*/

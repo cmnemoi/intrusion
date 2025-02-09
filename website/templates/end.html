@@ -1,0 +1,72 @@
+<div class="missionEnd">
+    <div class="window">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Debriefing Mission #::missionId::</span>
+        </div>
+
+        <div class="container">
+            <div class="::status::">
+            </div>
+            <div class="result">
+                <div class="left ::success::">
+                    Votre client vous a transfere la somme de ::prime::
+                    <img src="/img/icons/money.png"/> !
+
+                    <div class="goals ::success::">
+                        Vos statistiques sur Intrusion ont augmente:
+                        <ul>
+                            ::foreach goals::
+                            <li>::desc:: <strong>+::value::</strong></li>
+                            ::end::
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="left ::failure::">
+                    <p><strong>Vous n'avez pas reussi a remplir les objectis de votre mission...</strong></p>
+                    
+                    <p>N'heistez pas a modifier le contenu de votre deck pour adapter votre strategie a la situation ou a vous procurer de nouveaux virus pour enrichir vos possibilites.</p>
+                    <p>Vous pouvez egalemement rejouer l'une des <a href="/missions?tutorial">missions du tutorial</a>.</p>
+                    <p><strong>Votre client a reduit la prime pour cette mission a ::prime:: </strong><img src="/img/icons/money.png"/>.</p>
+                    
+                </div>
+                <div class="right">
+                    <table class="table">
+                        <tr>
+                            <th>Packs Extraits</th>
+                        </tr>
+                        ::foreach extracted::
+                        <tr>
+                            <td>::desc::</td>
+                        </tr>
+                        ::end::
+
+                    </table>
+                    <table class="table">
+                        <tr>
+                            <th>Fichiers Copies</th>
+                        </tr>
+                        ::foreach copied::
+                        <tr>
+                            <td>recu.doc</td>
+                        </tr>
+                        ::end::
+
+                    </table>
+                    <div>Vous pouvez y acceder depuis votre page <a href="/storage">disque dur</a></div>
+                </div>
+            </div>
+
+            <div class="footer ::success::">
+                <a class="button" href="/missions">Terminer</a>
+            </div>
+
+            <div class="footer ::failure::">
+                <a class="button" href="/missions/::missionId::/start">Tenter a nouveau la mission</a>
+                <a class="button" href="/deck">Modifier mon deck</a>
+                <a class="button" href="/missions">Terminer</a>
+            </div>
+        </div>
+    </div>
+</div>

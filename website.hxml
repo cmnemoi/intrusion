@@ -1,0 +1,18 @@
+
+-js website-bin/website.js
+-main App
+-lib hxnodejs
+-lib jsasync
+-lib json2object
+-cp website
+-cp website/externs
+-cp com
+-resource xml/fsNames.fr.xml@xml_fsNames_fr
+-resource xml/names.fr.xml@xml_names_fr
+-resource xml/texts.fr.xml@xml_texts_fr
+-resource xml/chipsets.en.xml@xml_chipsets_en
+-resource xml/chipsets.xml@xml_chipsets_fr
+-resource xml/valuables.en.xml@xml_valuables_en
+-resource xml/valuables.xml@xml_valuables_fr
+-resource xml/virus.en.xml@xml_virus_en
+-resource xml/virus.xml@xml_virus_fr

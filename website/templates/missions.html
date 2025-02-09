@@ -1,0 +1,97 @@
+    
+<script>
+    const elements = ["ongoing", "available", "tutorial", "completed"] 
+
+    function onClick(element) {
+        for (e of elements) {
+            if (e == element) {
+                document.getElementById("tab_" + e).classList.add('active');
+                document.getElementById(e).classList.remove('hidden');
+
+            } else {
+                document.getElementById("tab_" + e).classList.remove('active');
+                document.getElementById(e).classList.add('hidden');
+            }
+        }
+    }
+</script>
+
+<div class="offers">
+    <ul class="tabs">
+        <li id="tab_ongoing"::if (tab == "ongoing"):: class="active"::end::>
+            <a onclick="onClick('ongoing')">En Cours (::numOngoing::)</a>
+        </li>
+        <li id="tab_available"::if (tab == "available"):: class="active"::end::>
+            <a onclick="onClick('available')">Offres du Jour</a>
+        </li>
+        <li id="tab_tutorial"::if (tab == "tutorial"):: class="active"::end::>
+            <a onclick="onClick('tutorial')">Apprentissage</a>
+        </li>
+        <li id="tab_completed"::if (tab == "completed"):: class="active"::end::>
+            <a onclick="onClick('completed')">Termines</a>
+        </li>
+    </ul>
+    <div class="window">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Missions</span>
+        </div>
+        <div id="ongoing" class="container::if (tab != "ongoing"):: hidden::end::">
+            ::foreach ongoing::
+            <a class="file", href="/missions/::missionId::/start">
+                <img class="diff" src="img/design/mission_::difficulty::.png"/>
+                <!-- <div class="level">3</div> -->
+                <div class="label">::short::</div>
+                <div class="value">
+                    <div class="gameMoney">::value::
+                        <img src="/img/icons/money.png"/>
+                    </div>
+                </div>
+            </a>
+            ::end::
+        </div>
+
+        <div id="available" class="container::if (tab != "available"):: hidden::end::">
+            ::foreach available::
+            <a class="file", href="/missions/::missionId::/details">
+                <img class="diff" src="img/design/mission_::difficulty::.png"/>
+                <!-- <div class="level">3</div> -->
+                <div class="label">::short::</div>
+                <div class="value">
+                    <div class="gameMoney">::value::
+                        <img src="/img/icons/money.png"/>
+                    </div>
+                </div>
+            </a>
+            ::end::
+        </div>   
+        <div id="tutorial" class="container::if (tab != "tutorial"):: hidden::end::">
+            ::foreach tutorial::
+            <a class="file", href="/missions/::missionId::/details">
+                <img class="diff" src="img/design/mission_::difficulty::.png"/>
+                <!-- <div class="level">3</div> -->
+                <div class="label">::short::</div>
+                <div class="value">
+                    <div class="gameMoney">::value::
+                        <img src="/img/icons/money.png"/>
+                    </div>
+                </div>
+            </a>
+            ::end::
+        </div>
+        <div id="completed" class="container::if (tab != "completed"):: hidden::end::">
+            ::foreach completed::
+            <a class="file", href="/missions/::missionId::/start">
+                <img class="diff" src="img/design/mission_::difficulty::.png"/>
+                <!-- <div class="level">3</div> -->
+                <div class="label">::short::</div>
+                <div class="value">
+                    <div class="gameMoney">0
+                        <img src="/img/icons/money.png"/>
+                    </div>
+                </div>
+            </a>
+            ::end::
+        </div>
+    </div>
+</div>

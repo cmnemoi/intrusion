@@ -1,0 +1,93 @@
+<script>
+    const elements = ["packs", "misc", "cards"] 
+
+    function onClick(element) {
+        for (e of elements) {
+            if (e == element) {
+                document.getElementById("tab_" + e).classList.add('active');
+                document.getElementById(e).classList.remove('hidden');
+
+            } else {
+                document.getElementById("tab_" + e).classList.remove('active');
+                document.getElementById(e).classList.add('hidden');
+            }
+        }
+    }
+</script>
+
+<div class="storage">
+    <ul class="tabs">
+        <li id="tab_packs"::if (tab == "packs"):: class="active"::end::>
+            <a onclick="onClick('packs')"><img src="/img/icons/market.png"/>Fichiers Pack</a>
+        </li>
+        <li id="tab_misc"::if (tab == "misc"):: class="active"::end::>
+            <a onclick="onClick('misc')"><img src="/img/icons/storage.png"/>Fichiers Divers</a>
+        </li>
+        <li id="tab_cards"::if (tab == "cards"):: class="active"::end::>
+            <a onclick="onClick('cards')"><img src="/img/icons/money.png"/>Cartes Bancaires Volees</a>
+        </li>
+    </ul>
+    <div class="window">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>File_explorer.prg</span>
+        </div>
+        <div id="packs" class="container::if (tab != "packs"):: hidden::end::">
+            <div class="help">
+                <p>Cet espace (strictement illegal) vous permet de <strong>revendre sur le marche noir une partie de vos stocks de fichiers PACK</strong>.
+                Les pris varient chaque jour : il est donc recommande d'y jeter souvent un oeil.</p>
+                <p>Vous pouvez extraire les fichiers PACK en mission en cliquant dessus, puis en choisissant l'action Extraire.</p>
+            </div>
+            <div>
+                Vous pouvez encore <strong>revendre ::quota:: fichiers sur le marche noir aujourd'hui</strong>, sans risquer d'attirer trop l'attention.
+            </div>
+            <table class="table market">
+                <tr>
+                    <th>Categorie</th>
+                    <th>Offre du jour</th>
+                    <th>Mes stocks</th>
+                    <th></th>
+                </tr>
+                ::foreach packs::
+                <tr class="select packs">
+                    <td class="desc"><div>::name::</div></td>
+                    <td class="price"><div>::price::<img src="/img/icons/money.png"/></div></td>
+                    <td class="count"><div>X ::count::</div></td>
+                    <td class="act">
+                        <form method="POST" action="/storage/sellPack">
+                            <input type="hidden" name="id" value="::id::">
+                            <input type="number" class="field" name="count" value="::sellCount::">
+                            <input type="submit" class="button" value="Vendre">
+                        </form>
+                    </td>
+                </tr>
+                ::end::
+            </table>
+        </div>
+        <div id="misc" class="container::if (tab != "misc"):: hidden::end::">
+            <div class="help">
+                Prochainement disponible
+            </div>
+        </div>
+        <div id="cards" class="container::if (tab != "cards"):: hidden::end::">
+            <div class="creditCard">
+                <form method="POST" action="/useCard">
+                    <label for="number">Numero de carte bancaire volee:</label>
+                    <input type="text" class="field" name="number">
+                    
+                    <div class="offButton button">Utiliser</div>
+                    <!--
+                    TODO: Implement selling credit cards.
+                    <input type="submit" class="button" value="Utiliser">
+                    -->
+                </form>
+
+            </div>
+            <div class="help">
+                <p>En mission. soyez attentif: vous pouvez recuperer des informations bancaires dans les courries et documents de vos cibles.</p>
+                <p>Entrez ci-dessus les numeros de cartes bancaires volees pour recuperer des <img src="/img/icons/money.png"/>.</p>
+            </div>
+        </div>
+
+    </div>
+</div>

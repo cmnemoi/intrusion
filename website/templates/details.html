@@ -1,0 +1,58 @@
+<div class="missionDetails">
+    <div class="side">
+        <img src="/img/design/mission_::difficulty::.png"/>
+        <a class="button" href="/missions">Retour</a>
+    </div>
+    <div class="window details">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>intrusion.prg -- connect=::missionId::</span>
+        </div>
+
+        <div class="container">
+            <dl>
+                <dt>Objectif</dt>
+                <dd>::short::</dd>
+                <dt>Niveau</dt>
+                <p>::level::</p>
+                <dt>Date limite de validite</dt>
+                <p>::date::</p>
+                <dt>Detail de l'offre</dt>
+                <p>::desc::</p>
+                <dt>Prime</dt>
+                <p>::prime:: <img src="/img/icons/money.png" alt=""/></p>
+            </dl>
+            <a class="button" href="/missions/::missionId::/start">Debloquer cette mission</a>
+
+        </div>
+        
+        <div class="virusList">
+        <div class="wtitle">
+            <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
+            <span>Decks utilise(s)</span>
+        </div>
+
+        <div class="container ">
+
+            <div class="chipset">
+                <img src="/img/icons/chip.png"/> Chipset ::chipsetName::
+                <form class="::selectChipset::">
+                    <label for="chipset">Choisir:</label>
+                    <select id="chipset" name="chipset">
+                        ::foreach availableChipsets::
+                        <option value="::id::">::name::</option>
+                        ::end::
+                    </select>
+
+                </form>
+            </div>
+            <ul class="virusList">
+                ::foreach viruses::
+                <li><img src="/img/dockicons/::id::.png"/></li>
+                ::end::
+            </ul>
+            <a class="button" href="/decks">Modification de Deck/Chipset</a>
+        </div>
+        </div>
+    </div>
+</div>

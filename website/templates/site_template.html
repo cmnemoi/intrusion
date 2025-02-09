@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" xml:lang="fr" lang="fr"/>
+        <title>Intrusion   - Jeu de simulation de hacker... Oubliez toutes les règles, c'est VOUS qui avez le contrôle. </title>
+        <meta name="description" content="
+        Plongez dans la scène underground la plus fermée du réseau informatique international. Fouillez librement les fichiers d'autrui, vendez vos fichiers illégaux sur le marché, équipez-vous grâce à un large choix de virus et devenez le hacker le plus détesté par les autorités !
+        "/>
+
+        <meta name="language" content="fr"/>
+        <link rel="stylesheet" type="text/css" href="/design.css"/>
+        <link rel="stylesheet" type="text/css" href="/style.css"/>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.10/browser/pixi.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@pixi/sound@4.4.1/dist/pixi-sound.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pixi-filters@3.2.2/dist/pixi-filters.min.js"></script>
+        <script type="text/javascript" src="/website.js?v=5"></script>
+
+    </head>
+    <body class="mx_twinoid">
+    <div class="mxtophead" id="mxtop">
+        <div class="mxtopmenu">
+            <div class="mxtopmenucontent">
+                
+            </div>
+        </div>
+        <div class="mxhead">
+            
+            <a href="/" class="logo"><img src="https://web.archive.org/web/20130323020322im_/http://data.muxxu.com/img/pixel.gif" alt=""/></a>
+        
+            <div class="mxmainmenu">
+
+                <div id="glevel">
+                    <span>Niveau ::level::</span>
+
+                </div>
+    
+    
+                <div id="money">
+                        <span class="gameMoney">
+                            ::money::
+                            <img src="/img/icons/money.png"/>
+                        </span>
+                </div>
+                <a name="menu" class="anchor"></a>
+
+                <a href="/missions"><img src="/img/icons/disk.png" alt=""/> Missions</a>
+                <a class="locked"><img src="/img/icons/help.png" alt=""/> Challenge</a>
+                <a href="/decks"><img src="/img/icons/deck.png" alt=""/> Decks</a>
+                <a href="/store"><img src="/img/icons/uc.png" alt=""/> Hackstore</a>
+                <a href="/storage"><img src="/img/icons/storage.png" alt=""/> Disque Dur</a>
+                <a class="locked"><img src="/img/icons/help.png" alt=""/> Aide</a>
+                <a class="locked"><img src="/img/icons/forum.png" alt=""/> Forum</a>
+                
+
+            </div>
+
+        
+
+            <div class="mxtopmaincontent">
+                <div class="mxbottommaincontent">
+                    <div class="mxbordermaincontent">
+                        <div class="mxcontent" id="mxcontent">
+::content::
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mxbottom">
+            <a href="https://web.archive.org/web/20130323020322/http://muxxu.com/go/cgu" target="_blank">Règlement</a>
+            · <a href="https://web.archive.org/web/20130323020322/http://muxxu.com/go/support" target="_blank">Support</a>
+            · <a href="https://web.archive.org/web/20130323020322/http://muxxu.com/user/lostPassword">Oubli de code secret</a>
+            · &copy; 2011 <a href="https://web.archive.org/web/20130323020322/http://muxxu.com/go/mt" target="_blank"><img src="https://web.archive.org/web/20130323020322im_/http://data.muxxu.com/img/img/design/basic/logo_mt.gif" alt="Motion Twin" title=""/></a>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">document.body.className += ' mx_twinoid';</script>
+
+
+    <div id="tid_bar_down">
+
+<!-- -------------------- FOOTER ------------------------- -->
+    <style type="text/css">
+        #tid_bar_down {
+            font-size		: 9pt;
+        }
+        #tid_bar_down th {
+            text-align		: left;
+        }
+    </style>
+
+    <table style="margin:auto">
+    <tr>
+        <th>
+            <a href="https://web.archive.org/web/20130323020322/http://twinoid.com/" target="_blank" class="tid_tidLogo tid_external"><img src="https://web.archive.org/web/20130323020322im_/http://twinoid.com/img/img/design/logo_small.png" alt="Twinoid" title="Twinoid"/></a>
+            
+                Twinoid, A consommer de préférence avant [voir sur le couvercle]
+            
+        </th>
+        <th class="tid_moreGames">Il m'en faut plus...</th>
+        <th>Au secours&nbsp;!</th>
+    </tr>
+    <tr>
+        <td class="tid_large">
+            <ul>
+                <li class="tid_desc">
+                    
+                        <p>Twinoid vous permet de disposer d'un compte unique pour vous connecter à l'ensemble des jeux Motion-Twin (Muxxu, Hordes, DinoRPG, Kadokado, Naturalchimie, etc...)</p>
+                    
+                </li>
+                <li>
+                    <a href="https://web.archive.org/web/20130323020322/http://www.motion-twin.com/" target="_blank" class="tid_mtlogo tid_external"><img src="https://web.archive.org/web/20130323020322im_/http://twinoid.com/img/mtlogo.gif" alt="Motion Twin" title="Motion Twin"/></a>
+                    &copy; 2001-3011 (jusqu'à la fin des temps)
+                </li>
+            </ul>
+        </td>
+        <td class="tid_moreGames">
+            <ul>
+                <li><a href="https://web.archive.org/web/20130323020322/http://hotel.muxxu.com/" target="_blank" class="tid_external">CroqueMotel </a></li><li><a href="https://web.archive.org/web/20130323020322/http://intrusion.muxxu.com/" target="_blank" class="tid_external">Intrusion</a></li><li><a href="https://web.archive.org/web/20130323020322/http://www.dinorpg.com/" target="_blank" class="tid_external">DinoRPG</a></li><li><a href="https://web.archive.org/web/20130323020322/http://majority.muxxu.com/" target="_blank" class="tid_external">Majority</a></li><li><a href="https://web.archive.org/web/20130323020322/http://quiz.muxxu.com/" target="_blank" class="tid_external">Studio Quiz</a></li>
+                <li><a href="https://web.archive.org/web/20130323020322/http://twinoid.com/fr/jeux" target="_blank" class="tid_external">Tous les jeux...</a></li>
+                <li class="tid_separator"></li>
+                
+                
+            </ul>
+        </td>
+        <td>
+            <ul>
+                
+                <li><a href="https://web.archive.org/web/20130323020322/http://twinoid.com/support/twinoid" target="_blank" class="tid_external">Support technique</a></li>
+                <li><a href="https://web.archive.org/web/20130323020322/http://twinoid.com/support/cgu" target="_blank" class="tid_external">Règlement</a></li>
+                
+                <li><a href="#" onclick="return _tid.askForgetPass()">Oubli de mot de passe</a></li>
+                <li class="tid_server" title="Heure et nom du serveur">Il est <strong>03:02</strong> sur <strong>pop5</strong></li>
+                <li class="tid_tool"><a href="https://web.archive.org/web/20130323020322/http://haxe.org/" target="_blank"><img src="https://web.archive.org/web/20130323020322im_/http://twinoid.com/img/img/design/bar/haxe.png"/></a></li>
+            </ul>
+        </td>
+    </tr>
+    </table>
+
+    <!--
+    <script type="text/javascript">
+        var tips = $('#tid_bar .tid_barTip');
+        tips.each(function() {
+            var e = $('<span class="tid_barTipBox" style="display:none">?</span>');
+            var t = $(this).attr('title');
+            $(this).removeAttr('title');
+            e.html(t);
+            $(this).prepend(e);
+        });
+        tips.mouseout(function() {
+            $(this).find('.tid_barTipBox').hide();
+        })
+        tips.mouseover(function() {
+            $(this).find(".tid_barTipBox").fadeIn(250);
+        })
+    </script>
+
+    </div><script type="text/javascript">__tid = {lang:'fr',chk:'e478ae8600d5be76bae65ee279425298',ver:'171',infos:'n'};</script><script type="text/javascript" src="https://web.archive.org/web/20130323020322js_/http://data.twinoid.com/js/171/boot.js"></script><form action="/web/20130323020322/http://intrusion.muxxu.com/user/login" style="display:none"><input name="login"/><input name="pass" type="password"/></form>
+
+
+    <script type="text/javascript">
+        _.initFrame(true,null)
+    </script>
+-->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+    function setFocusToTextBox(){
+        document.getElementById("main").focus();
+    }
+    </script>
+<script type="text/javascript">
+    var WebFontConfig = {
+        custom: {
+            families: ["3", "6", "13", "34", "38", "97", "134", "194", "197", "202", "213"],
+            urls: ['/fonts.css']
+        },
+    };
+    WebFont.load(WebFontConfig);
+</script>
+</body>
+</html>
