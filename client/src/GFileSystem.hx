@@ -240,7 +240,7 @@ class GFileSystem {
 		// antivirus
 		initRand();
 		term.avman.generate(rseed,this);
-		term.avman.scan(this);
+		//term.avman.scan(this);
 
 //		applyNameUnicity();
 

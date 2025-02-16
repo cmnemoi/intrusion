@@ -24,14 +24,19 @@ class AntivirMan {
 		term = t;
 		mcList = new Array();
 		endTurn = new List();
+		resetFast();
 //		scanLevel = 0;
 	}
 
-	public function scan(fs:GFileSystem) {
+	function resetFast() {
 		fast = new Hash();
 		for (v in AntivirusXml.ALL.keys()) {
 			fast.set(v, new List());
 		}
+	}
+
+	public function scan(fs:GFileSystem) {
+		resetFast();
 		for ( f in fs.rawTree )
 			if ( f.av!=null )
 				register(f);
