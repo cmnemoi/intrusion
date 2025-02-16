@@ -368,9 +368,8 @@ class InternalMovieClip extends Container {
 	}
 
     public function attachMovieImage(identifier:String, image:String, newName:String = "smc", depth:Int = 0): MovieClip {
-        var a = this.builder.buildMovieClip(identifier);
+        var a = this.builder.buildMovieClip(identifier, newName);
         addChild(a);
-		a._name = newName;
 		a._zIndex = depth;
 		a.zsort();
         return a;

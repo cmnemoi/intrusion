@@ -76,7 +76,7 @@ class MovieClipBuilder {
       return tags;
     }
 
-    public function buildMovieClip(identifier: String): MovieClip {
+    public function buildMovieClip(identifier: String, name: String): MovieClip {
       var mc = new MovieClip(this);
       var id = assetTags.get(identifier) ?? identifier;
       var spriteTag = getSpriteTag(id);
@@ -101,6 +101,7 @@ class MovieClipBuilder {
             frameId++;
           }
         }
+        mc._name = name;
         mc.setSprites(sprites);
         mc.showFrame(true);
         return mc;
@@ -124,19 +125,19 @@ class MovieClipBuilder {
           }
 
             var t = getTag(tag.att.characterId);
-            var spriteId;
+            var objectId = getObjectId(t);
+            var name = if (tag.has.name) tag.att.name else getSpriteName(objectId) ?? objectId;
+
             var sprite: DisplayObject = switch (t.att.type) {
               case "DefineSpriteTag":
-                var sprite = buildMovieClip(t.att.spriteId);
+                var sprite = buildMovieClip(t.att.spriteId, name);
                 // Get bounds from child?
-                spriteId = t.att.spriteId;
                 sprite;
               case "DefineEditTextTag" | "DefineTextTag":
                 var bounds = getBounds(if (t.att.type == "DefineEditTextTag") t.node.bounds else t.node.textBounds);
                 var text: Text = buildTextField(t, bounds.width, bounds.height);
                 transform.x = transform.x + bounds.x;
                 transform.y = transform.y + bounds.y;
-                spriteId = t.att.characterID;
                 text;
               case "DefineShapeTag" | "DefineShape2Tag" | "DefineShape3Tag" | "DefineShape4Tag":
                 var baseTexture = textureCache.getTexture(this.assetRoot + 'shapes_svg/${t.att.shapeId}.svg');
@@ -146,15 +147,11 @@ class MovieClipBuilder {
                 var sprite = new Sprite(texture);
                 transform.x = bounds.x + transform.x;
                 transform.y = bounds.y + transform.y;
-                spriteId = t.att.shapeId;
                 sprite;
               case other:
                 throw "Unsupported tag definition: " + other;
             }
-            var name = if (tag.has.name) tag.att.name else getSpriteName(spriteId);
-            if (name == null) {
-              name = spriteId;
-            }
+
             applyColor(tag, sprite);   
             applyFilters(tag, sprite);
             sprites.set(name, sprite);
@@ -298,6 +295,19 @@ class MovieClipBuilder {
         if (s.value == id) return s.key;
       }
       return null;
+    }
+
+    private function getObjectId(tag: haxe.xml.Access): String {
+      switch (tag.att.type) {
+        case "DefineSpriteTag":
+          return tag.att.spriteId;
+        case "DefineEditTextTag" | "DefineTextTag":
+          return tag.att.characterID;
+        case "DefineShapeTag" | "DefineShape2Tag" | "DefineShape3Tag" | "DefineShape4Tag":
+          return tag.att.shapeId;
+        default:
+          throw 'Unsupported tag: ${tag.att.type}';
+      }
     }
 
     private function getTag(characterId: String): haxe.xml.Access {
