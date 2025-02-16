@@ -1,22 +1,5 @@
 import common.MovieClip;
 
-
-
-//typedef MCField = MovieClip;
-//typedef MCFile = MovieClip;
-//typedef MCNode = MovieClip;
-//typedef MCSprite = MovieClip;
-//typedef MCFieldShadow = MovieClip;
-
-/*
-class MCField extends InternalMovieClip {
-	public var field(get, never): Text;
-	public function get_field(): Text {
-		return cast super.get("field");
-	}
-}
-*/
-
 @:forward
 abstract MCField(MovieClip) from MovieClip to MovieClip {
 	public var field(get, never): Text;
@@ -51,6 +34,16 @@ abstract MCField2(MCField) from MovieClip to MovieClip {
 	}
 }
 
+@:forward
+abstract MCPasswordInput(MCField) from MovieClip to MovieClip {
+	public var input(get, never): Text;
+	public function new(mc: MovieClip) {
+		this = mc;
+	}
+	public function get_input(): Text {
+		return cast this.get("input");
+	}
+}
 
 @:forward
 abstract MCFile(MCField) from MovieClip to MovieClip {

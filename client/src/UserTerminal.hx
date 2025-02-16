@@ -101,7 +101,7 @@ class UserTerminal {
 	var logHistory		: Array<HistoryLine>;
 	//var logBmp			: Bmp;
 	var logMC			: MovieClip;
-	var pwin			: MCField2;
+	var pwin			: MCPasswordInput;
 	var cmdLine			: MCField;
 	var ffield			: Text;
 	var forcedCaret		: Int;		// bug avec le focus et l'utilisation de la fl�che du haut...
@@ -2050,14 +2050,14 @@ class UserTerminal {
 		pwin.field.text = Lang.fmt.AskPass({_f:passFile.name});
 		pwin._x = Std.int(Data.WID*0.5 - pwin._width*0.5);
 		pwin._y = Std.int(Data.HEI*0.5 - pwin._height*0.5);
-		pwin.field2.text = "";
+		pwin.input.text = "";
 		var me = this;
-		pwin.field2.onChanged = function(tf) {
+		pwin.input.onChanged = function(tf) {
 			me.startAnim( A_Blink, cast tf ).spd*=1.5;
 		}
 		startAnim(A_Text, pwin, pwin.field.text);
 		startAnim(A_BubbleIn, pwin);
-		setFocus(cast pwin.field2);
+		setFocus(pwin.input);
 		playSound("bleep_07");
 	}
 
@@ -2569,7 +2569,7 @@ class UserTerminal {
 				if ( popMC!=null )
 					detachPop();
 				else if ( pwin!=null )
-					validatePass(pwin.field2.text,passFile);
+					validatePass(pwin.input.text,passFile);
 				else if ( fl_leet && fs!=null ) {
 					var cmd = cmdLine.field.text;
 					try {
@@ -2642,6 +2642,16 @@ class UserTerminal {
 //			if ( c>=48 && c<=57 && cmdLine==null )
 //				dock.onKeyShortcut(c-48);
 		}
+
+        if (pwin!= null) {
+            if ((c == Key.BACKSPACE || c == Key.DELETE)) {
+                if (pwin.input.text.length > 0)
+                    pwin.input.text = pwin.input.text.substr(0, pwin.input.text.length - 1);
+            } else if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >=97 && c <= 122)) {
+                var char = String.fromCharCode(c).toLowerCase();
+                pwin.input.text =  pwin.input.text + char;
+            }
+        }
 	}
 
 

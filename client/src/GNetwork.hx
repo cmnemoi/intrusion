@@ -851,7 +851,7 @@ class GNetwork {
 		while (free==null) {
 			free = x;
 			for (y in 0...wid)
-				if ( map[x][y]!=null )
+				if ( x < wid && map[x][y]!=null )
 					free = null;
 			x++;
 		}

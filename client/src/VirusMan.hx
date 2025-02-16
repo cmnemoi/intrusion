@@ -343,7 +343,7 @@ class VirusMan {
 		if ( term.avman.systemContains(AntivirusXml.get.couveuse) )
 			throw Lang.get.Couveuse;
 
-		if ( f.hasEffect(E_Encoded) || f.hasEffect(E_Masked) )
+		if ( f?.hasEffect(E_Encoded) || f?.hasEffect(E_Masked) )
 			throw Lang.get.Crypted;
 
 		var len = 2.0;

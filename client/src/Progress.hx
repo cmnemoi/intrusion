@@ -99,7 +99,7 @@ class Progress {
 	}
 
 	private static function destroy(b:Bar) {
-		b.mc.removeMovieClip();
+		b.mc?.removeMovieClip();
 	}
 
 	public function clear() {
