@@ -1,3 +1,5 @@
+import model.Viruses;
+
 import haxe.crypto.Md5;
 import js.node.Fs;
 import jsasync.IJSAsync;
@@ -50,11 +52,12 @@ class App implements IJSAsync {
 	}
 	
 	@:jsasync public static function renderContent(req:ExpressRequest, res:ExpressResponse, content: String) {
-		var level = MissionGen.getGameLevel(req.locals.player.xp);
+		var player: PlayerInfo = req.locals.player;
 		res.end(getTemplate('site_template.html').execute({
 			content: content,
-			money: req.locals.player.money,
-			level: level
+			money: player.money,
+			level: player.level(),
+			virusData: if (StringTools.contains(content, "tooltipOnEnter")) Viruses.jSData(player) else "",
 		}));
 	}
 

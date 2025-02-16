@@ -68,6 +68,19 @@
             </div>
         </div>
 
+        <div id="tooltip" style="display: none;">
+            <div class="tiptop">
+                <div class="tipbottom">
+                    <div class="tipbg">
+                        <img class="vicon"/>
+                        <h1 class="name"></h1>
+                        <p class="desc"></p>
+                        <div class="infos"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="mxbottom">
             <a href="https://web.archive.org/web/20130323020322/http://muxxu.com/go/cgu" target="_blank">Règlement</a>
             · <a href="https://web.archive.org/web/20130323020322/http://muxxu.com/go/support" target="_blank">Support</a>
@@ -166,13 +179,12 @@
     </script>
 -->
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 <script>
     function setFocusToTextBox(){
         document.getElementById("main").focus();
     }
-    </script>
+</script>
 <script type="text/javascript">
     var WebFontConfig = {
         custom: {
@@ -181,6 +193,49 @@
         },
     };
     WebFont.load(WebFontConfig);
+</script>
+<script>
+
+    ['mousemove', 'wheel'].forEach(function(event) {
+        window.addEventListener(event, function(e) {
+            var tooltip = document.getElementById('tooltip');
+            var x = e.pageX,
+            y = e.pageY;
+            tooltip.style.position = 'absolute';
+            tooltip.style.top = (y + 20) + 'px';
+            tooltip.style.left = (x + 20) + 'px';
+        });
+    });
+
+    ::virusData::
+
+    var currentTooltip = null;
+    function tooltipOnEnter(id) {
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.display = "block";
+        currentTooltip = id;
+
+        var icon = tooltip.getElementsByClassName('vicon')[0];
+        icon.src = '/img/dockicons/xl/' + id + '.png';
+
+        var name = tooltip.getElementsByClassName('name')[0];
+        name.innerHTML = viruses[id]['name'] + ' <em>(' + id.toUpperCase() + ')</em>';
+
+        var desc = tooltip.getElementsByClassName('desc')[0];
+        desc.innerHTML = viruses[id]['desc'];
+
+        var infos = tooltip.getElementsByClassName('infos')[0];
+        var cc = viruses[id]['cc'];
+        var level = viruses[id]['level'];
+        infos.innerHTML = '<p>Cout en Ressources: ' + cc + '</p><p>Niveau: ' + level + '</p>';
+    }
+
+    function tooltipOnLeave(id) {
+        if (currentTooltip != id) return;
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.display = "none";
+
+    }
 </script>
 </body>
 </html>

@@ -64,7 +64,7 @@
                     <th></th>
                 </tr>
                 ::foreach virus_dmg::
-                <tr class="select virus">
+                <tr class="select virus" onmouseenter="tooltipOnEnter('::id::')" onmouseleave="tooltipOnLeave('::id::')">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
@@ -99,7 +99,7 @@
                     <th></th>
                 </tr>
                 ::foreach virus_debuff::
-                <tr class="select virus">
+                <tr class="select virus" onmouseenter="tooltipOnEnter('::id::')" onmouseleave="tooltipOnLeave('::id::')">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
@@ -134,7 +134,7 @@
                     <th></th>
                 </tr>
                 ::foreach virus_combo::
-                <tr class="select virus">
+                <tr class="select virus" onmouseenter="tooltipOnEnter('::id::')" onmouseleave="tooltipOnLeave('::id::')">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
@@ -169,7 +169,7 @@
                     <th></th>
                 </tr>
                 ::foreach virus_utils::
-                <tr class="select virus">
+                <tr class="select virus" onmouseenter="tooltipOnEnter('::id::')" onmouseleave="tooltipOnLeave('::id::')">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
@@ -229,16 +229,4 @@
             </table>
         </div>
     </div>
-
-
-    <!--
-    <div id="tooltip">
-        <div class="tiptop">
-        <img class="vicon" src="/img/dockicons/xl/stun2.png"/>
-            <h1>Degats moyens <em>(DMGL)</em></h1>
-            Inflige 10 degats
-        <div class="infos">Cout en Ressources: 8</div>
-    </div>
-    </div>
-    -->
 </div>

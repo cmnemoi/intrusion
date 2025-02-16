@@ -48,7 +48,7 @@
             </div>
             <ul class="virusList">
                 ::foreach viruses::
-                <li><img src="/img/dockicons/::id::.png"/></li>
+                <li onmouseenter="tooltipOnEnter('::id::')" onmouseleave="tooltipOnLeave('::id::')"><img src="/img/dockicons/::id::.png"/></li>
                 ::end::
             </ul>
             <a class="button" href="/decks">Modification de Deck/Chipset</a>
