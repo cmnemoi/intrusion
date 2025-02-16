@@ -11,10 +11,11 @@ import jsasync.IJSAsync;
 using jsasync.JSAsyncTools;
 
 class Missions implements IJSAsync {
-    static var ASSET_ROOT   : String = "/";
-    static var fsNames		: data.TextXml = null;
-	static var texts		: data.TextXml = null;
-	static var names		: data.TextXml = null;
+    static var MISSION_EXPIRATION_HOURS : Int = 24;
+    static var ASSET_ROOT               : String = "/";
+    static var fsNames                  : data.TextXml = null;
+    static var texts                    : data.TextXml = null;
+    static var names                    : data.TextXml = null;
 
 
     public static function create(lang: String) {
@@ -162,7 +163,7 @@ class Missions implements IJSAsync {
 
 
     @:jsasync private static function getAvailableMissions(player: PlayerInfo) {
-		var missions = player.availableMissions.filter((m) -> m.createdTs.getDay() == Date.now().getDay());
+		var missions = player.availableMissions.filter((m) -> Date.now().getTime() - m.createdTs.getTime() <= MISSION_EXPIRATION_HOURS * 60 * 60 * 1000);
 		if (missions.length == 0) {
 			if (player.level() < 4) {
 				var mdata = generateData(player.level(), Std.random(9999999));
