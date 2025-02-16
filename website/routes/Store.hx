@@ -49,10 +49,9 @@ class Store implements IJSAsync {
 	}
 
     private static function getContent(player: PlayerInfo, tab: String) {
-        var level = MissionGen.getGameLevel(player.xp);
-        var content = VirusXml.getCategorized(level);
+        var content = VirusXml.getCategorized(player.level());
 
-        var chipsets = [for (c in ChipsetsXml.ALL) if (ChipsetsXml.isAvailable(c, level)) toChipsetOutput(player, c)];
+        var chipsets = [for (c in ChipsetsXml.ALL) if (ChipsetsXml.isAvailable(c, player.level())) toChipsetOutput(player, c)];
         return {
             tab: tab,
             virus_dmg: getViruses(player, content, "damage"),
@@ -61,6 +60,7 @@ class Store implements IJSAsync {
             virus_utils: getViruses(player, content, "utils"),
             chipsets: chipsets,
             money: player.money,
+            playerLevel: player.level(),
         }
     }
 
@@ -76,6 +76,7 @@ class Store implements IJSAsync {
             cc: virus.cc,
             price: virus.price,
             bought: player.viruses.contains(virus.id),
+            level: virus.level,
         }
     }
 

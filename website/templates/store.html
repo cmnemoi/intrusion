@@ -66,7 +66,7 @@
                 ::foreach virus_dmg::
                 <tr class="select virus">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
-                    <td class="desc"><div>::name::</div></td>
+                    <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
                     <td class="price::if bought:: bought::end::">
                         <div class="::if (price > money)::out::end::">
@@ -101,7 +101,7 @@
                 ::foreach virus_debuff::
                 <tr class="select virus">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
-                    <td class="desc"><div>::name::</div></td>
+                    <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
                     <td class="price::if bought:: bought::end::">
                         <div class="::if (price > money)::out::end::">
@@ -136,7 +136,7 @@
                 ::foreach virus_combo::
                 <tr class="select virus">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
-                    <td class="desc"><div>::name::</div></td>
+                    <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
                     <td class="price::if bought:: bought::end::">
                         <div class="::if (price > money)::out::end::">
@@ -171,7 +171,7 @@
                 ::foreach virus_utils::
                 <tr class="select virus">
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
-                    <td class="desc"><div>::name::</div></td>
+                    <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
                     <td class="price::if bought:: bought::end::">
                         <div class="::if (price > money)::out::end::">
@@ -206,7 +206,7 @@
                 </tr>
                 ::foreach chipsets::
                 <tr class="select chipset">
-                    <td class="name"><div><img src="/img/icons/chip.png">::name::</div></td>
+                    <td class="name"><div><img src="/img/icons/chip.png">::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td><div>::desc::</div></td>
                     <td class="cc"><div>::level::</div></td>
                     <td class="price::if bought:: bought::end::">
