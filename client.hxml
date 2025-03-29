@@ -7,7 +7,6 @@
 -D client
 -D debugSound
 -cp com/
--cp ../libs-haxe
 -cp client/src/
 -cp haxe/api/
 -L hx3compat
