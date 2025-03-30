@@ -11,7 +11,7 @@ class Sound {
     }
 
     public function start(secondOffset: Float, loops: Int) {
-        if (loops != 1 && loops < 9000)  
+        if (loops != 1 && loops < 9000)
             throw "Playing sound with " + loops + " loops is not supported";
         this.sound.loop = loops > 1;
         if (!this.sound.isLoaded)
@@ -25,11 +25,11 @@ class Sound {
     }
 
     public function setVolume(value: Float) {
-        this.sound.volume = value;
+        this.sound.volume = value / 100.0;
     }
 
     public function getVolume() {
-        return this.sound.volume;
+        return this.sound.volume * 100;
     }
 
 
@@ -40,7 +40,7 @@ class Sound {
             url: url,
             preload: true,
             loaded: function(err, sound) {
-                this.sound = sound;            
+                this.sound = sound;
                 onLoad(err==null);
             }
         });
