@@ -40,6 +40,7 @@ class Missions implements IJSAsync {
 
 	@:jsasync static function missions(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
         var player: PlayerInfo = req.locals.player;
+		var tab = req.query.tab ?? "available";
 
 		var ongoing = [for (m in player.activeMissions) toMissionData(player, m)];
         var available = getAvailableMissions(player).jsawait();
@@ -49,7 +50,7 @@ class Missions implements IJSAsync {
 
 		App.renderContent(req, res, App.getTemplate('missions.html').execute(
 			{
-				tab: "available",
+				tab: tab,
 				numOngoing: ongoing.length,
 				ongoing: ongoing,
 				available: available,
