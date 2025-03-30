@@ -139,7 +139,7 @@ class Tutorial {
 
 		// ok !
 		#if debug
-			trace("Tutorial.play t="+t.id+" s="+s+" current="+current.id+" currentStep="+currentStep.id);
+			trace("Tutorial.play t="+t?.id+" s="+s+" current="+current?.id+" currentStep="+currentStep?.id);
 		#end
 		currentStep = current.steps[sid];
 		for (mc in indicators)
