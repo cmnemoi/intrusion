@@ -1323,6 +1323,7 @@ class GNetwork {
 
 		if ( node.system.fl_crashed ) {
 			term.popUp(Lang.get.SystemIsCrashed);
+			Manager.stopLoading();
 			return;
 		}
 
