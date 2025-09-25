@@ -8,7 +8,7 @@ import Express;
 using jsasync.JSAsyncTools;
 
 class App implements IJSAsync {
-	static inline private var MAX_PLAYER_UID = 0x7FFFFFFF;
+	static inline private var MAX_PLAYER_UID = 0xFFFFFF;
 	static inline private var TEMPLATES_ROOT = "website/templates/";
 
 	static function main() {
@@ -73,9 +73,7 @@ class App implements IJSAsync {
 		}
 		var id = Std.parseInt(req.cookies.abuid);
 		if (id > MAX_PLAYER_UID) {
-			req.locals = {};
-			renderRegister(res);
-			return;
+			throw new Error("Player ID too high!");
 		}
 
 		req.locals = {};
@@ -92,7 +90,7 @@ class App implements IJSAsync {
 
 	@:jsasync static function registerPlayer(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var body = req.body;
-		var id = Std.parseInt("0x" + Md5.encode(body.username).substr(0, 8));
+		var id = Std.parseInt("0x" + Md5.encode(body.username).substr(0, 6));
 		if (PlayerInfo.load(id).jsawait() == null) {
 			PlayerInfo.createDefault(id, body.username).persist().jsawait();
 		}
