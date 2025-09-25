@@ -6,8 +6,6 @@ services:
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
-    depends_on:
-      - traefik
     networks:
       - traefik-proxy
 
