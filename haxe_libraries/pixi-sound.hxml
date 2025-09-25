@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/pixi-sound#2.0.5" into pixi-sound/2.0.5/haxelib
+-lib pixijs
+-cp ${HAXE_LIBCACHE}/pixi-sound/2.0.5/haxelib/src
+-D pixi-sound=2.0.5

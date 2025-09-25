@@ -1,0 +1,5 @@
+# @install: lix --silent download "haxelib:/haxe-concurrent#5.1.4" into haxe-concurrent/5.1.4/haxelib
+-cp ${HAXE_LIBCACHE}/haxe-concurrent/5.1.4/haxelib/src/
+-D haxe-concurrent=5.1.4
+--macro hx.concurrent.internal.Macros.configureNullSafety()
+--macro hx.concurrent.internal.Macros.addDefines()
