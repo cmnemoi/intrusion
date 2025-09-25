@@ -73,7 +73,7 @@ class App implements IJSAsync {
 		}
 		var id = Std.parseInt(req.cookies.abuid);
 		if (id > MAX_PLAYER_UID) {
-			throw new Error("Player ID too high!");
+			throw new haxe.Exception("Player ID too high, could not create player");
 		}
 
 		req.locals = {};
