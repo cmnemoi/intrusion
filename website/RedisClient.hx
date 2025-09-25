@@ -5,7 +5,8 @@ class RedisClient {
 
 	static private function connect() {
 		if (client == null) {
-			client = Redis.createClient("redis://localhost");
+			var redisUrl = js.Node.process.env.get("REDIS_URL") ?? "redis://localhost";
+			client = Redis.createClient(redisUrl);
 		}
 	}
 
