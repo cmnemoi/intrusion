@@ -1,0 +1,35 @@
+name: intrusion
+
+services:
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    depends_on:
+      - traefik
+
+  website:
+    build: .
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.website.rule=Host(`intrusion.localhost`)
+      - traefik.http.services.website.loadbalancer.server.port=8001
+
+  traefik:
+    image: traefik:3.5
+    container_name: traefik
+    command:
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+volumes:
+  redis-data:

@@ -1,6 +1,15 @@
 
+# Installation
 
-## Build
+## With Docker
+
+If you have [Docker Compose](https://docs.docker.com/compose/install/) installed, you can run the application with `docker compose up -d`.
+
+The website will be available at http://intrusion.localhost/.
+
+## Without Docker
+
+### Build
 Build the client:
 ```
 haxelib install client.hxml
@@ -13,7 +22,7 @@ haxe website.hxml
 cd website-bin; npm install;cd ..
 ```
 
-## Launch
+### Launch
 You'll need to have a Redis instance running:
 ```
 sudo service redis-server restart
@@ -23,7 +32,7 @@ Start the node app
 node website-bin/website.js
 ```
 
-## TODO
+# TODO
 
 - Bitmaps not drawn properly
 - Key listeners disabled
