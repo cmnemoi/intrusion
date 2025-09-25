@@ -2,7 +2,7 @@ name: intrusion
 
 services:
   redis:
-    image: redis:alpine
+    image: redis:8.2-alpine
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
