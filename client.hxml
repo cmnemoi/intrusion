@@ -1,6 +1,6 @@
 -js www/client.js
 -main Boot
--lib pixijs
+-lib pixijs:5.1.2
 -lib pixi-sound
 -lib haxe-concurrent
 -lib jsasync
