@@ -6,3 +6,6 @@ node = "24"
 [env]
 HAXE_STD_PATH = "/Users/cmnemoi/.local/share/mise/installs/haxe/4.3.7/std"
 NEKOPATH = "/Users/cmnemoi/.local/share/mise/installs/neko/2-4-1"
+
+[tasks.test]
+run = "haxe test.hxml && node website-bin/tests.js"

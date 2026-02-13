@@ -2,92 +2,74 @@ package tests.commands;
 
 import commands.RenameDeck;
 import model.PlayerInfo;
+import utest.Assert;
+import utest.Test;
 
-class RenameDeckTest {
-	public static function run() {
-		testShouldRenameDeckWhenNameIsValid();
-		testShouldTrimNameBeforeRenamingDeck();
-		testShouldRenameDeckWhenNameLengthIsExactlyMax();
-		testShouldNotRenameDeckWhenNameIsEmptyAfterTrim();
-		testShouldNotRenameDeckWhenNameIsTooLong();
-		testShouldNotRenameDeckWhenDeckIndexIsOutOfBounds();
-		testShouldNotRenameDeckWhenDeckIndexIsNegative();
-		testShouldNotRenameDeckWhenRequestedNameIsNull();
+class RenameDeckTest extends Test {
+	var player:PlayerInfo;
+
+	public function setup() {
+		player = givenPlayerWithOneDeck("Deck Principal");
 	}
 
-	static function testShouldRenameDeckWhenNameIsValid() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testRenameDeckWhenNameIsValid() {
+		var hasBeenRenamed = renameDeck(0, "Aggro");
 
-		var hasBeenRenamed = whenRenamingDeck(player, 0, "Aggro");
-
-		thenRenameShouldSucceed(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Aggro");
+		Assert.isTrue(hasBeenRenamed);
+		Assert.equals("Aggro", player.decks[0].name);
 	}
 
-	static function testShouldTrimNameBeforeRenamingDeck() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testTrimNameBeforeRenamingDeck() {
+		var hasBeenRenamed = renameDeck(0, "  Combo  ");
 
-		var hasBeenRenamed = whenRenamingDeck(player, 0, "  Combo  ");
-
-		thenRenameShouldSucceed(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Combo");
+		Assert.isTrue(hasBeenRenamed);
+		Assert.equals("Combo", player.decks[0].name);
 	}
 
-	static function testShouldRenameDeckWhenNameLengthIsExactlyMax() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testRenameDeckWhenNameLengthIsExactlyMax() {
+		var maximumLengthName = nameWithLength(32);
+		var hasBeenRenamed = renameDeck(0, maximumLengthName);
 
-		var hasBeenRenamed = whenRenamingDeck(player, 0, givenNameWithLength(32));
-
-		thenRenameShouldSucceed(hasBeenRenamed);
-		thenDeckNameShouldBe(player, givenNameWithLength(32));
+		Assert.isTrue(hasBeenRenamed);
+		Assert.equals(maximumLengthName, player.decks[0].name);
 	}
 
-	static function testShouldNotRenameDeckWhenNameIsEmptyAfterTrim() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testNotRenameDeckWhenNameIsEmptyAfterTrim() {
+		var hasBeenRenamed = renameDeck(0, "   ");
 
-		var hasBeenRenamed = whenRenamingDeck(player, 0, "   ");
-
-		thenRenameShouldFail(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Deck Principal");
+		Assert.isFalse(hasBeenRenamed);
+		Assert.equals("Deck Principal", player.decks[0].name);
 	}
 
-	static function testShouldNotRenameDeckWhenNameIsTooLong() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testNotRenameDeckWhenNameIsTooLong() {
+		var hasBeenRenamed = renameDeck(0, nameWithLength(33));
 
-		var hasBeenRenamed = whenRenamingDeck(player, 0, givenNameWithLength(33));
-
-		thenRenameShouldFail(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Deck Principal");
+		Assert.isFalse(hasBeenRenamed);
+		Assert.equals("Deck Principal", player.decks[0].name);
 	}
 
-	static function testShouldNotRenameDeckWhenDeckIndexIsOutOfBounds() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testNotRenameDeckWhenDeckIndexIsOutOfBounds() {
+		var hasBeenRenamed = renameDeck(1, "Control");
 
-		var hasBeenRenamed = whenRenamingDeck(player, 1, "Control");
-
-		thenRenameShouldFail(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Deck Principal");
+		Assert.isFalse(hasBeenRenamed);
+		Assert.equals("Deck Principal", player.decks[0].name);
 	}
 
-	static function testShouldNotRenameDeckWhenDeckIndexIsNegative() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testNotRenameDeckWhenDeckIndexIsNegative() {
+		var hasBeenRenamed = renameDeck(-1, "Control");
 
-		var hasBeenRenamed = whenRenamingDeck(player, -1, "Control");
-
-		thenRenameShouldFail(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Deck Principal");
+		Assert.isFalse(hasBeenRenamed);
+		Assert.equals("Deck Principal", player.decks[0].name);
 	}
 
-	static function testShouldNotRenameDeckWhenRequestedNameIsNull() {
-		var player = givenPlayerWithOneDeck("Deck Principal");
+	function testNotRenameDeckWhenRequestedNameIsNull() {
+		var hasBeenRenamed = renameDeck(0, null);
 
-		var hasBeenRenamed = whenRenamingDeck(player, 0, null);
-
-		thenRenameShouldFail(hasBeenRenamed);
-		thenDeckNameShouldBe(player, "Deck Principal");
+		Assert.isFalse(hasBeenRenamed);
+		Assert.equals("Deck Principal", player.decks[0].name);
 	}
 
-	static function givenPlayerWithOneDeck(deckName: String): PlayerInfo {
+	function givenPlayerWithOneDeck(deckName:String):PlayerInfo {
 		return {
 			id: "1",
 			username: "tester",
@@ -105,26 +87,11 @@ class RenameDeckTest {
 		};
 	}
 
-	static function givenNameWithLength(length: Int): String {
+	function nameWithLength(length:Int):String {
 		return [for (_ in 0...length) "A"].join("");
 	}
 
-	static function whenRenamingDeck(player: PlayerInfo, deckIndex: Int, requestedName: String): Bool {
+	function renameDeck(deckIndex:Int, requestedName:String):Bool {
 		return RenameDeck.execute(player, deckIndex, requestedName);
-	}
-
-	static function thenRenameShouldSucceed(hasBeenRenamed: Bool) {
-		if (!hasBeenRenamed)
-			throw "Expected rename to succeed";
-	}
-
-	static function thenRenameShouldFail(hasBeenRenamed: Bool) {
-		if (hasBeenRenamed)
-			throw "Expected rename to fail";
-	}
-
-	static function thenDeckNameShouldBe(player: PlayerInfo, expectedName: String) {
-		if (player.decks[0].name != expectedName)
-			throw 'Expected deck name "$expectedName" but got "${player.decks[0].name}"';
 	}
 }

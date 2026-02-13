@@ -1,8 +1,9 @@
--js website-bin/website-tests.js
+-js website-bin/tests.js
 -main tests.TestMain
 -lib hxnodejs
 -lib jsasync
 -lib json2object
+-lib utest
 -cp website
 -cp website/externs
 -cp com

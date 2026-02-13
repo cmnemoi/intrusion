@@ -1,5 +1,8 @@
 {
     "name": "intrusion",
+    "license": "GPL",
+    "releasenote": "https://github.com/cmnemoi/intrusion/releases",
+    "contributors": ["cmenmoi", "johanLsp"],
     "version": "1.0.0",
     "description": "Intrusion game",
     "dependencies": {

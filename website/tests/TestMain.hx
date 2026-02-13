@@ -1,10 +1,10 @@
 package tests;
 
 import tests.commands.RenameDeckTest;
+import utest.UTest;
 
 class TestMain {
 	public static function main() {
-		RenameDeckTest.run();
-		trace("All tests passed");
+		UTest.run([new RenameDeckTest()]);
 	}
 }
