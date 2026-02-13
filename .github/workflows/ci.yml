@@ -27,4 +27,4 @@ jobs:
           haxelib install utest
       
       - name: Run tests
-        run: haxe test.hxml
+        run: haxe test.hxml && node website-bin/tests.js
