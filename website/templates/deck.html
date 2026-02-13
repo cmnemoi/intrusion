@@ -22,9 +22,11 @@
     </div>
 
     <ul class="tabs">
-        <li class="active">
-            <a href="test"> Deck Principal</a>
+        ::foreach decks::
+        <li class="::if(index == 0)::active::end::">
+            <a href="test"> ::name::</a>
         </li>
+        ::end::
         <!--
         TODO: allow buying additional decks
         <li>
@@ -68,10 +70,11 @@
                 ::end::
                 <a class="offButton">Definir comme favori</a>
             </div>
-            <form>
-                <input class="field" type="text" id="deckName" name="name"  value="::name::">
-                <input class="button" type="submit" value="Renommer">
-            </form>
+			<form method="POST" action="/decks/rename">
+				<input type="hidden" name="deckIndex" value="::index::">
+				<input class="field" type="text" id="deckName" name="name"  value="::name::">
+				<input class="button" type="submit" value="Renommer">
+			</form>
         </div>
     </div>
     ::end::

@@ -1,0 +1,65 @@
+name: intrusion-dev
+
+services:
+  traefik:
+    image: traefik:3.5
+    container_name: traefik
+    command:
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  redis:
+    image: redis:8.2-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+
+  website:
+    build: .
+    depends_on:
+      - traefik
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.website.rule=Host(`intrusion.localhost`)
+      - traefik.http.services.website.loadbalancer.server.port=8001
+    command: sh -lc "haxe client.hxml && haxe website.hxml && node website-bin/website.js"
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./website
+          target: /app/website
+          ignore:
+            - tests/
+        - action: sync+restart
+          path: ./client
+          target: /app/client
+        - action: sync+restart
+          path: ./com
+          target: /app/com
+        - action: sync+restart
+          path: ./xml
+          target: /app/xml
+        - action: sync+restart
+          path: ./website.hxml
+          target: /app/website.hxml
+        - action: sync+restart
+          path: ./client.hxml
+          target: /app/client.hxml
+        - action: rebuild
+          path: ./Dockerfile
+        - action: rebuild
+          path: ./haxelib.json
+        - action: rebuild
+          path: ./website-bin/package.json
+        - action: rebuild
+          path: ./website-bin/package-lock.json
+
+volumes:
+  redis-data:

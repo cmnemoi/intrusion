@@ -1,6 +1,7 @@
 package routes;
 
 import Express;
+import commands.RenameDeck;
 import haxe.Json;
 import jsasync.IJSAsync;
 
@@ -28,6 +29,7 @@ class Decks implements IJSAsync {
         var router = new ExpressRouter();
         router.get("/", decks);
 		router.post("/", saveDeck);
+		router.post("/rename", renameDeck);
 		router.post("/setActiveChipset", setActiveChipset);
         return router;
     }
@@ -50,18 +52,22 @@ class Decks implements IJSAsync {
 		}]);
 
 		var rank = 1;
-		var decks = player.decks.map(d -> {
-			slots: [for (i in 1...(d.capacity+1)){
-				rank: i,
+		var decks = [for (i in 0...player.decks.length) {
+			var d = player.decks[i];
+			{
+			slots: [for (slotIndex in 1...(d.capacity+1)){
+				rank: slotIndex,
 			}],
 			viruses: d.content.map(v -> {
 				id: v,
 				rank: rank++,
 			}),
+			index: i,
 			name: d.name,
 			expandCost: deckExpandCost(d.capacity),
 			money: player.money,
-		});
+			}
+		}];
 
 		var usedVirus = decks[0].viruses.map(v -> v.id);
 
@@ -93,9 +99,20 @@ class Decks implements IJSAsync {
 		
 		var decks: Array<{name: String, content: Array<String>}> = cast Json.parse(req.body.decks);
 		// TODO: update all decks.
-		player.decks[0].name = decks[0].name;
 		player.decks[0].content = decks[0].content;
 		player.persist();
+		res.redirect('/decks');
+	}
+
+	@:jsasync static function renameDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
+		var player: PlayerInfo = req.locals.player;
+		var deckIndex = req.body.deckIndex == null ? 0 : Std.parseInt(req.body.deckIndex);
+		if (deckIndex == null)
+			deckIndex = 0;
+
+		if (RenameDeck.execute(player, deckIndex, req.body.name)) {
+			player.persist();
+		}
 		res.redirect('/decks');
 	}
 	

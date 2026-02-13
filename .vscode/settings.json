@@ -1,0 +1,29 @@
+{
+    "haxe.executable": "/Users/cmnemoi/.local/share/mise/installs/haxe/4.3.7/haxe",
+    "haxelib.executable": "/Users/cmnemoi/.local/share/mise/installs/haxe/4.3.7/haxelib",
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "root"
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "watch",
+                    "commands": ["docker compose -f compose.dev.yaml up --watch"]
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "opencode",
+                    "commands": ["opencode"]
+                }
+            ]
+        }
+    ]
+}

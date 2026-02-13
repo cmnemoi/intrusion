@@ -1,0 +1,8 @@
+-js website-bin/website-tests.js
+-main tests.TestMain
+-lib hxnodejs
+-lib jsasync
+-lib json2object
+-cp website
+-cp website/externs
+-cp com
