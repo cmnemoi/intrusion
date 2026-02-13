@@ -2,3 +2,5 @@ www/client.js
 website-bin/website.js
 website-bin/node_modules
 website-bin/package-lock.json
+
+.env
