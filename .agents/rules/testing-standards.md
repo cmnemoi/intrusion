@@ -24,7 +24,7 @@ Test Quality:
 - Test behaviors not implementation details
 - Test both success and failure paths
 - Keep tests independent and deterministic
-- Test edge cases and error conditions
+- Test edge cases and error conditions using the ZOMBIES (Zero, One, Many, Boundaries, Interfaces, Exceptions, Simple/special cases) method
 
 Testing strategy:
 - Unit tests should use test doubles and focus on business logic
