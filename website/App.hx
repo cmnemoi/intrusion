@@ -2,10 +2,13 @@ import model.Viruses;
 
 import haxe.crypto.Md5;
 import js.node.Fs;
+import js.lib.Promise;
 import jsasync.IJSAsync;
 import Express;
 
 using jsasync.JSAsyncTools;
+
+private typedef AsyncExpressCallback = ExpressRequest->ExpressResponse->(?Dynamic->Void)->Promise<Dynamic>;
 
 class App implements IJSAsync {
 	static inline private var MAX_PLAYER_UID = 0xFFFFFF;
@@ -27,16 +30,46 @@ class App implements IJSAsync {
 		app.use(Express.staticServe('./xml/'));
 		
 		app.get("/", (req, res, next) -> res.redirect("/missions"));
-		app.post("/register", registerPlayer);
-		app.use('/missions', loadPlayer, routes.Missions.create("fr"));
-		app.use('/decks', loadPlayer, routes.Decks.create());
-		app.use('/store', loadPlayer, routes.Store.create());
-		app.use('/storage', loadPlayer, routes.Storage.create());
+		app.post("/register", withAsyncErrorHandler(registerPlayer));
+		app.use('/missions', withAsyncErrorHandler(loadPlayer), routes.Missions.create("fr"));
+		app.use('/decks', withAsyncErrorHandler(loadPlayer), routes.Decks.create());
+		app.use('/store', withAsyncErrorHandler(loadPlayer), routes.Store.create());
+		app.use('/storage', withAsyncErrorHandler(loadPlayer), routes.Storage.create());
+		app.use(handleUnhandledError);
 
 
 		app.listen(port, function() {
 			trace('Listening on port $port');
 		});
+	}
+
+	public static function withAsyncErrorHandler(callback:AsyncExpressCallback):ExpressCB {
+		return function(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void):Void {
+			try {
+				callback(req, res, next).then(function(_):Dynamic {
+					return null;
+				}, function(error:Dynamic):Dynamic {
+					if (next != null)
+						next(error);
+					return null;
+				});
+			} catch (error:Dynamic) {
+				if (next != null)
+					next(error);
+			}
+		}
+	}
+
+	public static function handleUnhandledError(error:Dynamic, req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void):Void {
+		trace('Unhandled route error: ${Std.string(error)}');
+		if (untyped res.headersSent == true) {
+			if (next != null)
+				next(error);
+			return;
+		}
+
+		untyped res.statusCode = 500;
+		res.end("Internal Server Error");
 	}
 
 	public static function getTemplate(name: String): haxe.Template {

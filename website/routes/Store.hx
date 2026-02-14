@@ -11,8 +11,8 @@ class Store implements IJSAsync {
 
     public static function create() {
         var router = new ExpressRouter();
-		router.get("/", store);
-		router.post("/", buy);
+		router.get("/", App.withAsyncErrorHandler(store));
+		router.post("/", App.withAsyncErrorHandler(buy));
         return router;
     }
 

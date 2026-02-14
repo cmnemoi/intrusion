@@ -6,8 +6,8 @@ import jsasync.IJSAsync;
 class Storage implements IJSAsync {
     public static function create() {
         var router = new ExpressRouter();
-		router.get("/", storage);
-		router.post("/sellPack", sellPack);
+		router.get("/", App.withAsyncErrorHandler(storage));
+		router.post("/sellPack", App.withAsyncErrorHandler(sellPack));
         return router;
     }
 

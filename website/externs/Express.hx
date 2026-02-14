@@ -26,6 +26,7 @@ typedef ExpressResponse = {
 };
 
 typedef ExpressCB = ExpressRequest->ExpressResponse->(?Dynamic->Void)->Void;
+typedef ExpressErrorCB = Dynamic->ExpressRequest->ExpressResponse->(?Dynamic->Void)->Void;
 
 @:jsRequire("cookie-parser")
 extern class ExpressCookieParser {
@@ -48,6 +49,7 @@ extern class Express {
 
 	@:overload(function(cb:ExpressCookieParser):Void {})
 	@:overload(function(cb:ExpressCB):Void {})
+	@:overload(function(cb:ExpressErrorCB):Void {})
 	@:overload(function(route:String, router:ExpressRouter):Void {})
 	@:overload(function(route:String, cb:ExpressCB, router:ExpressRouter):Void {})
 	public function use(route:String, cb:Rest<ExpressCB>):Void;

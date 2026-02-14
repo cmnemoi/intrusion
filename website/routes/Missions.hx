@@ -21,10 +21,10 @@ class Missions implements IJSAsync {
     public static function create(lang: String) {
         init(lang);
         var router = new ExpressRouter();
-        router.get("/", missions);
-		router.get('/:missionId/details', details);
-        router.get("/:missionId/start", start);
-        router.post("/:missionId/end", end);
+        router.get("/", App.withAsyncErrorHandler(missions));
+		router.get('/:missionId/details', App.withAsyncErrorHandler(details));
+        router.get("/:missionId/start", App.withAsyncErrorHandler(start));
+        router.post("/:missionId/end", App.withAsyncErrorHandler(end));
         return router;
     }
 

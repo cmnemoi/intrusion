@@ -22,16 +22,16 @@ class Decks implements IJSAsync {
 
     public static function create() {
         var router = new ExpressRouter();
-        router.get("/", decks);
-		router.get("/:deckId", decks);
-		router.post("/:deckId/buy", buyDeck);
-		router.post("/buy", buyDeck);
-		router.post("/:deckId/rename", renameDeck);
-		router.post("/rename", renameDeck);
-		router.post("/:deckId/setActiveChipset", setActiveChipset);
-		router.post("/setActiveChipset", setActiveChipset);
-		router.post("/:deckId", saveDeck);
-		router.post("/", saveDeck);
+        router.get("/", App.withAsyncErrorHandler(decks));
+		router.get("/:deckId", App.withAsyncErrorHandler(decks));
+		router.post("/:deckId/buy", App.withAsyncErrorHandler(buyDeck));
+		router.post("/buy", App.withAsyncErrorHandler(buyDeck));
+		router.post("/:deckId/rename", App.withAsyncErrorHandler(renameDeck));
+		router.post("/rename", App.withAsyncErrorHandler(renameDeck));
+		router.post("/:deckId/setActiveChipset", App.withAsyncErrorHandler(setActiveChipset));
+		router.post("/setActiveChipset", App.withAsyncErrorHandler(setActiveChipset));
+		router.post("/:deckId", App.withAsyncErrorHandler(saveDeck));
+		router.post("/", App.withAsyncErrorHandler(saveDeck));
         return router;
     }
 
