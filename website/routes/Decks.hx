@@ -78,7 +78,7 @@ class Decks implements IJSAsync {
 				id: v,
 			}),
 			activeDeckExpandCost: deckExpandCost(activeDeck.capacity),
-			availableViruses: player.viruses.filter(v -> !usedVirus.contains(v)).map(v -> {
+			availableViruses: availableVirusIds(player.viruses, usedVirus).map(v -> {
 				id: v,
 			}),
 			deckCapacity: activeDeck.capacity,
@@ -158,6 +158,21 @@ class Decks implements IJSAsync {
 		return (currentSize >= 8)  ? 999999 : ADD_SLOT_COST[currentSize + 1];
 	}
 
+	public static function availableVirusIds(ownedVirusIds:Array<String>, usedVirusIds:Array<String>):Array<String> {
+		var remainingVirusUsages = countViruses(usedVirusIds);
+		var availableVirusIds = [];
+
+		for (virusId in ownedVirusIds) {
+			if (hasRemainingUsage(remainingVirusUsages, virusId)) {
+				decrementUsage(remainingVirusUsages, virusId);
+				continue;
+			}
+			availableVirusIds.push(virusId);
+		}
+
+		return availableVirusIds;
+	}
+
 	public static function requestedDeckIndexFromPath(requestedDeckId:Dynamic, deckCount:Int):Int {
 		return normalizeDeckIndex(parseDeckIndex(requestedDeckId), deckCount);
 	}
@@ -184,5 +199,23 @@ class Decks implements IJSAsync {
 			return null;
 
 		return Std.parseInt(Std.string(rawValue));
+	}
+
+	static function countViruses(virusIds:Array<String>):Map<String, Int> {
+		var virusCounts:Map<String, Int> = new Map();
+		for (virusId in virusIds) {
+			var count = virusCounts.get(virusId) ?? 0;
+			virusCounts.set(virusId, count + 1);
+		}
+		return virusCounts;
+	}
+
+	static function hasRemainingUsage(remainingVirusUsages:Map<String, Int>, virusId:String):Bool {
+		return (remainingVirusUsages.get(virusId) ?? 0) > 0;
+	}
+
+	static function decrementUsage(remainingVirusUsages:Map<String, Int>, virusId:String):Void {
+		var remainingUsage = remainingVirusUsages.get(virusId) ?? 0;
+		remainingVirusUsages.set(virusId, remainingUsage - 1);
 	}
 }

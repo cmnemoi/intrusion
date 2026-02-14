@@ -68,13 +68,13 @@
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
-                    <td class="price::if bought:: bought::end::">
+                    <td class="price">
                         <div class="::if (price > money)::out::end::">
                             <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
                         </div>
                     </td>
                     <td>
-                        ::if ((price > money) || bought)::
+                        ::if (price > money)::
                         <div class="offButton">Acheter</div>
                         ::else::
                         <form method="POST" action="/store?tab=dmg">
@@ -103,13 +103,13 @@
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
-                    <td class="price::if bought:: bought::end::">
+                    <td class="price">
                         <div class="::if (price > money)::out::end::">
                             <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
                         </div>
                     </td>
                     <td>
-                        ::if ((price > money) || bought)::
+                        ::if (price > money)::
                         <div class="offButton">Acheter</div>
                         ::else::
                         <form method="POST" action="/store?tab=debuff">
@@ -138,13 +138,13 @@
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
-                    <td class="price::if bought:: bought::end::">
+                    <td class="price">
                         <div class="::if (price > money)::out::end::">
                             <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
                         </div>
                     </td>
                     <td>
-                        ::if ((price > money) || bought)::
+                        ::if (price > money)::
                         <div class="offButton">Acheter</div>
                         ::else::
                         <form method="POST" action="/store?tab=combo">
@@ -173,13 +173,13 @@
                     <td class="icon"><img src="/img/dockicons/xl/::id::.png"><div></div></td>
                     <td class="desc"><div>::if (level == playerLevel)::<img src="/img/design/new.png"/>::end::::name::</div></td>
                     <td class="cc"><div>::cc::</div></td>
-                    <td class="price::if bought:: bought::end::">
+                    <td class="price">
                         <div class="::if (price > money)::out::end::">
                             <div class="gameMoney">::price:: <img src="/img/icons/money.png"></div>
                         </div>
                     </td>
                     <td>
-                        ::if ((price > money) || bought)::
+                        ::if (price > money)::
                         <div class="offButton">Acheter</div>
                         ::else::
                         <form method="POST" action="/store?tab=utils">

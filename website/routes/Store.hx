@@ -1,6 +1,7 @@
 package routes;
 
 import Express;
+import commands.BuyVirus;
 import haxe.Json;
 import jsasync.IJSAsync;
 
@@ -23,27 +24,25 @@ class Store implements IJSAsync {
 
     @:jsasync static function buy(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {	
 		var player: PlayerInfo = req.locals.player;
+		var hasBoughtItem = false;
 		if (req.body.virusId != null) {
-			if (player.viruses.contains(req.body.virusId)) {
-				res.redirect('/store?tab=' + req.query.tab);
-				return;
-			}
 			var virus = VirusXml.ALL.get(req.body.virusId);
-			player.money -= virus.price;
-			player.viruses.push(virus.id);
+			var virusPrice = virus == null ? null : virus.price;
+			hasBoughtItem = BuyVirus.execute(player, req.body.virusId, virusPrice) || hasBoughtItem;
 		}
 		if (req.body.chipsetId != null) {
-			if (player.chipsets.contains(req.body.chipsetId)) {
-				res.redirect('/store?tab=' + req.query.tab);
-				return;
+			if (!player.chipsets.contains(req.body.chipsetId)) {
+				var chipset = ChipsetsXml.ALL.get(req.body.chipsetId);
+				player.money -= chipset.price;
+				player.chipsets.push(chipset.id);
+				hasBoughtItem = true;
 			}
-			var chipset = ChipsetsXml.ALL.get(req.body.chipsetId);
-			player.money -= chipset.price;
-			player.chipsets.push(chipset.id);
 		}
-		
-		player.persist();
-		req.locals.player = player;
+
+		if (hasBoughtItem) {
+			player.persist();
+			req.locals.player = player;
+		}
 		res.redirect('/store?tab=' + req.query.tab);
 		return;
 	}

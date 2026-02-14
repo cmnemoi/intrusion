@@ -36,4 +36,22 @@ class DecksRouteTest extends Test {
 	function testDeckPathUsesSegmentFormat() {
 		Assert.equals("/decks/3", Decks.deckPath(3));
 	}
+
+	function testAvailableVirusIdsWhenDeckUsesOneCopyAndPlayerOwnsTwo() {
+		var availableVirusIds = Decks.availableVirusIds(["worm", "worm", "trojan"], ["worm"]);
+
+		Assert.same(["worm", "trojan"], availableVirusIds);
+	}
+
+	function testAvailableVirusIdsWhenDeckUsesAllOwnedCopies() {
+		var availableVirusIds = Decks.availableVirusIds(["worm", "worm"], ["worm", "worm"]);
+
+		Assert.same([], availableVirusIds);
+	}
+
+	function testAvailableVirusIdsWhenDeckUsesNoCopies() {
+		var availableVirusIds = Decks.availableVirusIds(["worm", "worm"], []);
+
+		Assert.same(["worm", "worm"], availableVirusIds);
+	}
 }
