@@ -2,15 +2,15 @@
 
 Intrusion is a game with a Haxe-based website and client.
 
-Work exclusively in [TDD](.agents/rules/tdd.md).
+Work exclusively in [TDD](.agents/skills/tdd/SKILL.md).
 
 ## Standards
 Detailed rules in [`.agents/rules/`](.agents/rules/):
 - **Clean code:** [`.agents/rules/clean-code.md`](.agents/rules/clean-code.md)
 - **Naming:** [`.agents/rules/naming-conventions.md`](.agents/rules/naming-conventions.md)
 - **Testing:** [`.agents/rules/testing-standards.md`](.agents/rules/testing-standards.md), [`.agents/rules/testing-unit.md`](.agents/rules/testing-unit.md), [`.agents/rules/testing-integration.md`](.agents/rules/testing-integration.md)
-- **TDD:** [`.agents/rules/tdd.md`](.agents/rules/tdd.md)
-- **Debugging:** [`.agents/rules/debug.md`](.agents/skills/debug/SKILL.md)
+- **TDD:** [`.agents/skills/tdd/SKILL.md`](.agents/skills/tdd/SKILL.md)
+- **Debugging:** [`.agents/skills/debug/SKILL.md`](.agents/skills/debug/SKILL.md)
 
 ## Tools
 - Stack: Haxe 4.3 + Node.js + Redis.
