@@ -1,3 +1,12 @@
+---
+name: tdd
+description: How to work on a feature or a bugfix
+license: MIT
+compatibility: opencode
+metadata:
+  audience: maintainers
+---
+
 # How to work in TDD
 
 0) Determine the next feature to implement
@@ -7,8 +16,8 @@
 4) Write the minimum amount of production code to make the test passes
 5) Run tests
 6) If the test passes, go to 7), else go to 4)
-7) Refactor production code using [.ai/rules/clean-code.md](.ai/rules/clean-code.md) standards
+7) Refactor production code using [.agents/rules/clean-code.md](.agents/rules/clean-code.md) standards
 8) Run tests
 9) If the test passes, go to 10), else go to 4)
-10) Refactor tests using [.ai/rules/clean-code.md](.ai/rules/clean-code.md) and [.ai/rules/testing-standards.md](.ai/rules/testing-standards.md) standards
+10) Refactor tests using [.agents/rules/clean-code.md](.agents/rules/clean-code.md) and [.agents/rules/testing-standards.md](.agents/rules/testing-standards.md) standards
 11) If the test passes, go to 0), else revert and go to 10)

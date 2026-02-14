@@ -11,7 +11,7 @@
             <ul>
                 ::foreach chipsets::
                 <li class="chipset ::active::" name="::id::">
-                    <form name="::id::" method="POST" action="/decks/setActiveChipset">
+                    <form name="::id::" method="POST" action="/decks/::activeDeckIndex::/setActiveChipset">
                         <input type="hidden" name="id"  value="::id::">
                     </form>
                     <a href="javascript:document.::id::.submit();"><img src="/img/icons/::icon::.png"/>::name::</a>
@@ -23,61 +23,62 @@
 
     <ul class="tabs">
         ::foreach decks::
-        <li class="::if(index == 0)::active::end::">
-            <a href="test"> ::name::</a>
+        <li class="::active::">
+            <a href="/decks/::index::">::name::</a>
         </li>
         ::end::
-        <!--
-        TODO: allow buying additional decks
         <li>
-            <a href="test">Ajouter un Deck 2500 <img src="/img/icons/money.png" alt=""/> </a>
+            ::if(canBuyDeck)::
+            <form name="buyDeck" method="POST" action="/decks/::activeDeckIndex::/buy"></form>
+            <a href="javascript:document.buyDeck.submit();">Ajouter un Deck ::buyDeckCost:: <img src="/img/icons/money.png" alt=""/> </a>
+            ::else::
+            <div class="offButton">Ajouter un Deck ::buyDeckCost:: <img src="/img/icons/money.png" alt=""/> </div>
+            ::end::
         </li>
-        -->
     </ul>
     <div class="window">
         <div class="wtitle">
             <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
             <span>Contenu du Deck</span>
         </div>
-        ::foreach decks::
         <div class="container">
             <div class="help">
                 Grace a votre souris, faites glisser les icones depuis votre reserve vers un emplacement de de votre deck. Les changements sont automatiquement sauvegardes.
             </div>
             <div class="slots">
-                ::foreach slots::
+                ::foreach activeDeckSlots::
                 <div class="slot">::rank::</div>
                 ::end::
             </div>
-            <ul id="deckContainer" class="bg" name="::name::">
-                ::foreach viruses::
+            <ul id="deckContainer" class="bg" name="::activeDeckName::">
+                ::foreach activeDeckViruses::
                 <li name="::id::" onmouseenter="tooltipOnEnter('::id::')" onmouseleave="tooltipOnLeave('::id::')"><img src="/img/dockicons/::id::.png"/></li>
                 ::end::
             </ul>
 
         <div class="infos">
             <div class="actions">
-                <form id="save" method="POST" action="/decks">
+                <form id="save" method="POST" action="/decks/::activeDeckIndex::">
+                    <input type="hidden" name="deckIndex" value="::activeDeckIndex::">
                     <input class="button" type="submit" value="Sauvegarder">
                 </form>
                 <a class="offButton">Re-initialiser</a>
-                <form name="expand" method="POST" action="/decks?expand=::name::">
+                <form name="expand" method="POST" action="/decks/::activeDeckIndex::?expand=1">
                 </form>
-                ::if(money >= expandCost)::
-                <a class="button" href="javascript:document.expand.submit();">Agrandir ce deck (::expandCost:: <img src="/img/icons/money.png"/>)</a>
+                ::if(money >= activeDeckExpandCost)::
+                <a class="button" href="javascript:document.expand.submit();">Agrandir ce deck (::activeDeckExpandCost:: <img src="/img/icons/money.png"/>)</a>
                 ::else::
-                <div class="offButton">Agrandir ce deck (::expandCost:: <img src="/img/icons/money.png"/>)</div>
+                <div class="offButton">Agrandir ce deck (::activeDeckExpandCost:: <img src="/img/icons/money.png"/>)</div>
                 ::end::
                 <a class="offButton">Definir comme favori</a>
             </div>
-			<form method="POST" action="/decks/rename">
-				<input type="hidden" name="deckIndex" value="::index::">
-				<input class="field" type="text" id="deckName" name="name"  value="::name::">
+			<form method="POST" action="/decks/::activeDeckIndex::/rename">
+				<input type="hidden" name="deckIndex" value="::activeDeckIndex::">
+				<input class="field" type="text" id="deckName" name="name"  value="::activeDeckName::">
 				<input class="button" type="submit" value="Renommer">
 			</form>
         </div>
     </div>
-    ::end::
 </div>
     
     <div class="window">

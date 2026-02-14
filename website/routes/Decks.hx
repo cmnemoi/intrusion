@@ -1,6 +1,7 @@
 package routes;
 
 import Express;
+import commands.BuyDeck;
 import commands.RenameDeck;
 import haxe.Json;
 import jsasync.IJSAsync;
@@ -8,12 +9,6 @@ import jsasync.IJSAsync;
 using jsasync.JSAsyncTools;
 
 class Decks implements IJSAsync {
-	static var ADD_DECK_COST = [
-		0,	// deck 1
-		2500,	// deck 2
-		4500,	// deck 3
-		9500,	// deck 4
-	];
 	static var ADD_SLOT_COST = [
 		0,	// slot 1
 		0,	// slot 2
@@ -28,15 +23,24 @@ class Decks implements IJSAsync {
     public static function create() {
         var router = new ExpressRouter();
         router.get("/", decks);
-		router.post("/", saveDeck);
+		router.get("/:deckId", decks);
+		router.post("/:deckId/buy", buyDeck);
+		router.post("/buy", buyDeck);
+		router.post("/:deckId/rename", renameDeck);
 		router.post("/rename", renameDeck);
+		router.post("/:deckId/setActiveChipset", setActiveChipset);
 		router.post("/setActiveChipset", setActiveChipset);
+		router.post("/:deckId", saveDeck);
+		router.post("/", saveDeck);
         return router;
     }
 
 	@:jsasync static function decks(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		// TODO: decks can also be upgraded: https://youtu.be/nzoTSSlAOUM?t=1058 for 75000
 		var player: PlayerInfo = req.locals.player;
+		var activeDeckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
+		var activeDeck = player.decks[activeDeckIndex];
+
 		var chipsets = [{
 			id: "none",
 			icon: "delete",
@@ -51,79 +55,134 @@ class Decks implements IJSAsync {
 			name: ChipsetsXml.ALL.get(c).name,
 		}]);
 
-		var rank = 1;
 		var decks = [for (i in 0...player.decks.length) {
-			var d = player.decks[i];
 			{
-			slots: [for (slotIndex in 1...(d.capacity+1)){
-				rank: slotIndex,
-			}],
-			viruses: d.content.map(v -> {
-				id: v,
-				rank: rank++,
-			}),
-			index: i,
-			name: d.name,
-			expandCost: deckExpandCost(d.capacity),
-			money: player.money,
+				index: i,
+				name: player.decks[i].name,
+				active: i == activeDeckIndex ? "active" : "",
 			}
 		}];
 
-		var usedVirus = decks[0].viruses.map(v -> v.id);
+		var usedVirus = activeDeck.content;
+		var nextDeckCost = BuyDeck.nextDeckCost(player.decks.length);
 
 		var content = {
 			chipsets: chipsets,
 			decks: decks,
+			activeDeckIndex: activeDeckIndex,
+			activeDeckName: activeDeck.name,
+			activeDeckSlots: [for (slotIndex in 1...(activeDeck.capacity + 1)) {
+				rank: slotIndex,
+			}],
+			activeDeckViruses: activeDeck.content.map(v -> {
+				id: v,
+			}),
+			activeDeckExpandCost: deckExpandCost(activeDeck.capacity),
 			availableViruses: player.viruses.filter(v -> !usedVirus.contains(v)).map(v -> {
 				id: v,
 			}),
-			deckCapacity: player.decks[0].capacity,
+			deckCapacity: activeDeck.capacity,
+			buyDeckCost: nextDeckCost,
+			canBuyDeck: player.money >= nextDeckCost,
+			money: player.money,
 		}
 		App.renderContent(req, res, App.getTemplate('deck.html').execute(content));
 	}
 
 	@:jsasync static function saveDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var player: PlayerInfo = req.locals.player;
+		var deckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
 		if (req.query.expand != null) {
-			var cost = deckExpandCost(player.decks[0].capacity);
+			var cost = deckExpandCost(player.decks[deckIndex].capacity);
 			if (cost <= player.money) {
-				player.decks[0].capacity +=1;
+				player.decks[deckIndex].capacity +=1;
 				player.money -= cost;
 				player.persist();
 			}
-			res.redirect('/decks');
+			res.redirect(deckPath(deckIndex));
 			return;
 		}
 
 		player.activeChipset = req.body.activeChipset;
 		
 		var decks: Array<{name: String, content: Array<String>}> = cast Json.parse(req.body.decks);
-		// TODO: update all decks.
-		player.decks[0].content = decks[0].content;
+		if (decks != null && decks.length > 0)
+			player.decks[deckIndex].content = decks[0].content;
 		player.persist();
-		res.redirect('/decks');
+		res.redirect(deckPath(deckIndex));
+	}
+
+	@:jsasync static function buyDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
+		var player: PlayerInfo = req.locals.player;
+		var previousDeckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
+		if (BuyDeck.execute(player)) {
+			player.persist();
+			res.redirect(deckPath(player.decks.length - 1));
+			return;
+		}
+		res.redirect(deckPath(previousDeckIndex));
 	}
 
 	@:jsasync static function renameDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var player: PlayerInfo = req.locals.player;
-		var deckIndex = req.body.deckIndex == null ? 0 : Std.parseInt(req.body.deckIndex);
-		if (deckIndex == null)
-			deckIndex = 0;
+		var deckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
 
 		if (RenameDeck.execute(player, deckIndex, req.body.name)) {
 			player.persist();
 		}
-		res.redirect('/decks');
+		res.redirect(deckPath(deckIndex));
 	}
 	
 	@:jsasync static function setActiveChipset(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var player: PlayerInfo = req.locals.player;
+		var deckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
 		player.activeChipset = req.body.id;
 		player.persist();
-		res.redirect('/decks');
+		res.redirect(deckPath(deckIndex));
+	}
+
+	public static function normalizeDeckIndex(requestedDeckIndex:Null<Int>, deckCount:Int):Int {
+		if (deckCount <= 0)
+			return 0;
+
+		if (requestedDeckIndex == null)
+			return 0;
+
+		if (requestedDeckIndex < 0 || requestedDeckIndex >= deckCount)
+			return 0;
+
+		return requestedDeckIndex;
 	}
 
 	public static function deckExpandCost(currentSize: Int) {
 		return (currentSize >= 8)  ? 999999 : ADD_SLOT_COST[currentSize + 1];
+	}
+
+	public static function requestedDeckIndexFromPath(requestedDeckId:Dynamic, deckCount:Int):Int {
+		return normalizeDeckIndex(parseDeckIndex(requestedDeckId), deckCount);
+	}
+
+	public static function deckPath(deckIndex:Int):String {
+		return '/decks/$deckIndex';
+	}
+
+	static function requestedDeckIndexFromRequest(req:ExpressRequest, deckCount:Int):Int {
+		var fromPath = req.params == null ? null : req.params.deckId;
+		if (fromPath != null)
+			return requestedDeckIndexFromPath(fromPath, deckCount);
+
+		var fromBody = req.body == null ? null : req.body.deckIndex;
+		if (fromBody != null)
+			return normalizeDeckIndex(parseDeckIndex(fromBody), deckCount);
+
+		var fromQuery = req.query == null ? null : req.query.deck;
+		return normalizeDeckIndex(parseDeckIndex(fromQuery), deckCount);
+	}
+
+	static function parseDeckIndex(rawValue:Dynamic):Null<Int> {
+		if (rawValue == null)
+			return null;
+
+		return Std.parseInt(Std.string(rawValue));
 	}
 }

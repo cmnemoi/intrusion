@@ -10,7 +10,7 @@ Detailed rules in [`.agents/rules/`](.agents/rules/):
 - **Naming:** [`.agents/rules/naming-conventions.md`](.agents/rules/naming-conventions.md)
 - **Testing:** [`.agents/rules/testing-standards.md`](.agents/rules/testing-standards.md), [`.agents/rules/testing-unit.md`](.agents/rules/testing-unit.md), [`.agents/rules/testing-integration.md`](.agents/rules/testing-integration.md)
 - **TDD:** [`.agents/rules/tdd.md`](.agents/rules/tdd.md)
-- **Debugging:** [`.agents/rules/debug.md`](.agents/rules/debug.md)
+- **Debugging:** [`.agents/rules/debug.md`](.agents/skills/debug/SKILL.md)
 
 ## Tools
 - Stack: Haxe 4.3 + Node.js + Redis.
@@ -21,3 +21,6 @@ Detailed rules in [`.agents/rules/`](.agents/rules/):
   - Shared game/domain code: `com/`
   - Client code: `client/src/`
   - Website/server code: `website/`
+
+# Commands
+Run tests: `mise test`
