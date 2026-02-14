@@ -43,7 +43,7 @@
         </div>
         <div class="container">
             <div class="help">
-                Grace a votre souris, faites glisser les icones depuis votre reserve vers un emplacement de de votre deck. Les changements sont automatiquement sauvegardes.
+                Grace a votre souris, faites glisser les icones depuis votre reserve vers un emplacement de votre deck. Les changements sont automatiquement sauvegardes.
             </div>
             <div class="slots">
                 ::foreach activeDeckSlots::
@@ -63,7 +63,7 @@
                     <input class="button" type="submit" value="Sauvegarder">
                 </form>
                 <a class="offButton">Re-initialiser</a>
-                <form name="expand" method="POST" action="/decks/::activeDeckIndex::?expand=1">
+                <form name="expand" method="POST" action="/decks/::activeDeckIndex::/upgrade">
                 </form>
                 ::if(money >= activeDeckExpandCost)::
                 <a class="button" href="javascript:document.expand.submit();">Agrandir ce deck (::activeDeckExpandCost:: <img src="/img/icons/money.png"/>)</a>

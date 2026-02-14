@@ -3,29 +3,21 @@ package routes;
 import Express;
 import commands.BuyDeck;
 import commands.RenameDeck;
+import commands.UpgradeDeck;
 import haxe.Json;
 import jsasync.IJSAsync;
 
 using jsasync.JSAsyncTools;
 
 class Decks implements IJSAsync {
-	static var ADD_SLOT_COST = [
-		0,	// slot 1
-		0,	// slot 2
-		0,	// slot 3
-		2500,	// slot 4
-		4500,	// slot 5
-		8000,	// slot 6
-		14000, // slot 7
-		24500, // slot 8
-	];
-
     public static function create() {
         var router = new ExpressRouter();
         router.get("/", App.withAsyncErrorHandler(decks));
 		router.get("/:deckId", App.withAsyncErrorHandler(decks));
 		router.post("/:deckId/buy", App.withAsyncErrorHandler(buyDeck));
 		router.post("/buy", App.withAsyncErrorHandler(buyDeck));
+		router.post("/:deckId/upgrade", App.withAsyncErrorHandler(upgradeDeck));
+		router.post("/upgrade", App.withAsyncErrorHandler(upgradeDeck));
 		router.post("/:deckId/rename", App.withAsyncErrorHandler(renameDeck));
 		router.post("/rename", App.withAsyncErrorHandler(renameDeck));
 		router.post("/:deckId/setActiveChipset", App.withAsyncErrorHandler(setActiveChipset));
@@ -36,7 +28,6 @@ class Decks implements IJSAsync {
     }
 
 	@:jsasync static function decks(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
-		// TODO: decks can also be upgraded: https://youtu.be/nzoTSSlAOUM?t=1058 for 75000
 		var player: PlayerInfo = req.locals.player;
 		var activeDeckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
 		var activeDeck = player.decks[activeDeckIndex];
@@ -77,7 +68,7 @@ class Decks implements IJSAsync {
 			activeDeckViruses: activeDeck.content.map(v -> {
 				id: v,
 			}),
-			activeDeckExpandCost: deckExpandCost(activeDeck.capacity),
+			activeDeckExpandCost: UpgradeDeck.nextUpgradeCost(activeDeck.capacity),
 			availableViruses: availableVirusIds(player.viruses, usedVirus).map(v -> {
 				id: v,
 			}),
@@ -92,16 +83,6 @@ class Decks implements IJSAsync {
 	@:jsasync static function saveDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var player: PlayerInfo = req.locals.player;
 		var deckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
-		if (req.query.expand != null) {
-			var cost = deckExpandCost(player.decks[deckIndex].capacity);
-			if (cost <= player.money) {
-				player.decks[deckIndex].capacity +=1;
-				player.money -= cost;
-				player.persist();
-			}
-			res.redirect(deckPath(deckIndex));
-			return;
-		}
 
 		player.activeChipset = req.body.activeChipset;
 		
@@ -121,6 +102,16 @@ class Decks implements IJSAsync {
 			return;
 		}
 		res.redirect(deckPath(previousDeckIndex));
+	}
+
+	@:jsasync static function upgradeDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
+		var player: PlayerInfo = req.locals.player;
+		var deckIndex = requestedDeckIndexFromRequest(req, player.decks.length);
+
+		if (UpgradeDeck.execute(player, deckIndex)) {
+			player.persist();
+		}
+		res.redirect(deckPath(deckIndex));
 	}
 
 	@:jsasync static function renameDeck(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
@@ -152,10 +143,6 @@ class Decks implements IJSAsync {
 			return 0;
 
 		return requestedDeckIndex;
-	}
-
-	public static function deckExpandCost(currentSize: Int) {
-		return (currentSize >= 8)  ? 999999 : ADD_SLOT_COST[currentSize + 1];
 	}
 
 	public static function availableVirusIds(ownedVirusIds:Array<String>, usedVirusIds:Array<String>):Array<String> {
