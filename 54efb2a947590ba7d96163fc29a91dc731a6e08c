@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.3",
+  "base_commit_sha": "54efb2a947590ba7d96163fc29a91dc731a6e08c",
+  "prompts": {
+    "9480b2cb4870eb58": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_3a41cbf22ffeeXrhwg1c3rf7f9",
+        "model": "unknown"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 0,
+      "accepted_lines": 0,
+      "overriden_lines": 2
+    }
+  }
+}
