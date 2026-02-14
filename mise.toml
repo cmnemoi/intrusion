@@ -2,6 +2,9 @@
 haxe = "4.3.7"
 neko = "2-4-1"
 node = "24"
+docker-cli = "28.5"
+docker-compose = "2.40"
+python = "3.14"
 
 [env]
 HAXE_STD_PATH = "/Users/cmnemoi/.local/share/mise/installs/haxe/4.3.7/std"
@@ -9,3 +12,7 @@ NEKOPATH = "/Users/cmnemoi/.local/share/mise/installs/neko/2-4-1"
 
 [tasks.test]
 run = "haxe test.hxml && cd website-bin && npm install && node tests.js"
+
+[tasks.dev-give-credits]
+description = "Dev only: set user credits to 9999999 by username"
+run = "python ./scripts/dev_give_credits.py"
