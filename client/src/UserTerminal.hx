@@ -159,6 +159,7 @@ class UserTerminal {
 	public var storage		: Array<FSNode>;
 	public var virList		: List<Virus>;
 	var passFile			: FSNode;
+	var passwordInputValue	: String;
 	public var ueffects		: List<{source:Virus, type:UserEffectType, cpt:Int}>;
 	var gtimer				: Volatile<Float>;
 	var timerLimit			: Volatile<Float>;
@@ -2037,7 +2038,7 @@ class UserTerminal {
 		pwin.field.text = Lang.fmt.AskPass({_f:passFile.name});
 		pwin._x = Std.int(Data.WID*0.5 - pwin._width*0.5);
 		pwin._y = Std.int(Data.HEI*0.5 - pwin._height*0.5);
-		pwin.input.text = "";
+		setPasswordInputValue("");
 		var me = this;
 		pwin.input.onChanged = function(tf) {
 			me.startAnim( A_Blink, cast tf ).spd*=1.5;
@@ -2050,6 +2051,7 @@ class UserTerminal {
 
 	function detachPass() {
 		ffield = null;
+		passwordInputValue = "";
 		pwin?.removeMovieClip();
 		pwin = null;
 		detachMask();
@@ -2505,14 +2507,42 @@ class UserTerminal {
 		return cmdLine != null && cmdLine._visible && ffield == cast cmdLine.field;
 	}
 
+	function currentPasswordInputValue():String {
+		if (passwordInputValue == null)
+			return "";
+
+		return passwordInputValue;
+	}
+
+	function setPasswordInputValue(value:String):Void {
+		passwordInputValue = value;
+		if (pwin != null)
+			pwin.input.text = KeyboardInputPolicy.maskPasswordText(currentPasswordInputValue());
+	}
+
+	function appendPasswordInputValue(value:String):Void {
+		if (value == null || value.length == 0)
+			return;
+
+		setPasswordInputValue(currentPasswordInputValue() + value);
+	}
+
+	function removeLastPasswordInputCharacter():Void {
+		var value = currentPasswordInputValue();
+		if (value.length == 0)
+			return;
+
+		setPasswordInputValue(value.substr(0, value.length - 1));
+	}
+
 	function handlePasswordClipboardShortcut(shortcut:KeyboardClipboardShortcut):Bool {
 		switch (shortcut) {
 			case Copy:
-				ClipboardManager.copy(pwin.input.text);
+				ClipboardManager.copy(currentPasswordInputValue());
 
 			case Cut:
-				ClipboardManager.copy(pwin.input.text);
-				pwin.input.text = "";
+				ClipboardManager.copy(currentPasswordInputValue());
+				setPasswordInputValue("");
 
 			case Paste:
 				ClipboardManager.paste().then(function(clipboardText) {
@@ -2520,8 +2550,7 @@ class UserTerminal {
 						return null;
 
 					var sanitizedText = KeyboardInputPolicy.sanitizePasswordClipboardText(clipboardText);
-					if (sanitizedText.length > 0)
-						pwin.input.text = pwin.input.text + sanitizedText;
+					appendPasswordInputValue(sanitizedText);
 
 					return null;
 				});
@@ -2630,7 +2659,7 @@ class UserTerminal {
 				if ( popMC!=null )
 					detachPop();
 				else if ( pwin!=null )
-					validatePass(pwin.input.text,passFile);
+					validatePass(currentPasswordInputValue(),passFile);
 				else if ( fl_leet && fs!=null ) {
 					var cmd = cmdLine.field.text;
 					try {
@@ -2706,12 +2735,11 @@ class UserTerminal {
 
 		if (pwin!= null) {
 			if ((c == Key.BACKSPACE || c == Key.DELETE)) {
-				if (pwin.input.text.length > 0)
-					pwin.input.text = pwin.input.text.substr(0, pwin.input.text.length - 1);
+				removeLastPasswordInputCharacter();
 			}
 			else if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >=97 && c <= 122)) {
 				var char = String.fromCharCode(c).toLowerCase();
-				pwin.input.text = pwin.input.text + char;
+				appendPasswordInputValue(char);
 			}
 		}
 	}

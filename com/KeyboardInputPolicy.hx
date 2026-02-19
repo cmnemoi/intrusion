@@ -56,4 +56,15 @@ class KeyboardInputPolicy {
 		normalizedText = StringTools.replace(normalizedText, "\r", " ");
 		return normalizedText;
 	}
+
+	static public function maskPasswordText(text:String):String {
+		if (text == null || text.length == 0)
+			return "";
+
+		var maskedText = new StringBuf();
+		for (_ in 0...text.length)
+			maskedText.add("*");
+
+		return maskedText.toString();
+	}
 }

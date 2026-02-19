@@ -74,4 +74,16 @@ class KeyboardInputPolicyTest extends Test {
 
 		Assert.equals("ls -la  pwd whoami", normalizedText);
 	}
+
+	function testShouldMaskPasswordTextWithAsterisks() {
+		var maskedText = KeyboardInputPolicy.maskPasswordText("abc123");
+
+		Assert.equals("******", maskedText);
+	}
+
+	function testShouldKeepEmptyPasswordTextUnchanged() {
+		var maskedText = KeyboardInputPolicy.maskPasswordText("");
+
+		Assert.equals("", maskedText);
+	}
 }
