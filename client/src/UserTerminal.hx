@@ -1,4 +1,6 @@
 import common.JSSharedObject;
+import ClipboardManager;
+import KeyboardInputPolicy;
 import mt.flash.Key;
 import mt.Timer;
 import mt.bumdum.Lib;
@@ -1363,22 +1365,7 @@ class UserTerminal {
 	// *** FOCUS TEXTE
 
 	function hasFocus() {
-		/*
-		TODO: Fix focus
-		var path = ffield._name;
-		var par : MovieClip = cast ffield;
-		do {
-			par = par.parent;
-			path = par._name+"."+path;
-		} while (par._name!="" && par!=null);
-		path = path.substr(1);
-
-		var current = flash.Selection.getFocus();
-		current = current.substr( current.indexOf(".")+1 );
-
-		return current==path;
-		*/
-		return false;
+		return ffield != null;
 	}
 
 	function focus(?cidx:Int) {
@@ -2514,6 +2501,77 @@ class UserTerminal {
 //		spamLog.field.text = s;
 	}
 
+	function hasCmdLineFocus():Bool {
+		return cmdLine != null && cmdLine._visible && ffield == cast cmdLine.field;
+	}
+
+	function handlePasswordClipboardShortcut(shortcut:KeyboardClipboardShortcut):Bool {
+		switch (shortcut) {
+			case Copy:
+				ClipboardManager.copy(pwin.input.text);
+
+			case Cut:
+				ClipboardManager.copy(pwin.input.text);
+				pwin.input.text = "";
+
+			case Paste:
+				ClipboardManager.paste().then(function(clipboardText) {
+					if (pwin == null)
+						return null;
+
+					var sanitizedText = KeyboardInputPolicy.sanitizePasswordClipboardText(clipboardText);
+					if (sanitizedText.length > 0)
+						pwin.input.text = pwin.input.text + sanitizedText;
+
+					return null;
+				});
+		}
+
+		return true;
+	}
+
+	function handleCmdLineClipboardShortcut(shortcut:KeyboardClipboardShortcut):Bool {
+		switch (shortcut) {
+			case Copy:
+				ClipboardManager.copy(cmdLine.field.text);
+
+			case Cut:
+				ClipboardManager.copy(cmdLine.field.text);
+				cmdLine.field.text = "";
+				forcedCaret = -1;
+
+			case Paste:
+				ClipboardManager.paste().then(function(clipboardText) {
+					if (!hasCmdLineFocus())
+						return null;
+
+					var normalizedText = KeyboardInputPolicy.normalizeCommandClipboardText(clipboardText);
+					if (normalizedText.length > 0) {
+						cmdLine.field.text = cmdLine.field.text + normalizedText;
+						forcedCaret = -1;
+					}
+
+					return null;
+				});
+		}
+
+		return true;
+	}
+
+	function handleClipboardShortcut(keyCode:Int, ctrlKey:Bool, metaKey:Bool):Bool {
+		var shortcut = KeyboardInputPolicy.getClipboardShortcut(keyCode, ctrlKey, metaKey);
+		if (shortcut == null)
+			return false;
+
+		if (pwin != null)
+			return handlePasswordClipboardShortcut(shortcut);
+
+		if (hasCmdLineFocus())
+			return handleCmdLineClipboardShortcut(shortcut);
+
+		return false;
+	}
+
 
 	function onKey(e:KeyboardEvent) {
 		if ( apps.length > 0 )
@@ -2521,6 +2579,9 @@ class UserTerminal {
 
 		// touches sp�ciales
 		var c = e.keyCode;
+		if (handleClipboardShortcut(c, e.ctrlKey, e.metaKey))
+			return;
+
 		switch (c) {
 			case Key.ESCAPE :
 				hideCompletion();
@@ -2643,15 +2704,16 @@ class UserTerminal {
 //				dock.onKeyShortcut(c-48);
 		}
 
-        if (pwin!= null) {
-            if ((c == Key.BACKSPACE || c == Key.DELETE)) {
-                if (pwin.input.text.length > 0)
-                    pwin.input.text = pwin.input.text.substr(0, pwin.input.text.length - 1);
-            } else if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >=97 && c <= 122)) {
-                var char = String.fromCharCode(c).toLowerCase();
-                pwin.input.text =  pwin.input.text + char;
-            }
-        }
+		if (pwin!= null) {
+			if ((c == Key.BACKSPACE || c == Key.DELETE)) {
+				if (pwin.input.text.length > 0)
+					pwin.input.text = pwin.input.text.substr(0, pwin.input.text.length - 1);
+			}
+			else if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >=97 && c <= 122)) {
+				var char = String.fromCharCode(c).toLowerCase();
+				pwin.input.text = pwin.input.text + char;
+			}
+		}
 	}
 
 

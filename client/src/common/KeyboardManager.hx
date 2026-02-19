@@ -2,6 +2,7 @@ package common;
 
 import haxe.ds.IntMap;
 import js.html.KeyboardEvent;
+import KeyboardInputPolicy;
 
 class KeyboardManager {
 	static public inline var ARROW_DOWN = 40;
@@ -30,13 +31,14 @@ class KeyboardManager {
 
 	static private function onKeyUp(e:KeyboardEvent):Void {
 		keyState.remove(e.keyCode);
-		e.preventDefault();
+		if (KeyboardInputPolicy.shouldPreventDefaultOnKeyUp(e.keyCode, e.ctrlKey, e.metaKey))
+			e.preventDefault();
 	}
 
 	static private function onKeyDown(e:KeyboardEvent) {
 		keyState.set(e.keyCode, true);
 		lastDown = e.keyCode;
-		if (e.keyCode == SPACE || e.keyCode == ARROW_DOWN)
+		if (KeyboardInputPolicy.shouldPreventDefaultOnKeyDown(e.keyCode, e.ctrlKey, e.metaKey))
 			e.preventDefault();
 	}
 
