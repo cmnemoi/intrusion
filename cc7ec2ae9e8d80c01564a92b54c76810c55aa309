@@ -1,0 +1,23 @@
+Dockerfile
+  bcfd954b016de9a0 6,11-13,26-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "cc7ec2ae9e8d80c01564a92b54c76810c55aa309",
+  "prompts": {
+    "bcfd954b016de9a0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_37de0135dffe0FmHGLJTd4DpY9",
+        "model": "opencode/minimax-m2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 30,
+      "total_deletions": 18,
+      "accepted_lines": 14,
+      "overriden_lines": 0
+    }
+  }
+}
