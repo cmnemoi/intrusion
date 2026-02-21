@@ -80,16 +80,23 @@ class App implements IJSAsync {
 		res.end(getTemplate('site_template.html').execute({
 			content: Fs.readFileSync(TEMPLATES_ROOT + 'register.html').toString(),
 			money: 0,
-			level: 0
+			level: 0,
+			xp: 0,
+			xpRemaining: 0,
+			xpProgress: 0,
 		}));
 	}
 	
 	@:jsasync public static function renderContent(req:ExpressRequest, res:ExpressResponse, content: String) {
 		var player: PlayerInfo = req.locals.player;
+		var xpProgress = MissionGen.getXpProgress(player.xp);
 		res.end(getTemplate('site_template.html').execute({
 			content: content,
 			money: player.money,
 			level: player.level(),
+			xp: player.xp,
+			xpRemaining: xpProgress.remainingXp,
+			xpProgress: xpProgress.progressPercent,
 			virusData: if (StringTools.contains(content, "tooltipOnEnter")) Viruses.jSData(player) else "",
 		}));
 	}

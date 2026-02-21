@@ -14,6 +14,13 @@ typedef MissionData = {
 	_cards		: List<String>,
 }
 
+typedef XpProgress = {
+	var currentLevelXp:Int;
+	var nextLevelXp:Int;
+	var remainingXp:Int;
+	var progressPercent:Int;
+}
+
 
 enum _MissionPattern {
 	_MModerate(owner:String);
@@ -436,6 +443,34 @@ class MissionGen {
 			return XP_LEVELS[gl-1];
 	}
 
+	public static function getXpProgress(xp:Int):XpProgress {
+		var currentLevel = getGameLevel(xp);
+		var currentLevelXp = getXp(currentLevel);
+
+		if (currentLevel >= XP_LEVELS.length) {
+			return {
+				currentLevelXp: currentLevelXp,
+				nextLevelXp: currentLevelXp,
+				remainingXp: 0,
+				progressPercent: 100,
+			};
+		}
+
+		var nextLevelXp = getXp(currentLevel + 1);
+		var levelXpRange = nextLevelXp - currentLevelXp;
+		var progressedXp = xp - currentLevelXp;
+		var rawProgressPercent = Math.floor(progressedXp * 100 / levelXpRange);
+		var progressPercent = Std.int(Math.min(100, Math.max(0, rawProgressPercent)));
+		var remainingXp = Std.int(Math.max(0, nextLevelXp - xp));
+
+		return {
+			currentLevelXp: currentLevelXp,
+			nextLevelXp: nextLevelXp,
+			remainingXp: remainingXp,
+			progressPercent: progressPercent,
+		};
+	}
+
 	public static function getPrime(base:Int,tries:Int) {
 		if ( tries<=0 )
 			return base;
@@ -474,4 +509,3 @@ class MissionGen {
 	}
 
 }
-

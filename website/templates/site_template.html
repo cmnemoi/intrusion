@@ -29,9 +29,9 @@
         
             <div class="mxmainmenu">
 
-                <div id="glevel">
+                <div id="glevel" onmouseenter="showXpTooltip(::xp::, ::xpRemaining::)" onmouseleave="hideXpTooltip()">
+                    <div class="bar"><div style="width:::xpProgress::%"></div></div>
                     <span>Niveau ::level::</span>
-
                 </div>
     
     
@@ -209,12 +209,39 @@
     ::virusData::
 
     var currentTooltip = null;
+    var XP_TOOLTIP_ID = "xp";
+
+    function showXpTooltip(xp, remaining) {
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.display = "block";
+        currentTooltip = XP_TOOLTIP_ID;
+
+        var icon = tooltip.getElementsByClassName('vicon')[0];
+        icon.style.display = "none";
+
+        var name = tooltip.getElementsByClassName('name')[0];
+        name.innerHTML = 'Progression';
+
+        var desc = tooltip.getElementsByClassName('desc')[0];
+        desc.innerHTML = '';
+
+        var infos = tooltip.getElementsByClassName('infos')[0];
+        infos.innerHTML = '<p>XP : ' + xp + ' (' + remaining + ' restants pour passer au niveau suivant)</p>';
+    }
+
+    function hideXpTooltip() {
+        if (currentTooltip != XP_TOOLTIP_ID) return;
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.display = "none";
+    }
+
     function tooltipOnEnter(id) {
         var tooltip = document.getElementById('tooltip');
         tooltip.style.display = "block";
         currentTooltip = id;
 
         var icon = tooltip.getElementsByClassName('vicon')[0];
+        icon.style.display = "block";
         icon.src = '/img/dockicons/xl/' + id + '.png';
 
         var name = tooltip.getElementsByClassName('name')[0];

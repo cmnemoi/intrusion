@@ -384,6 +384,10 @@ ul.tabs li.active a {
 ul.tabs li.active a:hover {
 	color : #3b3d28;
 }
+#tooltip {
+	position : absolute;
+	z-index : 20;
+}
 #tooltip .tiptop {
 	margin : 0px;
 	padding : 0px;
