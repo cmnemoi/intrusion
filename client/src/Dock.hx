@@ -138,13 +138,11 @@ class Dock {
 		detach();
 		var i = 0;
 		var list = getCurrentDeck();
-		var me = this;
 		for (ds in list) {
 			var mc : DockMC = cast dm.attach("slot",0);
 			mc._x = Math.round( Data.WID*0.5 - list.length*ICON_WIDTH*0.5 + i*ICON_WIDTH );
 			mc._y = 4;
 			mc.gotoAndStop(1);
-			mc.cacheAsBitmap = true;
 			mc.filters = baseFilters;
 //			mc._visible = !fl_lock;
 			if ( term.fl_leet ) {
@@ -176,16 +174,18 @@ class Dock {
 
 	public function loadIcons() {
 		urlList = new List();
-		var me = this;
 		for (deck in decks)
 			for(ds in deck.content) {
 				if ( ds.virus==null )
 					continue;
 
 				var url = Manager.PARAMS._iconsUrl+ds.virus.id+".png?v="+Manager.PARAMS._iconsVer;
-				var promise = ((untyped Texture).fromURL(url))
+				((untyped Texture).fromURL(url))
 					.then((texture) -> {
+						if ( ds.mc==null )
+							return;
 						ds.mc.smc.attachBitmap(texture, 1);
+						ds.mc.smc.cacheAsBitmap = true;
 					});
 			}
 	}
