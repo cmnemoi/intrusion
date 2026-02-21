@@ -1,4 +1,5 @@
-FROM haxe:4.3-alpine
+# Stage 1: Build stage
+FROM haxe:4.3-alpine AS builder
 
 WORKDIR /app
 
@@ -7,9 +8,6 @@ RUN apk update && apk upgrade --no-cache && apk add --no-cache nodejs npm
 
 # Copy Haxe files
 COPY . .
-
-# Setup haxelib (required for first run, must be done as root)
-RUN haxelib setup /app/.haxelib
 
 # Install haxelib dependencies
 RUN haxelib install haxelib.json
@@ -23,8 +21,21 @@ RUN haxe website.hxml
 # Install npm dependencies
 RUN cd website-bin && npm install
 
+# Stage 2: Production stage
+FROM node:lts-alpine AS production
+
+WORKDIR /app
+
+# Update and upgrade
+RUN apk update && apk upgrade --no-cache
+
 # Create a non-root user
 RUN adduser -D app
+
+# Copy only the necessary artifacts from builder
+COPY --from=builder /app/www /app/www
+COPY --from=builder /app/website-bin /app/website-bin
+COPY --from=builder /app/website /app/website
 
 # Change ownership to non-root user
 RUN chown -R app:app /app
