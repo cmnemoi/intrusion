@@ -2,8 +2,6 @@ package tests;
 
 import tests.AppErrorHandlingTest;
 import tests.MissionGenXpProgressTest;
-import tests.SiteTemplateHeaderLayoutTest;
-import tests.TooltipStyleTest;
 import tests.client.ClipboardManagerTest;
 import tests.client.KeyboardInputPolicyTest;
 import tests.commands.BuyDeckTest;
