@@ -133,7 +133,7 @@ class ClipboardManager {
 
 		return KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
 			cast resolvedDocument.activeElement,
-			"clipboard-paste-fallback"
+			KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
 		);
 	}
 
@@ -198,7 +198,7 @@ class ClipboardManager {
 	}
 
 	static function createFallbackPasteHTMLElement(document:Document):Null<Element> {
-		var existingElement = document.getElementById("clipboard-paste-fallback");
+		var existingElement = document.getElementById(KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID);
 		if (existingElement != null)
 			return existingElement;
 
@@ -206,7 +206,7 @@ class ClipboardManager {
 			return null;
 
 		var fallbackElement = document.createElement("div");
-		fallbackElement.setAttribute("id", "clipboard-paste-fallback");
+		fallbackElement.setAttribute("id", KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID);
 		fallbackElement.setAttribute("contenteditable", "plaintext-only");
 		fallbackElement.setAttribute("tabindex", "-1");
 		fallbackElement.setAttribute("aria-hidden", "true");

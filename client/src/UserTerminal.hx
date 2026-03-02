@@ -1,6 +1,7 @@
 import common.JSSharedObject;
 import ClipboardManager;
 import KeyboardInputPolicy;
+import KeyboardInputPolicy.KeyboardShortcutContext;
 import KeyboardInputPolicy.KeyboardShortcutTarget;
 import mt.flash.Key;
 import mt.Timer;
@@ -2548,12 +2549,10 @@ class UserTerminal {
 			case Paste:
 				ClipboardManager.paste().then(function(clipboardText) {
 					if (pwin == null)
-						return null;
+						return;
 
 					var sanitizedText = KeyboardInputPolicy.sanitizePasswordClipboardText(clipboardText);
 					appendPasswordInputValue(sanitizedText);
-
-					return null;
 				});
 		}
 
@@ -2573,32 +2572,28 @@ class UserTerminal {
 			case Paste:
 				ClipboardManager.paste().then(function(clipboardText) {
 					if (!hasCmdLineFocus())
-						return null;
+						return;
 
 					var normalizedText = KeyboardInputPolicy.normalizeCommandClipboardText(clipboardText);
 					if (normalizedText.length > 0) {
 						cmdLine.field.text = cmdLine.field.text + normalizedText;
 						forcedCaret = -1;
 					}
-
-					return null;
 				});
 		}
 
 		return true;
 	}
 
-	function handleClipboardShortcut(keyCode:Int, ctrlKey:Bool, metaKey:Bool, target:KeyboardShortcutTarget):Bool {
-		if (!KeyboardInputPolicy.shouldHandleClipboardShortcut(
-			keyCode,
-			ctrlKey,
-			metaKey,
-			target,
-			"clipboard-paste-fallback"
-		))
+	function handleClipboardShortcut(shortcutContext:KeyboardShortcutContext):Bool {
+		if (!KeyboardInputPolicy.shouldHandleClipboardShortcut(shortcutContext))
 			return false;
 
-		var shortcut = KeyboardInputPolicy.getClipboardShortcut(keyCode, ctrlKey, metaKey);
+		var shortcut = KeyboardInputPolicy.getClipboardShortcut(
+			shortcutContext.keyCode,
+			shortcutContext.ctrlKey,
+			shortcutContext.metaKey
+		);
 		if (shortcut == null)
 			return false;
 
@@ -2618,7 +2613,13 @@ class UserTerminal {
 
 		// touches sp�ciales
 		var c = e.keyCode;
-		if (handleClipboardShortcut(c, e.ctrlKey, e.metaKey, cast e.target))
+		if (handleClipboardShortcut({
+			keyCode: c,
+			ctrlKey: e.ctrlKey,
+			metaKey: e.metaKey,
+			target: cast e.target,
+			allowedEditableElementId: KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		}))
 			return;
 
 		switch (c) {
@@ -2747,7 +2748,7 @@ class UserTerminal {
 			if ((c == Key.BACKSPACE || c == Key.DELETE)) {
 				removeLastPasswordInputCharacter();
 			}
-			else if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >=97 && c <= 122)) {
+			else if (KeyboardInputPolicy.shouldAcceptPasswordCharacterKey(c, e.ctrlKey, e.metaKey)) {
 				var char = String.fromCharCode(c).toLowerCase();
 				appendPasswordInputValue(char);
 			}

@@ -63,13 +63,13 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldNotHandleClipboardShortcutWhenShortcutIsMissing() {
 		var target:KeyboardShortcutTarget = { tagName: "DIV" };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcut(
-			65,
-			false,
-			false,
-			target,
-			"clipboard-paste-fallback"
-		);
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcut({
+			keyCode: 65,
+			ctrlKey: false,
+			metaKey: false,
+			target: target,
+			allowedEditableElementId: KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		});
 
 		Assert.isFalse(shouldHandle);
 	}
@@ -77,13 +77,13 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldNotHandleClipboardShortcutWhenTextareaIsFocused() {
 		var target:KeyboardShortcutTarget = { tagName: "TEXTAREA" };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcut(
-			KeyboardInputPolicy.KEY_CODE_C,
-			true,
-			false,
-			target,
-			"clipboard-paste-fallback"
-		);
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcut({
+			keyCode: KeyboardInputPolicy.KEY_CODE_C,
+			ctrlKey: true,
+			metaKey: false,
+			target: target,
+			allowedEditableElementId: KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		});
 
 		Assert.isFalse(shouldHandle);
 	}
@@ -91,13 +91,13 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldHandleClipboardShortcutWhenTargetIsNotEditable() {
 		var target:KeyboardShortcutTarget = { tagName: "DIV" };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcut(
-			KeyboardInputPolicy.KEY_CODE_V,
-			true,
-			false,
-			target,
-			"clipboard-paste-fallback"
-		);
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcut({
+			keyCode: KeyboardInputPolicy.KEY_CODE_V,
+			ctrlKey: true,
+			metaKey: false,
+			target: target,
+			allowedEditableElementId: KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		});
 
 		Assert.isTrue(shouldHandle);
 	}
@@ -105,7 +105,10 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldNotHandleClipboardShortcutWhenTargetIsTextarea() {
 		var target:KeyboardShortcutTarget = { tagName: "TEXTAREA" };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(target, "clipboard-paste-fallback");
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
+			target,
+			KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		);
 
 		Assert.isFalse(shouldHandle);
 	}
@@ -113,7 +116,10 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldNotHandleClipboardShortcutWhenTargetIsTextInput() {
 		var target:KeyboardShortcutTarget = { tagName: "INPUT", type: "text" };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(target, "clipboard-paste-fallback");
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
+			target,
+			KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		);
 
 		Assert.isFalse(shouldHandle);
 	}
@@ -121,7 +127,10 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldNotHandleClipboardShortcutWhenTargetIsCheckboxInput() {
 		var target:KeyboardShortcutTarget = { tagName: "INPUT", type: "checkbox" };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(target, "clipboard-paste-fallback");
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
+			target,
+			KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		);
 
 		Assert.isFalse(shouldHandle);
 	}
@@ -129,17 +138,56 @@ class KeyboardInputPolicyTest extends Test {
 	function testShouldNotHandleClipboardShortcutWhenTargetIsEditableElement() {
 		var target:KeyboardShortcutTarget = { isContentEditable: true };
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(target, "clipboard-paste-fallback");
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
+			target,
+			KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		);
 
 		Assert.isFalse(shouldHandle);
 	}
 
 	function testShouldHandleClipboardShortcutWhenTargetIsFallbackElement() {
-		var target:KeyboardShortcutTarget = { id: "clipboard-paste-fallback", isContentEditable: true };
+		var target:KeyboardShortcutTarget = {
+			id: KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID,
+			isContentEditable: true
+		};
 
-		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(target, "clipboard-paste-fallback");
+		var shouldHandle = KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
+			target,
+			KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
+		);
 
 		Assert.isTrue(shouldHandle);
+	}
+
+	function testShouldAcceptPasswordCharacterKeyWithoutModifier() {
+		var shouldAccept = KeyboardInputPolicy.shouldAcceptPasswordCharacterKey(
+			KeyboardInputPolicy.KEY_CODE_V,
+			false,
+			false
+		);
+
+		Assert.isTrue(shouldAccept);
+	}
+
+	function testShouldRejectPasswordCharacterKeyWithControlModifier() {
+		var shouldAccept = KeyboardInputPolicy.shouldAcceptPasswordCharacterKey(
+			KeyboardInputPolicy.KEY_CODE_V,
+			true,
+			false
+		);
+
+		Assert.isFalse(shouldAccept);
+	}
+
+	function testShouldRejectPasswordCharacterKeyWithMetaModifier() {
+		var shouldAccept = KeyboardInputPolicy.shouldAcceptPasswordCharacterKey(
+			KeyboardInputPolicy.KEY_CODE_V,
+			false,
+			true
+		);
+
+		Assert.isFalse(shouldAccept);
 	}
 
 	function testShouldSanitizePasswordClipboardText() {

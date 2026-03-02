@@ -18,15 +18,31 @@ typedef KeyboardShortcutTarget = {
 }
 
 /**
+Represents keyboard metadata used to resolve shortcut handling.
+*/
+typedef KeyboardShortcutContext = {
+	var keyCode:Int;
+	var ctrlKey:Bool;
+	var metaKey:Bool;
+	var target:KeyboardShortcutTarget;
+	var allowedEditableElementId:String;
+}
+
+/**
 Provides keyboard input policies used by client event handlers.
 */
 class KeyboardInputPolicy {
+	public static inline var CLIPBOARD_FALLBACK_ELEMENT_ID = "clipboard-paste-fallback";
 	public static inline var ARROW_DOWN_KEY_CODE = 40;
 	public static inline var SPACE_KEY_CODE = 32;
 
 	public static inline var KEY_CODE_C = 67;
 	public static inline var KEY_CODE_V = 86;
 	public static inline var KEY_CODE_X = 88;
+	static inline var KEY_CODE_DIGIT_ZERO = 48;
+	static inline var KEY_CODE_DIGIT_NINE = 57;
+	static inline var KEY_CODE_UPPERCASE_A = 65;
+	static inline var KEY_CODE_UPPERCASE_Z = 90;
 	static inline var CHARACTER_CODE_DIGIT_ZERO = 48;
 	static inline var CHARACTER_CODE_DIGIT_NINE = 57;
 	static inline var CHARACTER_CODE_LOWERCASE_A = 97;
@@ -109,34 +125,20 @@ class KeyboardInputPolicy {
 
 	Parameters
 	----------
-	keyCode : Int
-		Pressed key code.
-	ctrlKey : Bool
-		Whether Control is pressed.
-	metaKey : Bool
-		Whether Meta (Command) is pressed.
-	target : KeyboardShortcutTarget
-		Current keyboard event target metadata.
-	allowedEditableElementId : String
-		Identifier of editable fallback element controlled by the game.
+	context : KeyboardShortcutContext
+		Keyboard key state, target metadata, and allowed fallback id.
 
 	Returns
 	-------
 	Bool
 		True when game code should handle the clipboard shortcut.
 	*/
-	public static function shouldHandleClipboardShortcut(
-		keyCode:Int,
-		ctrlKey:Bool,
-		metaKey:Bool,
-		target:KeyboardShortcutTarget,
-		allowedEditableElementId:String
-	):Bool {
-		var shortcut = getClipboardShortcut(keyCode, ctrlKey, metaKey);
+	public static function shouldHandleClipboardShortcut(context:KeyboardShortcutContext):Bool {
+		var shortcut = getClipboardShortcut(context.keyCode, context.ctrlKey, context.metaKey);
 		if (shortcut == null)
 			return false;
 
-		return shouldHandleClipboardShortcutForTarget(target, allowedEditableElementId);
+		return shouldHandleClipboardShortcutForTarget(context.target, context.allowedEditableElementId);
 	}
 
 	/**
@@ -232,6 +234,30 @@ class KeyboardInputPolicy {
 		return StringTools.lpad("", "*", text.length);
 	}
 
+	/**
+	Returns whether a key-down should append a password character.
+
+	Parameters
+	----------
+	keyCode : Int
+		Pressed key code.
+	ctrlKey : Bool
+		Whether Control is pressed.
+	metaKey : Bool
+		Whether Meta (Command) is pressed.
+
+	Returns
+	-------
+	Bool
+		True when the key should append a password character.
+	*/
+	public static function shouldAcceptPasswordCharacterKey(keyCode:Int, ctrlKey:Bool, metaKey:Bool):Bool {
+		if (ctrlKey || metaKey)
+			return false;
+
+		return isPasswordCharacterKeyCode(keyCode);
+	}
+
 	static function isTextEditingTarget(target:KeyboardShortcutTarget):Bool {
 		var normalizedTagName = (target.tagName ?? "").toLowerCase();
 		if (target.isContentEditable || normalizedTagName == "textarea")
@@ -243,6 +269,12 @@ class KeyboardInputPolicy {
 	static function isAlphaNumerical(characterCode:Int):Bool {
 		var isDigit = characterCode >= CHARACTER_CODE_DIGIT_ZERO && characterCode <= CHARACTER_CODE_DIGIT_NINE;
 		var isLetter = characterCode >= CHARACTER_CODE_LOWERCASE_A && characterCode <= CHARACTER_CODE_LOWERCASE_Z;
+		return isDigit || isLetter;
+	}
+
+	static function isPasswordCharacterKeyCode(keyCode:Int):Bool {
+		var isDigit = keyCode >= KEY_CODE_DIGIT_ZERO && keyCode <= KEY_CODE_DIGIT_NINE;
+		var isLetter = keyCode >= KEY_CODE_UPPERCASE_A && keyCode <= KEY_CODE_UPPERCASE_Z;
 		return isDigit || isLetter;
 	}
 

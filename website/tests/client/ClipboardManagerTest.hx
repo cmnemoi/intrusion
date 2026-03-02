@@ -1,6 +1,7 @@
 package tests.client;
 
 import ClipboardManager;
+import KeyboardInputPolicy;
 import js.lib.Promise;
 import tests.client.ClipboardManagerFakes.DeferredReadClipboard;
 import tests.client.ClipboardManagerFakes.FakeClipboard;
@@ -190,7 +191,7 @@ class ClipboardManagerTest extends Test {
 	function thenFallbackElementIsEditable(fakeDocument:FakeDocument):Void {
 		Assert.equals(
 			"plaintext-only",
-			fakeDocument.attributeForElement("clipboard-paste-fallback", "contenteditable")
+			fakeDocument.attributeForElement(KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID, "contenteditable")
 		);
 	}
 
