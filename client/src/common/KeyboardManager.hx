@@ -12,41 +12,35 @@ class KeyboardManager {
 	static public inline var SPACE = 32;
 	static public inline var ESCAPE = 27;
 
-	static private var keyState:IntMap<Bool>;
+	public static var lastKeyCodeDown:Int = 0;
+	private static var keyState:IntMap<Bool>;
 
-	static public var lastDown:Int;
 
 	static public function init() {
 		keyState = new IntMap();
 
 		js.Browser.window.addEventListener("keydown", onKeyDown);
 		js.Browser.window.addEventListener("keyup", onKeyUp);
-
-		/*window.js.Browser.dEventListener("keydown", function(e) {
-			if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
-				e.preventDefault();
-			}
-		}, false);*/
 	}
 
-	static private function onKeyUp(e:KeyboardEvent):Void {
-		keyState.remove(e.keyCode);
-		if (KeyboardInputPolicy.shouldPreventDefaultOnKeyUp(e.keyCode, e.ctrlKey, e.metaKey))
-			e.preventDefault();
+	static public function isAnyArrowKeyDown():Bool {
+		return isKeyDown(ARROW_RIGHT) || isKeyDown(ARROW_UP) || isKeyDown(ARROW_LEFT) || isKeyDown(ARROW_DOWN);
 	}
 
-	static private function onKeyDown(e:KeyboardEvent) {
-		keyState.set(e.keyCode, true);
-		lastDown = e.keyCode;
-		if (KeyboardInputPolicy.shouldPreventDefaultOnKeyDown(e.keyCode, e.ctrlKey, e.metaKey))
-			e.preventDefault();
-	}
-
-	static public function isDown(keyCode:Int):Bool {
+	static public function isKeyDown(keyCode:Int):Bool {
 		return keyState.exists(keyCode);
 	}
 
-	static public function isArrowDown():Bool {
-		return isDown(ARROW_RIGHT) || isDown(ARROW_UP) || isDown(ARROW_LEFT) || isDown(ARROW_DOWN);
+	static private function onKeyUp(event:KeyboardEvent):Void {
+		keyState.remove(event.keyCode);
+		if (KeyboardInputPolicy.shouldPreventDefaultOnKeyUp(event.ctrlKey, event.metaKey))
+			event.preventDefault();
+	}
+
+	static private function onKeyDown(event:KeyboardEvent):Void {
+		keyState.set(event.keyCode, true);
+		lastKeyCodeDown = event.keyCode;
+		if (KeyboardInputPolicy.shouldPreventDefaultOnKeyDown(event.keyCode, event.ctrlKey, event.metaKey))
+			event.preventDefault();
 	}
 }

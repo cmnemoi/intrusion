@@ -1,6 +1,7 @@
 import common.JSSharedObject;
 import ClipboardManager;
 import KeyboardInputPolicy;
+import KeyboardInputPolicy.KeyboardShortcutTarget;
 import mt.flash.Key;
 import mt.Timer;
 import mt.bumdum.Lib;
@@ -2587,7 +2588,16 @@ class UserTerminal {
 		return true;
 	}
 
-	function handleClipboardShortcut(keyCode:Int, ctrlKey:Bool, metaKey:Bool):Bool {
+	function handleClipboardShortcut(keyCode:Int, ctrlKey:Bool, metaKey:Bool, target:KeyboardShortcutTarget):Bool {
+		if (!KeyboardInputPolicy.shouldHandleClipboardShortcut(
+			keyCode,
+			ctrlKey,
+			metaKey,
+			target,
+			"clipboard-paste-fallback"
+		))
+			return false;
+
 		var shortcut = KeyboardInputPolicy.getClipboardShortcut(keyCode, ctrlKey, metaKey);
 		if (shortcut == null)
 			return false;
@@ -2608,7 +2618,7 @@ class UserTerminal {
 
 		// touches sp�ciales
 		var c = e.keyCode;
-		if (handleClipboardShortcut(c, e.ctrlKey, e.metaKey))
+		if (handleClipboardShortcut(c, e.ctrlKey, e.metaKey, cast e.target))
 			return;
 
 		switch (c) {

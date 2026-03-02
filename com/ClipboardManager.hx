@@ -1,9 +1,10 @@
 import js.lib.Promise;
+import js.lib.Error;
 import js.html.Document;
 import js.html.Element;
 
 typedef ClipboardAccess = {
-	function writeText(text:String):Promise<Dynamic>;
+	function writeText(text:String):Promise<Bool>;
 	function readText():Promise<String>;
 }
 
@@ -34,16 +35,17 @@ typedef PasteTimeoutContext = {
 }
 
 class ClipboardManager {
-	static inline var EMPTY_TEXT = "";
+	public static inline var EMPTY_TEXT = "";
 	static inline var NO_TIMEOUT_HANDLE = -1;
 	static inline var PASTE_TIMEOUT_IN_MILLISECONDS = 5_000;
+	static var pasteInFlight:Null<Promise<String>> = null;
 
 	/**
 	 * Initialize clipboard paste fallback support.
 	 * Creates an off-screen editable element used only during paste interception.
 	 */
 	public static function initFallback(?document:Document):Void {
-		var resolvedDocument = resolveDocument(document);
+		var resolvedDocument = getHTMLDocument(document);
 		if (resolvedDocument == null)
 			return;
 
@@ -56,54 +58,87 @@ class ClipboardManager {
 			return Promise.resolve(false);
 
 		try {
-			return cast clipboard.writeText(text).then(function(_ignoredResult) {
+			return cast resolvedClipboard.writeText(text).then(function(_) {
 				return true;
-			}, function(_clipboardError) {
+			}, function(_) {
 				return false;
 			});
 		}
-		catch (error:Dynamic) {
+		catch (_:Error) {
 			// Clipboard APIs are optional and may throw in unsupported contexts.
 			return Promise.resolve(false);
 		}
 	}
 
-	public static function paste(?clipboard:ClipboardAccess):Promise<String> {
+	public static function paste(?clipboard:ClipboardAccess, ?document:Document):Promise<String> {
+		if (pasteInFlight != null)
+			return pasteInFlight;
+
+		var pasteOperation = pasteWithClipboardOrFallback(clipboard, document);
+		pasteInFlight = releasePasteLockWhenComplete(pasteOperation);
+		return pasteInFlight;
+	}
+
+	static function pasteWithClipboardOrFallback(?clipboard:ClipboardAccess, ?document:Document):Promise<String> {
+		if (!shouldHandleClipboardFromFocusedElement(document))
+			return Promise.resolve(EMPTY_TEXT);
+
 		var resolvedClipboard = getClipboard(clipboard);
 		if (resolvedClipboard == null)
-			return fallbackPaste();
+			return fallbackPaste(document);
 
 		try {
 			return cast resolvedClipboard.readText().then(function(text:String) {
 				if (text == null || text.length == 0)
-					return fallbackPaste();
+					return fallbackPaste(document);
 
 				return Promise.resolve(text);
-			}, function(_readError) {
-				return fallbackPaste();
+			}, function(_) {
+				return fallbackPaste(document);
 			});
 		}
-		catch (error:Dynamic) {
+		catch (_:Error) {
 			// Clipboard APIs are optional and may throw in unsupported contexts.
-			return fallbackPaste();
+			return fallbackPaste(document);
 		}
 	}
 
-	static function fallbackPaste():Promise<String> {
-		var document = resolveDocument();
-		if (document == null)
+	static function releasePasteLockWhenComplete(pasteOperation:Promise<String>):Promise<String> {
+		return cast pasteOperation.then(function(text:String) {
+			pasteInFlight = null;
+			return text;
+		}, function(_:Error) {
+			pasteInFlight = null;
+			return EMPTY_TEXT;
+		});
+	}
+
+	static function fallbackPaste(?document:Document):Promise<String> {
+		var resolvedDocument = getHTMLDocument(document);
+		if (resolvedDocument == null)
 			return Promise.resolve(EMPTY_TEXT);
 
-		var fallbackElement = createFallbackPasteHTMLElement(document);
+		var fallbackElement = createFallbackPasteHTMLElement(resolvedDocument);
 		if (fallbackElement == null)
 			return Promise.resolve(EMPTY_TEXT);
 
 		focusElement(fallbackElement);
-		return waitForPasteText(document);
+		return waitForPasteText(resolvedDocument);
+	}
+
+	static function shouldHandleClipboardFromFocusedElement(?document:Document):Bool {
+		var resolvedDocument = getHTMLDocument(document);
+		if (resolvedDocument == null)
+			return true;
+
+		return KeyboardInputPolicy.shouldHandleClipboardShortcutForTarget(
+			cast resolvedDocument.activeElement,
+			"clipboard-paste-fallback"
+		);
 	}
 
 	static function waitForPasteText(document:Document):Promise<String> {
-		return new Promise(function(resolve, _ignoredReject) {
+		return new Promise(function(resolve, _) {
 			var browserWindow = getBrowserWindow();
 			if (browserWindow == null) {
 				resolve(EMPTY_TEXT);
@@ -195,19 +230,19 @@ class ClipboardManager {
 		try {
 			focusableElement.focus();
 		}
-		catch (error:Dynamic) {
+		catch (_:Error) {
 			// Some browsers block focus changes outside trusted interactions.
 		}
 	}
 
-	static function resolveDocument(?document:Document):Null<Document> {
+	static function getHTMLDocument(?document:Document):Null<Document> {
 		if (document != null)
 			return document;
 
 		try {
 			return js.Browser.document;
 		}
-		catch (error:Dynamic) {
+		catch (_:Error) {
 			// Browser globals are unavailable in non-browser execution contexts.
 			return null;
 		}
@@ -217,7 +252,7 @@ class ClipboardManager {
 		try {
 			return cast js.Browser.window;
 		}
-		catch (error:Dynamic) {
+		catch (_:Error) {
 			// Browser globals are unavailable in non-browser execution contexts.
 			return null;
 		}
@@ -227,18 +262,18 @@ class ClipboardManager {
 		if (clipboard != null)
 			return clipboard;
 
-		return getNaviagatorClipboard();
+		return getNavigatorClipboard();
 	}
 
-	static function getNaviagatorClipboard():Null<ClipboardAccess> {
+	static function getNavigatorClipboard():Null<ClipboardAccess> {
 		try {
 			if (js.Browser.navigator == null)
 				return null;
 
-			var navigatorClipboard:Null<ClipboardAccess> = cast untyped js.Browser.navigator.clipboard;
+			var navigatorClipboard:Null<ClipboardAccess> = cast js.Browser.navigator.clipboard;
 			return navigatorClipboard;
 		}
-		catch (error:Dynamic) {
+		catch (_:Error) {
 			// Clipboard API access can fail in restricted browser environments.
 			return null;
 		}
