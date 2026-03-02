@@ -5,6 +5,7 @@ import MissionGen;
 import pixi.core.Application;
 import haxe.CallStack;
 import common.MovieClipBuilder;
+import ClipboardManager;
 
 import haxe.Unserializer;
 
@@ -68,6 +69,10 @@ class Manager {
 		data.ChipsetsXml.init(Manager.LANG);
 
 		PARAMS = getParams();
+
+		// Initialize clipboard fallback for paste
+		ClipboardManager.initFallback();
+
 		term = new UserTerminal();
 		stopLoading();
 	}

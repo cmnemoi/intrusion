@@ -1,57 +1,245 @@
 import js.lib.Promise;
+import js.html.Document;
+import js.html.Element;
 
 typedef ClipboardAccess = {
 	function writeText(text:String):Promise<Dynamic>;
 	function readText():Promise<String>;
 }
 
+typedef BrowserWindowAccess = {
+	function setTimeout(callback:Void->Void, delay:Int):Int;
+	function clearTimeout(timeoutHandle:Int):Void;
+}
+
+typedef FocusableElement = {
+	function focus():Void;
+}
+
+typedef FallbackElementStyle = {
+	var position:String;
+	var left:String;
+	var top:String;
+	var width:String;
+	var height:String;
+	var opacity:String;
+	var pointerEvents:String;
+}
+
+typedef PasteTimeoutContext = {
+	var document:Document;
+	var browserWindow:BrowserWindowAccess;
+	var onPaste:js.html.ClipboardEvent->Void;
+	var resolve:String->Void;
+}
+
 class ClipboardManager {
+	static inline var EMPTY_TEXT = "";
+	static inline var NO_TIMEOUT_HANDLE = -1;
+	static inline var PASTE_TIMEOUT_IN_MILLISECONDS = 5_000;
+
+	/**
+	 * Initialize clipboard paste fallback support.
+	 * Creates an off-screen editable element used only during paste interception.
+	 */
+	public static function initFallback(?document:Document):Void {
+		var resolvedDocument = resolveDocument(document);
+		if (resolvedDocument == null)
+			return;
+
+		createFallbackPasteHTMLElement(resolvedDocument);
+	}
+
 	public static function copy(text:String, ?clipboard:ClipboardAccess):Promise<Bool> {
-		var resolvedClipboard = resolveClipboard(clipboard);
+		var resolvedClipboard = getClipboard(clipboard);
 		if (resolvedClipboard == null)
 			return Promise.resolve(false);
 
 		try {
-			return cast resolvedClipboard.writeText(text).then(function(_) {
+			return cast clipboard.writeText(text).then(function(_ignoredResult) {
 				return true;
-			}, function(_) {
+			}, function(_clipboardError) {
 				return false;
 			});
 		}
-		catch (_:Dynamic) {
+		catch (error:Dynamic) {
+			// Clipboard APIs are optional and may throw in unsupported contexts.
 			return Promise.resolve(false);
 		}
 	}
 
 	public static function paste(?clipboard:ClipboardAccess):Promise<String> {
-		var resolvedClipboard = resolveClipboard(clipboard);
+		var resolvedClipboard = getClipboard(clipboard);
 		if (resolvedClipboard == null)
-			return Promise.resolve("");
+			return fallbackPaste();
 
 		try {
-			return cast resolvedClipboard.readText().then(function(text) {
-				if (text == null)
-					return "";
+			return cast resolvedClipboard.readText().then(function(text:String) {
+				if (text == null || text.length == 0)
+					return fallbackPaste();
 
-				return text;
-			}, function(_) {
-				return "";
+				return Promise.resolve(text);
+			}, function(_readError) {
+				return fallbackPaste();
 			});
 		}
-		catch (_:Dynamic) {
-			return Promise.resolve("");
+		catch (error:Dynamic) {
+			// Clipboard APIs are optional and may throw in unsupported contexts.
+			return fallbackPaste();
 		}
 	}
 
-	static function resolveClipboard(clipboard:ClipboardAccess):Null<ClipboardAccess> {
+	static function fallbackPaste():Promise<String> {
+		var document = resolveDocument();
+		if (document == null)
+			return Promise.resolve(EMPTY_TEXT);
+
+		var fallbackElement = createFallbackPasteHTMLElement(document);
+		if (fallbackElement == null)
+			return Promise.resolve(EMPTY_TEXT);
+
+		focusElement(fallbackElement);
+		return waitForPasteText(document);
+	}
+
+	static function waitForPasteText(document:Document):Promise<String> {
+		return new Promise(function(resolve, _ignoredReject) {
+			var browserWindow = getBrowserWindow();
+			if (browserWindow == null) {
+				resolve(EMPTY_TEXT);
+				return;
+			}
+
+			waitForPasteEvent(document, browserWindow, resolve);
+		});
+	}
+
+	static function waitForPasteEvent(
+		document:Document,
+		browserWindow:BrowserWindowAccess,
+		resolve:String->Void
+	):Void {
+		var timeoutHandle = NO_TIMEOUT_HANDLE;
+		var onPaste:js.html.ClipboardEvent->Void = null;
+
+		onPaste = function(event:js.html.ClipboardEvent) {
+			if (timeoutHandle != NO_TIMEOUT_HANDLE) {
+				browserWindow.clearTimeout(timeoutHandle);
+			}
+			document.removeEventListener("paste", onPaste);
+			resolve(readClipboardText(event));
+		};
+
+		timeoutHandle = schedulePasteTimeout({
+			document: document,
+			browserWindow: browserWindow,
+			onPaste: onPaste,
+			resolve: resolve,
+		});
+		document.addEventListener("paste", onPaste);
+	}
+
+	static function schedulePasteTimeout(context:PasteTimeoutContext):Int {
+		var document = context.document;
+		var browserWindow = context.browserWindow;
+		var onPaste = context.onPaste;
+		var resolve = context.resolve;
+
+		return browserWindow.setTimeout(function() {
+			document.removeEventListener("paste", onPaste);
+			resolve(EMPTY_TEXT);
+		}, PASTE_TIMEOUT_IN_MILLISECONDS);
+	}
+
+	static function readClipboardText(event:js.html.ClipboardEvent):String {
+		if (event == null || event.clipboardData == null)
+			return EMPTY_TEXT;
+
+		var text = event.clipboardData.getData("text/plain");
+		if (text == null)
+			return EMPTY_TEXT;
+
+		return text;
+	}
+
+	static function createFallbackPasteHTMLElement(document:Document):Null<Element> {
+		var existingElement = document.getElementById("clipboard-paste-fallback");
+		if (existingElement != null)
+			return existingElement;
+
+		if (document.body == null)
+			return null;
+
+		var fallbackElement = document.createElement("div");
+		fallbackElement.setAttribute("id", "clipboard-paste-fallback");
+		fallbackElement.setAttribute("contenteditable", "plaintext-only");
+		fallbackElement.setAttribute("tabindex", "-1");
+		fallbackElement.setAttribute("aria-hidden", "true");
+		fallbackElement.style.position = "fixed";
+		fallbackElement.style.left = "-10000px";
+		fallbackElement.style.top = "0";
+		fallbackElement.style.width = "1px";
+		fallbackElement.style.height = "1px";
+		fallbackElement.style.opacity = "0";
+		fallbackElement.style.pointerEvents = "none";
+		document.body.appendChild(fallbackElement);
+
+		return fallbackElement;
+	}
+
+	static function focusElement(element:Element):Void {
+		var focusableElement:Null<FocusableElement> = cast element;
+		if (focusableElement == null)
+			return;
+
+		try {
+			focusableElement.focus();
+		}
+		catch (error:Dynamic) {
+			// Some browsers block focus changes outside trusted interactions.
+		}
+	}
+
+	static function resolveDocument(?document:Document):Null<Document> {
+		if (document != null)
+			return document;
+
+		try {
+			return js.Browser.document;
+		}
+		catch (error:Dynamic) {
+			// Browser globals are unavailable in non-browser execution contexts.
+			return null;
+		}
+	}
+
+	static function getBrowserWindow():Null<BrowserWindowAccess> {
+		try {
+			return cast js.Browser.window;
+		}
+		catch (error:Dynamic) {
+			// Browser globals are unavailable in non-browser execution contexts.
+			return null;
+		}
+	}
+
+	static function getClipboard(clipboard:ClipboardAccess):Null<ClipboardAccess> {
 		if (clipboard != null)
 			return clipboard;
 
+		return getNaviagatorClipboard();
+	}
+
+	static function getNaviagatorClipboard():Null<ClipboardAccess> {
 		try {
-			var navigatorClipboard:Dynamic = untyped js.Browser.navigator != null ? untyped js.Browser.navigator.clipboard : null;
-			return cast navigatorClipboard;
+			if (js.Browser.navigator == null)
+				return null;
+
+			var navigatorClipboard:Null<ClipboardAccess> = cast untyped js.Browser.navigator.clipboard;
+			return navigatorClipboard;
 		}
-		catch (_:Dynamic) {
+		catch (error:Dynamic) {
+			// Clipboard API access can fail in restricted browser environments.
 			return null;
 		}
 	}
