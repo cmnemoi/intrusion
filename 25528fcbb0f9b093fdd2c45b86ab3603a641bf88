@@ -1,0 +1,38 @@
+com/ClipboardManager.hx
+  5791dd579382eb98 127,137,152,161,169,176-187
+client/src/Manager.hx
+  d830461fbff21902 8,72-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "25528fcbb0f9b093fdd2c45b86ab3603a641bf88",
+  "prompts": {
+    "5791dd579382eb98": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_351ccd324ffe08Qp2hw7Mu9EnH",
+        "model": "opencode/minimax-m2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 27,
+      "total_deletions": 34,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    },
+    "d830461fbff21902": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_37d82c010ffeAAbuWfv3FTeVrb",
+        "model": "opencode/minimax-m2.5-free"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 0,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}
