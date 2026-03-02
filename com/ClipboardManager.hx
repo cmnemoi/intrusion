@@ -38,7 +38,7 @@ class ClipboardManager {
 	public static inline var EMPTY_TEXT = "";
 	static inline var NO_TIMEOUT_HANDLE = -1;
 	static inline var PASTE_TIMEOUT_IN_MILLISECONDS = 5_000;
-	static var pasteInFlight:Null<Promise<String>> = null;
+	static var pendingPasteOperation:Null<Promise<String>> = null;
 
 	/**
 	 * Initialize clipboard paste fallback support.
@@ -71,12 +71,28 @@ class ClipboardManager {
 	}
 
 	public static function paste(?clipboard:ClipboardAccess, ?document:Document):Promise<String> {
-		if (pasteInFlight != null)
-			return pasteInFlight;
+		return runCoalescedPaste(function() {
+			if (clipboard == null)
+				return pasteFromKeyboardShortcut(document);
 
-		var pasteOperation = pasteWithClipboardOrFallback(clipboard, document);
-		pasteInFlight = releasePasteLockWhenComplete(pasteOperation);
-		return pasteInFlight;
+			return pasteWithClipboardOrFallback(clipboard, document);
+		});
+	}
+
+	static function runCoalescedPaste(createPasteOperation:Void->Promise<String>):Promise<String> {
+		if (pendingPasteOperation != null)
+			return pendingPasteOperation;
+
+		var pasteOperation = createPasteOperation();
+		pendingPasteOperation = releasePasteLockWhenComplete(pasteOperation);
+		return pendingPasteOperation;
+	}
+
+	static function pasteFromKeyboardShortcut(?document:Document):Promise<String> {
+		if (!shouldHandleClipboardFromFocusedElement(document))
+			return Promise.resolve(EMPTY_TEXT);
+
+		return fallbackPaste(document);
 	}
 
 	static function pasteWithClipboardOrFallback(?clipboard:ClipboardAccess, ?document:Document):Promise<String> {
@@ -105,10 +121,10 @@ class ClipboardManager {
 
 	static function releasePasteLockWhenComplete(pasteOperation:Promise<String>):Promise<String> {
 		return cast pasteOperation.then(function(text:String) {
-			pasteInFlight = null;
+			pendingPasteOperation = null;
 			return text;
 		}, function(_:Error) {
-			pasteInFlight = null;
+			pendingPasteOperation = null;
 			return EMPTY_TEXT;
 		});
 	}

@@ -20,7 +20,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.copy(COPIED_TEXT, clipboard).then(function(hasCopied) {
 			thenCopySucceeds(hasCopied, clipboard.copiedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -39,7 +38,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.copy(COPIED_TEXT, clipboard).then(function(hasCopied) {
 			thenCopyFails(hasCopied, clipboard.copiedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -49,7 +47,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.paste(clipboard).then(function(pastedText) {
 			thenPastedTextIs("from-clipboard", pastedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -59,7 +56,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.paste(clipboard).then(function(pastedText) {
 			thenTextIsEmpty(pastedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -67,7 +63,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.paste(null).then(function(pastedText) {
 			thenTextIsEmpty(pastedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -79,7 +74,6 @@ class ClipboardManagerTest extends Test {
 			thenTextIsEmpty(pastedText);
 			Assert.equals(0, clipboard.readCallCount);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -90,7 +84,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.paste(clipboard, cast fakeDocument).then(function(pastedText) {
 			thenTextIsEmpty(pastedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -101,7 +94,6 @@ class ClipboardManagerTest extends Test {
 		ClipboardManager.paste(clipboard, cast fakeDocument).then(function(pastedText) {
 			thenTextIsEmpty(pastedText);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -114,7 +106,6 @@ class ClipboardManagerTest extends Test {
 		pastePromise.then(function(text) {
 			thenPastedTextIs("test-text", text);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -132,7 +123,6 @@ class ClipboardManagerTest extends Test {
 			Assert.equals("shared", pastedTexts[0]);
 			Assert.equals("shared", pastedTexts[1]);
 			asyncHandle.done();
-			return null;
 		});
 	}
 
@@ -151,10 +141,16 @@ class ClipboardManagerTest extends Test {
 			thirdPaste.then(function(thirdText) {
 				Assert.equals("second", thirdText);
 				asyncHandle.done();
-				return null;
 			});
+		});
+	}
 
-			return null;
+	function testShouldUseFallbackPaste(asyncHandle:Async) {
+		var fakeDocument = givenDocumentWithMainCanvas();
+
+		ClipboardManager.paste(null, cast fakeDocument).then(function(pastedText) {
+			thenTextIsEmpty(pastedText);
+			asyncHandle.done();
 		});
 	}
 

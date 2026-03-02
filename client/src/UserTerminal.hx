@@ -2540,10 +2540,10 @@ class UserTerminal {
 	function handlePasswordClipboardShortcut(shortcut:KeyboardClipboardShortcut):Bool {
 		switch (shortcut) {
 			case Copy:
-				ClipboardManager.copy(currentPasswordInputValue());
+				ClipboardManager.copy(currentPasswordInputValue()).then(function(_) {});
 
 			case Cut:
-				ClipboardManager.copy(currentPasswordInputValue());
+				ClipboardManager.copy(currentPasswordInputValue()).then(function(_) {});
 				setPasswordInputValue("");
 
 			case Paste:
@@ -2562,10 +2562,10 @@ class UserTerminal {
 	function handleCmdLineClipboardShortcut(shortcut:KeyboardClipboardShortcut):Bool {
 		switch (shortcut) {
 			case Copy:
-				ClipboardManager.copy(cmdLine.field.text);
+				ClipboardManager.copy(cmdLine.field.text).then(function(_) {});
 
 			case Cut:
-				ClipboardManager.copy(cmdLine.field.text);
+				ClipboardManager.copy(cmdLine.field.text).then(function(_) {});
 				cmdLine.field.text = "";
 				forcedCaret = -1;
 
