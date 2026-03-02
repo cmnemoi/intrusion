@@ -8,7 +8,7 @@ Code Quality:
 - Eliminate duplication (DRY).
 
 Length Limits:
-- Max 20 lines per function : extract until you drop.
+- Max 25 lines per function : extract until you drop.
 - Max 3 parameters per function.
 - Max 300 lines per file.
 - Max 10 sub-files per folder.
