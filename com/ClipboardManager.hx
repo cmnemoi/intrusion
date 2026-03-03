@@ -89,34 +89,39 @@ class ClipboardManager {
 	}
 
 	static function pasteFromKeyboardShortcut(?document:Document):Promise<String> {
-		if (!shouldHandleClipboardFromFocusedElement(document))
-			return Promise.resolve(EMPTY_TEXT);
-
-		return fallbackPaste(document);
+		return pasteWhenFocused(function() {
+			return fallbackPaste(document);
+		}, document);
 	}
 
 	static function pasteWithClipboardOrFallback(?clipboard:ClipboardAccess, ?document:Document):Promise<String> {
+		return pasteWhenFocused(function() {
+			var resolvedClipboard = getClipboard(clipboard);
+			if (resolvedClipboard == null)
+				return fallbackPaste(document);
+
+			try {
+				return cast resolvedClipboard.readText().then(function(text:String) {
+					if (text == null || text.length == 0)
+						return fallbackPaste(document);
+
+					return Promise.resolve(text);
+				}, function(_) {
+					return fallbackPaste(document);
+				});
+			}
+			catch (_:Error) {
+				// Clipboard APIs are optional and may throw in unsupported contexts.
+				return fallbackPaste(document);
+			}
+		}, document);
+	}
+
+	static function pasteWhenFocused(createPasteOperation:Void->Promise<String>, ?document:Document):Promise<String> {
 		if (!shouldHandleClipboardFromFocusedElement(document))
 			return Promise.resolve(EMPTY_TEXT);
 
-		var resolvedClipboard = getClipboard(clipboard);
-		if (resolvedClipboard == null)
-			return fallbackPaste(document);
-
-		try {
-			return cast resolvedClipboard.readText().then(function(text:String) {
-				if (text == null || text.length == 0)
-					return fallbackPaste(document);
-
-				return Promise.resolve(text);
-			}, function(_) {
-				return fallbackPaste(document);
-			});
-		}
-		catch (_:Error) {
-			// Clipboard APIs are optional and may throw in unsupported contexts.
-			return fallbackPaste(document);
-		}
+		return createPasteOperation();
 	}
 
 	static function releasePasteLockWhenComplete(pasteOperation:Promise<String>):Promise<String> {
