@@ -1,0 +1,16 @@
+compose.dev.yaml
+  h_32f94e59e2f995 5
+compose.yaml
+  h_32f94e59e2f995 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "03728af84f050782a6da338e86a41808487dd25f",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
