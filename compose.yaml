@@ -21,7 +21,7 @@ services:
       - traefik.http.services.website.loadbalancer.server.port=8001
 
   traefik:
-    image: traefik:3.5
+    image: traefik:3.7
     container_name: traefik
     command:
       - --providers.docker=true
