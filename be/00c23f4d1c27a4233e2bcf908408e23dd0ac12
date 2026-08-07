@@ -1,0 +1,81 @@
+website/routes/Videos.hx
+  s_6eee9cacb64931::t_01452a1fa0b042 15,17,22-43,62-65,73
+  s_6eee9cacb64931::t_381a8dceef40c1 14
+  s_bc398593d99135::t_b0fea219fb70dd 3
+  s_bc398593d99135::t_af06ebeb2bcb3a 1-2,4-13,16,18-20,44-61,66-72,74-85
+  s_6eee9cacb64931::t_512acf2844af3e 21
+website/queries/GetMostPopularVideoByKeywordFromYoutube.hx
+  s_bc398593d99135::t_00208463b15556 63-64,66,69-73
+  s_bc398593d99135::t_8de3d4bb49a004 83
+  s_bc398593d99135::t_29d3b2616480c5 12,15,35-45,78-80
+  s_bc398593d99135::t_fc8992f964d410 1-11,13-14,16-34,46-62,65,67-68,74-77,81-82,84-129
+docs/specs/live-videos.md
+  s_bc398593d99135::t_fc657850c968da 41
+  s_bc398593d99135::t_a75feba5cc4bd5 1-18,25-30,37-40,42-45,47-49,51-68
+  s_6eee9cacb64931::t_0ca80cd93f9056 31-36,50
+  s_bc398593d99135::t_e3934f39ae2bc5 19-24,46
+client/src/Live.hx
+  s_bc398593d99135::t_c00fe4f88f2678 2,4,6-11,13-18,21-26,28-52,97-98
+website/tests/routes/VideosRouteTest.hx
+  s_6eee9cacb64931::t_70c00e0e784fdc 3-4,20-21,24-34,37
+  s_6eee9cacb64931::t_129fe41c346b55 7,23,35-36,38-40
+  s_6eee9cacb64931::t_4816c26ce28bbf 43-59
+  s_bc398593d99135::t_af7916755e5106 1-2,5-6,8-19,41-42,60-73
+  s_6eee9cacb64931::t_de06d8ee936057 22
+compose.yaml
+  h_32f94e59e2f995 26
+  s_bc398593d99135::t_2599f67539967e 18
+  s_bc398593d99135::t_04e4ef3e10c67a 19
+client/src/JSMain.hx
+  s_bc398593d99135::t_516a908799619a 69-70,72-75
+website/App.hx
+  s_bc398593d99135::t_fde057065fe6ac 24,39
+com/VideoSearch.hx
+  s_bc398593d99135::t_1ca7180d2c0101 1-26
+website/tests/TestMain.hx
+  s_bc398593d99135::t_06d1c987506e31 13-14,25-26
+  s_bc398593d99135::t_2cd74b01d158d8 7,30
+compose.dev.yaml
+  h_32f94e59e2f995 5
+  s_bc398593d99135::t_9b746a1f533d6f 28
+  s_bc398593d99135::t_c00eac200073cb 29
+website/tests/queries/GetMostPopularVideoByKeywordFromYoutubeTest.hx
+  s_bc398593d99135::t_81ae97d6b1aeca 1-17,30-54
+  s_bc398593d99135::t_9e7b21fe8d22eb 18-29
+website/queries/VideoSearchResult.hx
+  s_bc398593d99135::t_6bb162ee531ea8 1-8
+website/tests/client/VideoSearchTest.hx
+  s_bc398593d99135::t_765adf86f2aef4 1-28
+compose.prod.yaml
+  s_bc398593d99135::t_4927524d818c39 26
+  s_bc398593d99135::t_e488b0e24d24ff 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "be00c23f4d1c27a4233e2bcf908408e23dd0ac12",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_6eee9cacb64931": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fdbc3-369f-74cd-977e-bf1f6c024706",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    },
+    "s_bc398593d99135": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fd834-caf8-79c4-ac82-4910abdf3752",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
