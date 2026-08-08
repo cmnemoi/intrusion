@@ -1,0 +1,19 @@
+client/src/FSNode.hx
+  s_5a9b1a92b8d94c::t_df0f0865f07431 40,91,351-356,380-384
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "4d8945a4670432e3dcec3899d15e79ec8bd60f45",
+  "prompts": {},
+  "sessions": {
+    "s_5a9b1a92b8d94c": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fe190-a578-7e3b-8738-60a7c9a0b9b2",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
