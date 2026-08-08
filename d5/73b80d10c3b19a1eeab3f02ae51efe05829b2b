@@ -1,0 +1,19 @@
+client/src/VirusMan.hx
+  s_5a9b1a92b8d94c::t_12cbe70b192006 146-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "d573b80d10c3b19a1eeab3f02ae51efe05829b2b",
+  "prompts": {},
+  "sessions": {
+    "s_5a9b1a92b8d94c": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fe190-a578-7e3b-8738-60a7c9a0b9b2",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  }
+}
