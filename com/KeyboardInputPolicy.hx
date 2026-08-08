@@ -91,6 +91,11 @@ class KeyboardInputPolicy {
 		return keyCode == SPACE_KEY_CODE || keyCode == ARROW_DOWN_KEY_CODE;
 	}
 
+	/** @spec missions.uber-eleet.client-input::prevent-browser-navigation */
+	public static function shouldPreventDefaultInCommandLine(ctrlKey:Bool, metaKey:Bool):Bool {
+		return !ctrlKey && !metaKey;
+	}
+
 	/**
 	Resolves clipboard shortcut action from a key combination.
 
@@ -212,6 +217,30 @@ class KeyboardInputPolicy {
 		normalizedText = StringTools.replace(normalizedText, "\n", " ");
 		normalizedText = StringTools.replace(normalizedText, "\r", " ");
 		return normalizedText;
+	}
+
+	/**
+	Returns a printable command-line character from a key event.
+
+	Parameters
+	----------
+	key : Null<String>
+		Browser key value.
+	ctrlKey : Bool
+		Whether Control is pressed.
+	metaKey : Bool
+		Whether Meta (Command) is pressed.
+
+	Returns
+	-------
+	Null<String>
+		Lowercased character, or null for shortcuts and special keys.
+	*/
+	/** @spec missions.uber-eleet.client-input::typed-characters-visible */
+	public static function commandLineCharacter(key:Null<String>, ctrlKey:Bool, metaKey:Bool):Null<String> {
+		if (key == null || key.length != 1 || ctrlKey || metaKey)
+			return null;
+		return key.toLowerCase();
 	}
 
 	/**

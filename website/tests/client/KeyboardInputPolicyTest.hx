@@ -30,6 +30,17 @@ class KeyboardInputPolicyTest extends Test {
 		Assert.isTrue(shouldPreventDefault);
 	}
 
+	/** @spec missions.uber-eleet.client-input::prevent-browser-navigation */
+	function testShouldPreventDefaultInCommandLineWithoutModifier() {
+		Assert.isTrue(KeyboardInputPolicy.shouldPreventDefaultInCommandLine(false, false));
+	}
+
+	/** @spec missions.uber-eleet.client-input::prevent-browser-navigation */
+	function testShouldNotPreventDefaultInCommandLineWithModifier() {
+		Assert.isFalse(KeyboardInputPolicy.shouldPreventDefaultInCommandLine(true, false));
+		Assert.isFalse(KeyboardInputPolicy.shouldPreventDefaultInCommandLine(false, true));
+	}
+
 	function testShouldPreventDefaultOnArrowDownKeyDownWithoutModifier() {
 		var shouldPreventDefault = KeyboardInputPolicy.shouldPreventDefaultOnKeyDown(KeyboardInputPolicy.ARROW_DOWN_KEY_CODE, false, false);
 
@@ -204,6 +215,27 @@ class KeyboardInputPolicyTest extends Test {
 		var normalizedText = KeyboardInputPolicy.normalizeCommandClipboardText(clipboardText);
 
 		Assert.equals("ls -la  pwd whoami", normalizedText);
+	}
+
+	/** @spec missions.uber-eleet.client-input::typed-characters-visible */
+	function testShouldReturnLowercaseCommandLineCharacter() {
+		Assert.equals("a", KeyboardInputPolicy.commandLineCharacter("A", false, false));
+	}
+
+	/** @spec missions.uber-eleet.client-input::typed-characters-visible */
+	function testShouldReturnCommandLineSpace() {
+		Assert.equals(" ", KeyboardInputPolicy.commandLineCharacter(" ", false, false));
+	}
+
+	/** @spec missions.uber-eleet.client-input::typed-characters-visible */
+	function testShouldRejectCommandLineControlShortcut() {
+		Assert.isNull(KeyboardInputPolicy.commandLineCharacter("c", true, false));
+		Assert.isNull(KeyboardInputPolicy.commandLineCharacter("c", false, true));
+	}
+
+	/** @spec missions.uber-eleet.client-input::typed-characters-visible */
+	function testShouldRejectCommandLineSpecialKey() {
+		Assert.isNull(KeyboardInputPolicy.commandLineCharacter("ArrowLeft", false, false));
 	}
 
 	function testShouldMaskPasswordTextWithAsterisks() {

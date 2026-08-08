@@ -9,6 +9,7 @@ import tests.commands.BuyVirusTest;
 import tests.commands.RenameDeckTest;
 import tests.commands.UpgradeDeckTest;
 import tests.routes.DecksRouteTest;
+import tests.routes.MissionsUberEleetTest;
 import utest.UTest;
 
 class TestMain {
@@ -19,6 +20,7 @@ class TestMain {
 			new BuyVirusTest(),
 			new UpgradeDeckTest(),
 			new DecksRouteTest(),
+			new MissionsUberEleetTest(),
 			new AppErrorHandlingTest(),
 			new MissionGenXpProgressTest(),
 			new KeyboardInputPolicyTest(),

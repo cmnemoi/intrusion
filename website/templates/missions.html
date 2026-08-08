@@ -36,6 +36,15 @@
             <img class="wbutton" src="/img/design/pixel.gif" alt=""/>
             <span>Missions</span>
         </div>
+        <!-- @spec missions.uber-eleet.player-preference::accessible-before-launch -->
+        <div class="missionMode">
+            <form method="post" action="/missions/mode">
+                <input type="hidden" name="saveUberEleet" value="1"/>
+                <input id="uberEleet" type="checkbox" name="uberEleet" value="1"::if (uberEleet):: checked::end:: />
+                <label for="uberEleet">Mode Uber-Eleet</label>
+                <input class="button" type="submit" value="Enregistrer"/>
+            </form>
+        </div>
         <div id="ongoing" class="container::if (tab != "ongoing"):: hidden::end::">
             ::foreach ongoing::
             <a class="file", href="/missions/::missionId::/start">

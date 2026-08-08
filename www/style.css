@@ -1238,6 +1238,23 @@ img.vicon {
 	font-size : 7pt;
 	letter-spacing : 0pt;
 }
+.offers .missionMode {
+	padding : 8px 10px;
+	background-color : #595c3c;
+	border : 1px solid #d0d194;
+}
+.offers .missionMode form {
+	margin : 0px;
+}
+.offers .missionMode label {
+	margin-left : 5px;
+}
+.offers .missionMode input[type=checkbox] {
+	vertical-align : middle;
+}
+.offers .missionMode input.button {
+	margin-left : 10px;
+}
 .missionDetails form select {
 	width : 100%;
 	font-size : 8pt;

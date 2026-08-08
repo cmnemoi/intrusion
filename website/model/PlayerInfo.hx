@@ -19,6 +19,9 @@ typedef Deck = {
     public var viruses: Array<String>;
     public var chipsets: Array<String>;
     public var activeChipset: Null<String>;
+    /** @spec missions.uber-eleet.player-preference::default-disabled */
+    @:optional @:default(false)
+    public var uberEleet: Bool = false;
     public var decks: Array<Deck>;
     public var goals: Map<Goal, Int>;
     public var valuables: Map<String, Int>;
@@ -63,6 +66,7 @@ typedef Deck = {
             viruses: startingViruses,
             chipsets: [],
             activeChipset: "none",
+            uberEleet: false,
             decks: [{name: "Deck Principal", capacity: 3, content: startingViruses}],
             goals: new Map(),
             valuables: new Map(),

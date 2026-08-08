@@ -22,8 +22,10 @@ class Missions implements IJSAsync {
         init(lang);
         var router = new ExpressRouter();
         router.get("/", App.withAsyncErrorHandler(missions));
+        router.post("/mode", App.withAsyncErrorHandler(updateMode));
 		router.get('/:missionId/details', App.withAsyncErrorHandler(details));
         router.get("/:missionId/start", App.withAsyncErrorHandler(start));
+        router.post("/:missionId/start", App.withAsyncErrorHandler(start));
         router.post("/:missionId/end", App.withAsyncErrorHandler(end));
         return router;
     }
@@ -56,9 +58,17 @@ class Missions implements IJSAsync {
 				available: available,
 				tutorial: tutorial,
 				completed: completed,
+                uberEleet: player.uberEleet,
 			}
 		));
 	}
+
+    @:jsasync static function updateMode(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
+        var player: PlayerInfo = req.locals.player;
+        player.uberEleet = uberEleetPreference(req.body, player.uberEleet);
+        player.persist().jsawait();
+        res.redirect("/missions");
+    }
     
 	@:jsasync static function details(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var player: PlayerInfo = req.locals.player;
@@ -91,6 +101,7 @@ class Missions implements IJSAsync {
 	@:jsasync static function start(req:ExpressRequest, res:ExpressResponse, next:?Dynamic->Void) {
 		var missionId = Std.parseInt(req.params.missionId);
 		var player: PlayerInfo = req.locals.player;
+        var nextUberEleet = uberEleetPreference(req.body, player.uberEleet);
 
 		var mission = null;
 		for (m in player.availableMissions) {
@@ -101,7 +112,8 @@ class Missions implements IJSAsync {
 		if (mission != null) {
 			player.availableMissions = player.availableMissions.filter((m) -> m.id() != missionId);
 			player.activeMissions.push(mission);
-			player.persist();
+            player.uberEleet = nextUberEleet;
+            player.persist();
 		}
 		App.renderContent(req, res, App.getTemplate('start.html').execute({init: getStartData(player, missionId)}));
 	}
@@ -218,6 +230,8 @@ class Missions implements IJSAsync {
         return player.activeChipset == "none" ? null : player.activeChipset;
     }
 
+    /** @spec missions.uber-eleet.mission-start::profile-flag */
+    @:allow(tests.routes.MissionsUberEleetTest)
     private static function pinit(player: PlayerInfo, missionId: Int, level: Int, seed: Int, mission: MissionData): PInit {
         return {
             _sfxVer		: 1,
@@ -240,7 +254,7 @@ class Missions implements IJSAsync {
                 _low		: false,
                 _adult		: true,
                 _ulevel		: 4,
-                _leet		: false,
+                _leet		: player.uberEleet,
                 _cfg		: "
                     alias d=avdmg1
                     alias    up = cd ..
@@ -290,6 +304,13 @@ class Missions implements IJSAsync {
 			expireTs: DateTools.delta(mission.createdTs, 24 * 3600 * 1000),
 		}
 	}
+
+    /** @spec missions.uber-eleet.player-preference::persisted */
+    public static function uberEleetPreference(query: Dynamic, current: Bool): Bool {
+        if (query == null || query.saveUberEleet != "1")
+            return current;
+        return query.uberEleet == "1";
+    }
 
     public static function difficulty(missionLevel: Int, playerLevel: Int): String {
 		if (missionLevel == playerLevel) {

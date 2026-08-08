@@ -2103,11 +2103,15 @@ class UserTerminal {
 	public function attachCmdLine() {
 		if ( !fl_leet )
 			return;
-		cmdLine.removeMovieClip();
+		/** @spec missions.uber-eleet.client-startup::safe-first-activation */
+		cmdLine?.removeMovieClip();
 		cmdLine = cast Manager.DM.attach("cmdLine", Data.DP_TOPTOP);
 		cmdLine._x = 16;
 		cmdLine._y = Data.HEI-cmdLine._height+2;
 		cmdLine.field.text = "";
+		/** @spec missions.uber-eleet.client-input::text-aligned-with-bar */
+		cmdLine.field._x = 5;
+		cmdLine.field._y = 3;
 		cmdLine._alpha = 90;
 //		var me = this;
 //		cmdLine.field.onChanged = function(tf) {
@@ -2585,6 +2589,27 @@ class UserTerminal {
 		return true;
 	}
 
+	/** @spec missions.uber-eleet.client-input::typed-characters-visible */
+	function handleCmdLineTextInput(event:KeyboardEvent):Bool {
+		if (!hasCmdLineFocus())
+			return false;
+
+		if (event.key == "Backspace" || event.key == "Delete") {
+			if (cmdLine.field.text.length > 0)
+				cmdLine.field.text = cmdLine.field.text.substr(0, cmdLine.field.text.length - 1);
+			forcedCaret = -1;
+			return true;
+		}
+
+		var character = KeyboardInputPolicy.commandLineCharacter(event.key, event.ctrlKey, event.metaKey);
+		if (character == null)
+			return false;
+
+		cmdLine.field.text += character;
+		forcedCaret = -1;
+		return true;
+	}
+
 	function handleClipboardShortcut(shortcutContext:KeyboardShortcutContext):Bool {
 		if (!KeyboardInputPolicy.shouldHandleClipboardShortcut(shortcutContext))
 			return false;
@@ -2613,6 +2638,9 @@ class UserTerminal {
 
 		// touches sp�ciales
 		var c = e.keyCode;
+		if (fl_leet && fs != null && KeyboardInputPolicy.shouldPreventDefaultInCommandLine(e.ctrlKey, e.metaKey))
+			e.preventDefault();
+
 		if (handleClipboardShortcut({
 			keyCode: c,
 			ctrlKey: e.ctrlKey,
@@ -2620,6 +2648,9 @@ class UserTerminal {
 			target: cast e.target,
 			allowedEditableElementId: KeyboardInputPolicy.CLIPBOARD_FALLBACK_ELEMENT_ID
 		}))
+			return;
+
+		if (handleCmdLineTextInput(e))
 			return;
 
 		switch (c) {
