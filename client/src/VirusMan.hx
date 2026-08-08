@@ -143,7 +143,8 @@ class VirusMan {
 			}
 
 		// lancement
-		term.fs.focus(f.mcIndex);
+		if ( f!=null )
+			term.fs.focus(f.mcIndex);
 		exec(v, f);
 	}
 
