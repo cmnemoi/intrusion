@@ -1,0 +1,70 @@
+website/templates/missions.html
+  s_5a9b1a92b8d94c::t_d0b086d6e8d243 39-47
+website/model/PlayerInfo.hx
+  s_5a9b1a92b8d94c::t_8a01ae6e59e9c1 24
+  s_5a9b1a92b8d94c::t_b81eff484443ab 69
+  s_5a9b1a92b8d94c::t_5843f8a2e1f784 22
+  s_5a9b1a92b8d94c::t_a489d75bdf1776 23
+website/tests/TestMain.hx
+  s_5a9b1a92b8d94c::t_3b3ad519df2132 12,23
+website/tests/client/KeyboardInputPolicyTest.hx
+  s_5a9b1a92b8d94c::t_d5e910979e9545 33-43
+  s_5a9b1a92b8d94c::t_1401e9fd065078 220-240
+com/KeyboardInputPolicy.hx
+  s_5a9b1a92b8d94c::t_099bd0eb8b25be 222
+  s_5a9b1a92b8d94c::t_26a52e44e6a3a3 223-245
+  s_5a9b1a92b8d94c::t_85611d57c11cb8 94-98
+website/routes/Missions.hx
+  s_5a9b1a92b8d94c::t_5211a78fb5c226 28,104,233,257,308-313
+  s_5a9b1a92b8d94c::t_49cf0c1cf51e62 234
+  s_5a9b1a92b8d94c::t_1b79d0867ffa18 115
+  s_5a9b1a92b8d94c::t_0f8a52c1362bc4 116
+  s_5a9b1a92b8d94c::t_cef67747899cf6 314
+  s_5a9b1a92b8d94c::t_3ce1f09c51f41b 25,61,65-71
+www/style.css
+  s_5a9b1a92b8d94c::t_dba9817bc472b8 1241-1249,1252,1255-1256
+  s_5a9b1a92b8d94c::t_8ef8c70c0ce5a0 1250,1254
+  s_5a9b1a92b8d94c::t_f2f57df11af2ad 1251,1253,1257
+client/src/UserTerminal.hx
+  s_5a9b1a92b8d94c::t_1ae682828b974d 2106-2107
+  s_5a9b1a92b8d94c::t_a00aa8511b1888 2598-2599
+  s_5a9b1a92b8d94c::t_6328602cf3bdeb 2653-2655
+  s_5a9b1a92b8d94c::t_ca96a29c187b65 2592-2597,2600-2612
+  s_5a9b1a92b8d94c::t_16a3d9bf822023 2112-2114
+  s_5a9b1a92b8d94c::t_5fbe7f3e9cdbb6 2641-2643
+docs/specs/uber-eleet-player-preference.md
+  s_5a9b1a92b8d94c::t_422bb825e24d1c 35,77-78
+  s_5a9b1a92b8d94c::t_ee7b155b955829 67-70,72
+  s_5a9b1a92b8d94c::t_5c7a4e161b73b4 55-60,81-82
+  s_5a9b1a92b8d94c::t_74699bfc439f94 49-54,80
+  s_5a9b1a92b8d94c::t_c1d5433e99f404 61-66,83
+  s_5a9b1a92b8d94c::t_c505b43dd76293 25-30,76
+  s_5a9b1a92b8d94c::t_794204f7967790 71,84
+  s_5a9b1a92b8d94c::t_03a846769e8667 1-24,31-34,36-48,73-75,79,85-90,92
+  s_5a9b1a92b8d94c::t_f460bec88e5caf 91
+website/tests/routes/MissionsUberEleetTest.hx
+  s_5a9b1a92b8d94c::t_8ee7aba7f4a546 1-16,26-27,29-32,34-37,39-53,58-81
+  s_5a9b1a92b8d94c::t_2a8b57fb5773cc 17-25,54-57
+  s_5a9b1a92b8d94c::t_af85bccf3e8dfb 28,33,38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "27a6a4eb714b7aa204809adade5ab42c53ff5ac9",
+  "prompts": {},
+  "humans": {
+    "h_32f94e59e2f995": {
+      "author": "Charles-Meldhine Madi Mnemoi <icdk5b4zf@relay.firefox.com>"
+    }
+  },
+  "sessions": {
+    "s_5a9b1a92b8d94c": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fe190-a578-7e3b-8738-60a7c9a0b9b2",
+        "model": "gpt-5.6-luna"
+      },
+      "human_author": null
+    }
+  }
+}
