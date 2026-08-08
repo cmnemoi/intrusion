@@ -37,6 +37,7 @@ class FSNode {
 	public var life			: Int;
 	public var lifeTotal	: Int;
 	var freezeTimer			: Float;
+	var iconTextAdjusted		: Bool;
 
 
 //	var resists				: Array< {dt:DamageType, v:Int} >;
@@ -87,6 +88,7 @@ class FSNode {
 				setLife( AntivirMan.AV_LIFE );
 		}
 		freezeTimer = 0;
+		iconTextAdjusted = false;
 	}
 
 
@@ -346,9 +348,12 @@ class FSNode {
 			var mcc: MCFolder = cast mc.icon;
 			var str =  if ( TD.fsNames.exists(key+"_short") ) TD.fsNames.get(key+"_short") else "";
 			mcc.field.text = hasEffect(E_Masked) ? "" : str;
-			// Position isn't rendered correctly, adjusting it here
-			mcc.field.x += 8;
-			mcc.field.y += 2;
+			// Position isn't rendered correctly, adjusting it once from the SWF position
+			if (!iconTextAdjusted) {
+				mcc.field.x += 8;
+				mcc.field.y += 2;
+				iconTextAdjusted = true;
+			}
 			if ( password!=null || term.avman.folderContains(this, AntivirusXml.get.passwd) ) {
 				mcc.lockIcon._visible = true;
 				mcc.field._visible = false;
@@ -372,8 +377,11 @@ class FSNode {
 					else
 						mcc.field.text = av.key.substr(0,3).toUpperCase();
 					// TODO: text position is off, adjusting for it here, but should be fixed when building MovieClip
-					mcc.field.x = mcc.field.x + 6;
-					mcc.field.y = mcc.field.y + 6;
+					if (!iconTextAdjusted) {
+						mcc.field.x += 6;
+						mcc.field.y += 6;
+						iconTextAdjusted = true;
+					}
 
 //					mc.icon.gotoAndStop("unknownAV");
 //					if ( av!=null )
