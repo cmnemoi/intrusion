@@ -156,6 +156,7 @@ class DepthManager {
 		for (i in 0...plan_data.cur)
 			p[i]?.removeMovieClip();
 		plan_data.cur = 0;
+		plan_data.tbl.splice(0, plan_data.tbl.length);
 	}
 
 	public function ysort(plan:Int) {
