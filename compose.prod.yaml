@@ -17,6 +17,7 @@ services:
 
   website:
     container_name: intrusion-website
+    ports: ["127.0.0.1:8150:8001"]
     image: ghcr.io/cmnemoi/intrusion:${IMAGE_TAG:-main}
     depends_on:
       redis:
