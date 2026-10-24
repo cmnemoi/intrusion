@@ -12,8 +12,6 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
-    networks:
-      - traefik-proxy
 
   website:
     container_name: intrusion-website
@@ -25,18 +23,6 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379
     restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.website.rule=Host(`intrusion.cmnemoi.com`)
-      - traefik.http.routers.website.entrypoints=websecure
-      - traefik.http.routers.website.tls.certresolver=letsencrypt
-      - traefik.http.services.website.loadbalancer.server.port=8001
-    networks:
-      - traefik-proxy
 
 volumes:
   redis-data:
-
-networks:
-  traefik-proxy:
-    external: true
