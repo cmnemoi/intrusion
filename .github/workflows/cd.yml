@@ -87,6 +87,6 @@ jobs:
           script: |
             set -euo pipefail
             cd ~/www
-            docker compose -f compose.prod.yaml pull
-            docker compose -f compose.prod.yaml up -d --remove-orphans
+            docker compose -f compose.prod.yaml -f ~/compose.vps.yaml pull
+            docker compose -f compose.prod.yaml -f ~/compose.vps.yaml up -d --remove-orphans
             docker image prune -f
